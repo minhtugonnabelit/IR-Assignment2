@@ -104,7 +104,7 @@ class Sawyer(DHRobot3D):
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
         d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
         alpha = [-np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
-
+        qlim = [[-2*np.pi, 2*np.pi] for _ in range(7)]
         # offset to have the dh from toolbox match with the actual pose
         offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
 
@@ -112,7 +112,7 @@ class Sawyer(DHRobot3D):
 
         for j in range(7):
             link = rtb.RevoluteDH(
-                d=d[j], a=a[j], alpha=alpha[j], offset=offset[j])
+                d=d[j], a=a[j], alpha=alpha[j], offset=offset[j], qlim=qlim[j])
             links.append(link)
 
         return links
@@ -206,7 +206,7 @@ class Sawyer(DHRobot3D):
     # -----------------------------------------------------------------------------------#
     def go_to_CartesianPose(self, pose, time=1):
 
-        step = 100
+        step = 50
         time_step = time/step
         current_ee_pose = self.get_ee_pose()
 
@@ -238,6 +238,102 @@ class Sawyer(DHRobot3D):
 
             self._env.step(time_step)
 
+    # -----------------------------------------------------------------------------------#
+    def ee_plus_z(self):
+        """
+        move ee in z direction locally by 0.01m
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Tz(0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    def ee_minus_z(self):
+        """
+        move ee in z direction locally by -0.01m
+        """  
+        pose = self.get_ee_pose() @ sm.SE3.Tz(-0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    def ee_plus_x(self):
+        """
+        move ee in x direction locally by 0.01m
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Tx(0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    def ee_minus_x(self):
+
+        """
+        move ee in x direction locally by -0.01m
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Tx(-0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    def ee_plus_y(self):
+        """
+        move ee in y direction locally by 0.01m
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Ty(0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    def ee_minus_y(self):
+
+        """
+        move ee in y direction locally by -0.01m
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Ty(-0.1)
+        self.go_to_CartesianPose(pose, time=0.001)
+
+    ## orientation
+    def ee_plus_z_ori(self):
+        """
+        move ee in z direction locally by 0.1 radians
+        """
+
+        for i in range(50):
+            self.q[6] = self.q[6] + 0.2/50
+            self.q = self.q
+            self._env.step(0.01/50)
+
+
+    def ee_minus_z_ori(self):
+        """
+        move ee in z direction locally by -0.1 radians
+        """
+
+        for i in range(50):
+            self.q[6] = self.q[6] - 0.2/50
+            self.q = self.q
+            self._env.step(0.01/50)
+
+    def ee_plus_x_ori(self):
+        """
+        move ee in x direction locally by 0.1 radians
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Rx(0.2)
+        self.go_to_CartesianPose(pose, time=0.01)
+    
+    def ee_minus_x_ori(self):
+        """
+        move ee in x direction locally by -0.1 radians
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Rx(-0.2)
+        self.go_to_CartesianPose(pose, time=0.01)
+    
+    def ee_plus_y_ori(self):
+        """
+        move ee in y direction locally by 0.1 radians
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Ry(0.2)
+        self.go_to_CartesianPose(pose, time=0.01)
+    
+    def ee_minus_y_ori(self):
+        """
+        move ee in y direction locally by -0.1 radians
+        """
+        pose = self.get_ee_pose() @ sm.SE3.Ry(-0.2)
+        self.go_to_CartesianPose(pose, time=0.01)
+    
+    # -----------------------------------------------------------------------------------#
     def rotate_head(self, angle):
         """
         animate head motion
