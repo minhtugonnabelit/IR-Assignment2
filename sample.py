@@ -162,7 +162,6 @@ a =     Button(
         desc="-Rx",
     )
 
-a.update()
 
 while True:
     # Process the event queue from Swift, this invokes the callback functions
