@@ -51,6 +51,7 @@ class Sawyer(DHRobot3D):
         links = self._create_DH()
         self._gripper_ready = gripper_ready
         self._env = env
+        self._UIjs = np.zeros(7)
 
         # Names of the robot link files in the directory
         link3D_names = dict(
@@ -243,21 +244,21 @@ class Sawyer(DHRobot3D):
         """
         move ee in z direction locally by 0.01m
         """
-        pose = self.get_ee_pose() @ sm.SE3.Tz(0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Tz(0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     def ee_minus_z(self):
         """
         move ee in z direction locally by -0.01m
         """  
-        pose = self.get_ee_pose() @ sm.SE3.Tz(-0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Tz(-0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     def ee_plus_x(self):
         """
         move ee in x direction locally by 0.01m
         """
-        pose = self.get_ee_pose() @ sm.SE3.Tx(0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Tx(0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     def ee_minus_x(self):
@@ -265,14 +266,14 @@ class Sawyer(DHRobot3D):
         """
         move ee in x direction locally by -0.01m
         """
-        pose = self.get_ee_pose() @ sm.SE3.Tx(-0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Tx(-0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     def ee_plus_y(self):
         """
         move ee in y direction locally by 0.01m
         """
-        pose = self.get_ee_pose() @ sm.SE3.Ty(0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Ty(0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     def ee_minus_y(self):
@@ -280,7 +281,7 @@ class Sawyer(DHRobot3D):
         """
         move ee in y direction locally by -0.01m
         """
-        pose = self.get_ee_pose() @ sm.SE3.Ty(-0.1)
+        pose = self.get_ee_pose() @ sm.SE3.Ty(-0.05)
         self.go_to_CartesianPose(pose, time=0.001)
 
     ## orientation
@@ -367,6 +368,24 @@ class Sawyer(DHRobot3D):
         for q in traj.q:
             self.q = q
             self._env.step(0.02)
+
+    def move(self):
+        """
+        Execute a joint space trajectory
+
+        """
+        path = rtb.jtraj(self.q, self._UIjs, 100)
+        for q in path.q:
+            self.q = q
+            self._env.step(0.02)
+
+    def set_joint_value(self, j, value):
+        """
+        Set joint value
+
+        """
+        self._UIjs[j] = np.deg2rad(float(value))
+
 
     # -----------------------------------------------------------------------------------#
     # ENV TESTING

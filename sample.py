@@ -15,33 +15,12 @@ env.launch(realtime=True)
 env.set_camera_pose([0, 0, 2], [0, 0, 0])
 
 robot = Sawyer(env)
-# robot.update_sim()
 robot.q = robot._neutral
 robot.add_to_env(env)
-
-# # robot motion test with joint space
-# robot.test()
-
-# # robot motion test with Cartesian space
-# pose1 = robot.get_ee_pose() @ sm.SE3.Tz(-0.2)
-# robot.go_to_CartesianPose(pose1, time=2)
-
-# # test motion function with rotating end-effector pi/3 rad around its local z axis
-# robot.rotate_head(np.pi/3)
-
-# # test motion function with forwarding end-effector -0.5m in its local x direction
-# pose2 = robot.get_ee_pose() @ sm.SE3.Tx(-0.5)
-# robot.go_to_CartesianPose(pose2, time=2)
-# robot.home()
-
-# This is our callback funciton from the sliders in Swift which set
-# the joint angles of our robot to the value of the sliders
-
 
 def set_joint(j, value):
     robot.q[j] = np.deg2rad(float(value))
     robot.q = robot.q
-
 
 # Loop through each link in the Panda and if it is a variable joint,
 # add a slider to Swift to control it
@@ -53,7 +32,7 @@ for link in robot.links:
         # We use the HTML unicode format for the degree sign in the unit arg
         env.add(
             Slider(
-                lambda x, j=j: set_joint(j, x),
+                lambda x, j=j: robot.set_joint_value(j, x),
                 min=np.round(np.rad2deg(link.qlim[0]), 2),
                 max=np.round(np.rad2deg(link.qlim[1]), 2),
                 step=1,
@@ -66,6 +45,13 @@ for link in robot.links:
         j += 1
 
 # Add a button to Swift which calls the function to set the robot to its home pose
+env.add(
+    Button(
+        lambda x: robot.move(),
+        desc="Confirm",
+    )
+)
+
 env.add(
     Button(
         lambda x: robot.home(),
@@ -157,10 +143,6 @@ env.add(
     )
 )
 
-a =     Button(
-        lambda x: robot.ee_minus_x_ori(),
-        desc="-Rx",
-    )
 
 
 while True:
