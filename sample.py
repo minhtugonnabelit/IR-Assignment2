@@ -18,9 +18,6 @@ robot = Sawyer(env)
 robot.q = robot._neutral
 robot.add_to_env(env)
 
-def set_joint(j, value):
-    robot.q[j] = np.deg2rad(float(value))
-    robot.q = robot.q
 
 # Loop through each link in the Panda and if it is a variable joint,
 # add a slider to Swift to control it
@@ -44,7 +41,14 @@ for link in robot.links:
 
         j += 1
 
-# Add a button to Swift which calls the function to set the robot to its home pose
+
+env.add(
+    Button(
+        lambda x: env.close(),
+        desc="Close",
+    )
+)
+
 env.add(
     Button(
         lambda x: robot.move(),

@@ -88,10 +88,11 @@ class Sawyer(DHRobot3D):
             qtest_transforms=qtest_transforms,
         )
 
-        self._head = self._add_model("head.DAE", smb.transl(0, 0, 0.3811))
-
         self.base = base * self.base
         self.q = qtest
+        self._head = self._add_model("head.DAE", smb.transl(0, 0, 0.3811))
+        self.update_sim()
+
 
     def _create_DH(self):
         """
@@ -203,6 +204,37 @@ class Sawyer(DHRobot3D):
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
 
+    # COLISION FUNCTION
+    # -----------------------------------------------------------------------------------#
+    def get_ellipsoid(self):
+        """
+        Get ellipsoid of the robot
+        """
+
+        tr = self.get_link_poses()
+
+        ellipsoid = []
+        for i, link in enumerate(self.links):
+            if i == 0:
+                continue
+            else:
+                pass
+
+        # for i in range(7):
+        #     # link = self.
+        #     pass
+        return ellipsoid
+
+    def get_link_poses(self, q=None):
+        """
+        :param q robot joint angles
+        :param robot -  seriallink robot model
+        :param transforms - list of transforms
+        """
+        if q is None:
+            return self.fkine_all().A
+        return self.fkine_all(q).A
+
     # MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
     def go_to_CartesianPose(self, pose, time=1):
@@ -294,7 +326,6 @@ class Sawyer(DHRobot3D):
             self.q[6] = self.q[6] + 0.2/50
             self.q = self.q
             self._env.step(0.01/50)
-
 
     def ee_minus_z_ori(self):
         """
@@ -420,6 +451,7 @@ if __name__ == "__main__":
 
     # generate robot
     r = Sawyer(env)
-    r.test()
+    # r.test()
+    r.get_ellipsoid()
 
 
