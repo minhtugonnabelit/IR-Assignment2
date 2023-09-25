@@ -13,6 +13,7 @@ import roboticstoolbox as rtb
 import spatialmath as sm
 import spatialmath.base as smb
 import spatialgeometry as geometry
+import matplotlib.pyplot as plt
 
 from swift import Swift
 from spatialmath import SE3
@@ -136,6 +137,7 @@ class Sawyer(DHRobot3D):
         Reconfigure robot to home position set by user
 
         """
+        self._ellipsoids = self.get_ellipsoid()
         self.add_to_env(self._env)
 
     def set_base(self, base):
@@ -211,19 +213,20 @@ class Sawyer(DHRobot3D):
         Get ellipsoid of the robot
         """
 
-        tr = self.get_link_poses()
+        ellipsoids = []
+        for i in range(len(self.links)):
 
-        ellipsoid = []
-        for i, link in enumerate(self.links):
-            if i == 0:
-                continue
-            else:
-                pass
+            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(self.a[i]) / 2 + 0.02
+            major_axis = copy.deepcopy(self.d[i]) / 2
 
-        # for i in range(7):
-        #     # link = self.
-        #     pass
-        return ellipsoid
+            ellipsoid = np.asarray(
+                [minor_axis, major_axis, minor_axis])
+            
+            ellipsoids.append(ellipsoid)
+
+        ellipsoids[6][2] = ellipsoids[6][1]
+        ellipsoids[6][1] = ellipsoids[6][0]
+        return ellipsoids
 
     def get_link_poses(self, q=None):
         """
@@ -429,7 +432,7 @@ class Sawyer(DHRobot3D):
         self.update_sim()
 
         q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
-        qtraj = rtb.jtraj(self.q, q_goal, 100).q
+        qtraj = rtb.jtraj(self.q, q_goal, 10).q
 
         # fig = self.plot(self.q, limits= [-1,1,-1,1,-1,1])
         # fig._add_teach_panel(self, self.q)
@@ -441,6 +444,21 @@ class Sawyer(DHRobot3D):
 
         # self._env.hold()
 
+    def plot_elipsoids(self):
+        """
+        Test ellipsoid function
+        """
+        tr = self.get_link_poses()
+        for i in range(len(tr)):
+
+            if i == 0:
+                continue
+
+            center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
+            # radi = copy.deepcopy(self._ellipsoids[i-1])
+            elip = np.round((tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
+            ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
+
 
 # ---------------------------------------------------------------------------------------#
 if __name__ == "__main__":
@@ -451,7 +469,7 @@ if __name__ == "__main__":
 
     # generate robot
     r = Sawyer(env)
-    # r.test()
-    r.get_ellipsoid()
+    r.test()
+
 
 
