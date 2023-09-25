@@ -2,7 +2,7 @@ import roboticstoolbox as rtb
 import spatialmath as sm
 import spatialmath.base as smb
 import numpy as np
-from swift import Swift, Slider, Button
+from swift import Swift, Slider, Button, Label, Select, Checkbox, Radio
 from Sawyer_model.sawyer import Sawyer
 
 import ipdb
@@ -19,7 +19,7 @@ robot.q = robot._neutral
 robot.add_to_env(env)
 
 
-# Loop through each link in the Panda and if it is a variable joint,
+# Loop through each link in the Sawyer and if it is a variable joint,
 # add a slider to Swift to control it
 j = 0
 for link in robot.links:
@@ -41,12 +41,11 @@ for link in robot.links:
 
         j += 1
 
-
 env.add(
     Button(
         lambda x: env.close(),
         desc="Close",
-    )
+    ),
 )
 
 env.add(
@@ -148,7 +147,6 @@ env.add(
 )
 
 
-
 while True:
     # Process the event queue from Swift, this invokes the callback functions
     # from the sliders if the slider value was changed
@@ -157,5 +155,3 @@ while True:
     # Update the environment with the new robot pose
     env.step(0)
     time.sleep(0.01)
-
-

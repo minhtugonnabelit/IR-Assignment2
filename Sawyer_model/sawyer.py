@@ -242,7 +242,7 @@ class Sawyer(DHRobot3D):
     # -----------------------------------------------------------------------------------#
     def go_to_CartesianPose(self, pose, time=1):
 
-        step = 50
+        step = 100
         time_step = time/step
         current_ee_pose = self.get_ee_pose()
 
