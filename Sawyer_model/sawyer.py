@@ -4,6 +4,7 @@
 #   @brief Sawyer robot defined by standard DH parameters with 3D model
 #   @author Ho Minh Quang Ngo & Anh Minh Tu
 #   @date August 21, 2023
+
 import numpy as np
 import time
 import copy
@@ -18,9 +19,6 @@ import matplotlib.pyplot as plt
 from swift import Swift
 from spatialmath import SE3
 from ir_support.robots.DHRobot3D import DHRobot3D
-
-# Useful variables
-# from math import np.pi
 
 # -----------------------------------------------------------------------------------#
 
@@ -108,6 +106,7 @@ class Sawyer(DHRobot3D):
         d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
         alpha = [-np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
         qlim = [[-2*np.pi, 2*np.pi] for _ in range(7)]
+
         # offset to have the dh from toolbox match with the actual pose
         offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
 
@@ -206,8 +205,16 @@ class Sawyer(DHRobot3D):
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
 
-    # COLISION FUNCTION
+    # COLISION and SAFETY FUNCTION
     # -----------------------------------------------------------------------------------#
+    
+    def stop(self):
+        """
+        Immediately Stop the robot motion
+        """
+
+        pass
+
     def get_ellipsoid(self):
         """
         Get ellipsoid of the robot
@@ -237,10 +244,98 @@ class Sawyer(DHRobot3D):
         if q is None:
             return self.fkine_all().A
         return self.fkine_all(q).A
+    
+    def is_grounded(self, q=None):
+        """
+        Check if robot is grounded
+        """
+        pass
+
+    # testing
+    def is_collided_with_object(self, q=None):
+        """
+        Check if robot is collided with object
+        """
+
+        pass
+    
+    # testing
+    def self_collided_LP(self,):
+        """
+        Check self-collision of the robot using line-plance intersection
+        """
+        is_collided = False
+        tr = self.get_link_poses()
+
+        geometry.Cylinder()
+
+        for i in range(len(tr)):
+
+            if i == 0:
+                continue
+
+            center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
+            radi = copy.deepcopy(self._ellipsoids[i-1])
+            elip = np.round((tr[i][0:3, 0:3] @ np.diag(np.power(radi, -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
+            ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
+
+            for j in range(len(tr)):
+                if j == i or j == i-1:
+                    continue
+                center = (tr[j][0:3, 3] + tr[j-1][0:3, 3])/2
+                radi = copy.deepcopy(self._ellipsoids[j-1])
+                elip = np.round((tr[j][0:3, 0:3] @ np.diag(np.power(radi, -2)) @ np.transpose(tr[j][0:3, 0:3])), 3)
+                ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
+
+                if ob.intersect(ob):
+                    is_collided = True
+                    break
+
+
+        return is_collided
+    
+    # testing
+    def self_collisions_Cylinder(self, q=None):
+        """
+        Check self-collision of the robot using cylinder intersection
+        """
+        is_collided = False
+        tr = self.get_link_poses(q)
+
+        for i in range(len(tr)):
+
+            if i == 0:
+                continue
+
+            center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
+            radi = copy.deepcopy(self._ellipsoids[i-1])
+            ob = geometry.Cylinder(center, radi[0], radi[1])
+            for j in range(len(tr)):
+                if j == i or j == i-1:
+                    continue
+                center = (tr[j][0:3, 3] + tr[j-1][0:3, 3])/2
+                radi = copy.deepcopy(self._ellipsoids[j-1])
+                ob2 = geometry.Cylinder(center, radi[0], radi[1])
+                if ob.intersect(ob2):
+                    is_collided = True
+                    break
+
+        return is_collided
+
 
     # MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
-    def go_to_CartesianPose(self, pose, time=1):
+    def go_to_CartesianPose(self, pose : SE3, time=1, tolerance=0.0001):
+        
+        """
+        ### Move robot to desired Cartesian pose
+        Function to move robot end-effector to desired Cartesian pose. 
+        This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
+        - @param pose: desired Cartesian pose           
+        - @param time: time to complete the motion
+        - @param tolerance: tolerance to consider the robot has reached the desired pose
+
+        """
 
         step = 100
         time_step = time/step
@@ -248,31 +343,79 @@ class Sawyer(DHRobot3D):
 
         path = rtb.ctraj(current_ee_pose, pose, t=step)
 
-        for i in range(len(path)-1):
+        # for i in range(len(path)-1):
 
-            prev_ee_pos = path[i].A[0:3, 3]
-            desired_ee_pos = path[i+1].A[0:3, 3]
+        #     prev_ee_pos = path[i].A[0:3, 3]
+        #     desired_ee_pos = path[i+1].A[0:3, 3]
+
+        #     # get linear velocity between interpolated point and current pose of ee
+        #     lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+
+        #     # get angular velocity between interpolated ...
+        #     s_omega = (path[i+1].A[0:3, 0:3] @ np.transpose(
+        #         self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
+        #     ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+
+        #     # combine vel
+        #     ee_vel = np.hstack((lin_vel, ang_vel))
+
+        #     # get joint velocities
+        #     joint_vel = np.linalg.pinv(
+        #         self.jacob0(self.q)) @ np.transpose(ee_vel)
+
+        #     current_js = self.get_jointstates()
+        #     q = current_js + joint_vel * time_step
+        #     self.q = q
+
+        #     self._env.step(time_step)
+
+        # get ee carterian pose difference wih desired pose
+        def is_arrived():
+            ee_pose = self.get_ee_pose()
+            poss_diff = np.diff(ee_pose.A - pose.A)
+            if np.all(np.abs(poss_diff) < tolerance):
+                print('done')
+                return True
+
+            return False
+
+        index = 0
+        while not is_arrived():
+
+            prev_ee_pos = path[index].A[0:3, 3]
+            desired_ee_pos = path[index+1].A[0:3, 3]
 
             # get linear velocity between interpolated point and current pose of ee
             lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
             # get angular velocity between interpolated ...
-            s_omega = (path[i+1].A[0:3, 0:3] @ np.transpose(
+            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
                 self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
             ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
-            # combine vel
+            # combine velocities
             ee_vel = np.hstack((lin_vel, ang_vel))
 
             # get joint velocities
             joint_vel = np.linalg.pinv(
                 self.jacob0(self.q)) @ np.transpose(ee_vel)
 
+            #@todo:
+            # -- adding sigulariry check and joint limit check
+            # -- consider adding collision check   
+            
+            # update joint states as a command to robot
             current_js = self.get_jointstates()
             q = current_js + joint_vel * time_step
             self.q = q
 
+            index += 1
+            if index == len(path)-1 and not is_arrived():
+                print('Pose is unreachable!')
+                break
+
             self._env.step(time_step)
+
 
     # -----------------------------------------------------------------------------------#
     def ee_plus_z(self):
@@ -280,21 +423,21 @@ class Sawyer(DHRobot3D):
         move ee in z direction locally by 0.01m
         """
         pose = self.get_ee_pose() @ sm.SE3.Tz(0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     def ee_minus_z(self):
         """
         move ee in z direction locally by -0.01m
         """  
         pose = self.get_ee_pose() @ sm.SE3.Tz(-0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     def ee_plus_x(self):
         """
         move ee in x direction locally by 0.01m
         """
         pose = self.get_ee_pose() @ sm.SE3.Tx(0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     def ee_minus_x(self):
 
@@ -302,14 +445,14 @@ class Sawyer(DHRobot3D):
         move ee in x direction locally by -0.01m
         """
         pose = self.get_ee_pose() @ sm.SE3.Tx(-0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     def ee_plus_y(self):
         """
         move ee in y direction locally by 0.01m
         """
         pose = self.get_ee_pose() @ sm.SE3.Ty(0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     def ee_minus_y(self):
 
@@ -317,7 +460,7 @@ class Sawyer(DHRobot3D):
         move ee in y direction locally by -0.01m
         """
         pose = self.get_ee_pose() @ sm.SE3.Ty(-0.05)
-        self.go_to_CartesianPose(pose, time=0.001)
+        self.go_to_CartesianPose(pose, time=0.02)
 
     ## orientation
     def ee_plus_z_ori(self):
