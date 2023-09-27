@@ -10,6 +10,7 @@ import spatialmath.base as smb
 from swift import Swift
 
 from Sawyer_model.sawyer import Sawyer
+from controller import Controller
 
 # Create the environment and robot
 env = Swift()
@@ -17,6 +18,7 @@ env.launch(realtime=True)
 
 # Create the Sawyer robot and set the joint limits
 robot = Sawyer(env)
+sawyer_controller = Controller(robot, env)
 robot.home()
 sawyer_qlim = copy.deepcopy(robot.qlim)
 sawyer_qlim = np.rad2deg(sawyer_qlim)
@@ -66,8 +68,8 @@ tab1_layout = [
                size=slider_size, key='-SLIDER5-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[5])} deg', size=(15, 1), key='-J4-', justification='right')],
     [sg.Slider(range=(sawyer_qlim[0, 6], sawyer_qlim[1, 6]), default_value=robot.q[6], orientation='h',
                size=slider_size, key='-SLIDER6-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[6])} deg', size=(15, 1), key='-J5-', justification='right')],
+   
     [sg.Text('TCP Jogging', key='-TCP-', font=('Cooper Black', 15), background_color='brown')],
-
     [sg.Text('X: ',    size=(5, 1), ), sg.Input(default_text='0', size=(10, 1), key='-CARTX-'),
      sg.Text('Y: ',    size=(5, 1), ), sg.Input(default_text='0', size=(10, 1), key='-CARTY-'),
      sg.Text('Z: ',    size=(5, 1), ), sg.Input(default_text='0', size=(10, 1), key='-CARTZ-')],
@@ -143,7 +145,7 @@ while True:
 
     # event activated with +X button
     if event == '-PLUSX-':
-        robot.ee_plus_x()
+        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0.01, 0, 0), time=0.1)
     
     # event activated with -X button
     if event == '-MINUSX-':
