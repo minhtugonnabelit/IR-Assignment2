@@ -45,6 +45,7 @@ class Sawyer(DHRobot3D):
         env: Swift,
         base=SE3(0, 0, 0),
         gripper_ready=True,
+        gui=None,
     ):
         # DH links
         links = self._create_DH()
@@ -119,16 +120,20 @@ class Sawyer(DHRobot3D):
 
         return links
 
-    def _add_model(self, file_path, placement):
+    def _add_model(self, file_path, placement, color=None):
         """
         Add model to simulation environment
         """
         model_full_path = os.path.join(self._script_directory, file_path)
         model_placement = self.base.A @ placement
-        model = geometry.Mesh(
-            model_full_path, pose=model_placement,)
+        if color is None:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement,)
+        else:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement, color=color)
+            
         self._env.add(model)
-
         return model
 
     def update_sim(self):
@@ -212,7 +217,7 @@ class Sawyer(DHRobot3D):
         """
         Immediately Stop the robot motion
         """
-
+        
         pass
 
     def get_ellipsoid(self):
@@ -325,191 +330,191 @@ class Sawyer(DHRobot3D):
 
     # MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
-    def go_to_CartesianPose(self, pose : SE3, time=1, tolerance=0.0001):
+    # def go_to_CartesianPose(self, pose : SE3, time=1, tolerance=0.0001):
         
-        """
-        ### Move robot to desired Cartesian pose
-        Function to move robot end-effector to desired Cartesian pose. 
-        This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
-        - @param pose: desired Cartesian pose           
-        - @param time: time to complete the motion
-        - @param tolerance: tolerance to consider the robot has reached the desired pose
+    #     """
+    #     ### Move robot to desired Cartesian pose
+    #     Function to move robot end-effector to desired Cartesian pose. 
+    #     This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
+    #     - @param pose: desired Cartesian pose           
+    #     - @param time: time to complete the motion
+    #     - @param tolerance: tolerance to consider the robot has reached the desired pose
 
-        """
+    #     """
 
-        step = 100
-        time_step = time/step
-        current_ee_pose = self.get_ee_pose()
+    #     step = 100
+    #     time_step = time/step
+    #     current_ee_pose = self.get_ee_pose()
 
-        path = rtb.ctraj(current_ee_pose, pose, t=step)
+    #     path = rtb.ctraj(current_ee_pose, pose, t=step)
 
-        # for i in range(len(path)-1):
+    #     # for i in range(len(path)-1):
 
-        #     prev_ee_pos = path[i].A[0:3, 3]
-        #     desired_ee_pos = path[i+1].A[0:3, 3]
+    #     #     prev_ee_pos = path[i].A[0:3, 3]
+    #     #     desired_ee_pos = path[i+1].A[0:3, 3]
 
-        #     # get linear velocity between interpolated point and current pose of ee
-        #     lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+    #     #     # get linear velocity between interpolated point and current pose of ee
+    #     #     lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
-        #     # get angular velocity between interpolated ...
-        #     s_omega = (path[i+1].A[0:3, 0:3] @ np.transpose(
-        #         self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
-        #     ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+    #     #     # get angular velocity between interpolated ...
+    #     #     s_omega = (path[i+1].A[0:3, 0:3] @ np.transpose(
+    #     #         self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
+    #     #     ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
-        #     # combine vel
-        #     ee_vel = np.hstack((lin_vel, ang_vel))
+    #     #     # combine vel
+    #     #     ee_vel = np.hstack((lin_vel, ang_vel))
 
-        #     # get joint velocities
-        #     joint_vel = np.linalg.pinv(
-        #         self.jacob0(self.q)) @ np.transpose(ee_vel)
+    #     #     # get joint velocities
+    #     #     joint_vel = np.linalg.pinv(
+    #     #         self.jacob0(self.q)) @ np.transpose(ee_vel)
 
-        #     current_js = self.get_jointstates()
-        #     q = current_js + joint_vel * time_step
-        #     self.q = q
+    #     #     current_js = self.get_jointstates()
+    #     #     q = current_js + joint_vel * time_step
+    #     #     self.q = q
 
-        #     self._env.step(time_step)
+    #     #     self._env.step(time_step)
 
-        # get ee carterian pose difference wih desired pose
-        def is_arrived():
-            ee_pose = self.get_ee_pose()
-            poss_diff = np.diff(ee_pose.A - pose.A)
-            if np.all(np.abs(poss_diff) < tolerance):
-                print('done')
-                return True
+    #     # get ee carterian pose difference wih desired pose
+    #     def is_arrived():
+    #         ee_pose = self.get_ee_pose()
+    #         poss_diff = np.diff(ee_pose.A - pose.A)
+    #         if np.all(np.abs(poss_diff) < tolerance):
+    #             print('done')
+    #             return True
 
-            return False
+    #         return False
 
-        index = 0
-        while not is_arrived():
+    #     index = 0
+    #     while not is_arrived():
 
-            prev_ee_pos = path[index].A[0:3, 3]
-            desired_ee_pos = path[index+1].A[0:3, 3]
+    #         prev_ee_pos = path[index].A[0:3, 3]
+    #         desired_ee_pos = path[index+1].A[0:3, 3]
 
-            # get linear velocity between interpolated point and current pose of ee
-            lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+    #         # get linear velocity between interpolated point and current pose of ee
+    #         lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
-            # get angular velocity between interpolated ...
-            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
-                self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
-            ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+    #         # get angular velocity between interpolated ...
+    #         s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
+    #             self.get_ee_pose().A[0:3, 0:3]) - np.eye(3)) / time_step
+    #         ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
-            # combine velocities
-            ee_vel = np.hstack((lin_vel, ang_vel))
+    #         # combine velocities
+    #         ee_vel = np.hstack((lin_vel, ang_vel))
 
-            # get joint velocities
-            joint_vel = np.linalg.pinv(
-                self.jacob0(self.q)) @ np.transpose(ee_vel)
+    #         # get joint velocities
+    #         joint_vel = np.linalg.pinv(
+    #             self.jacob0(self.q)) @ np.transpose(ee_vel)
 
-            #@todo:
-            # -- adding sigulariry check and joint limit check
-            # -- consider adding collision check   
+    #         #@todo:
+    #         # -- adding sigulariry check and joint limit check
+    #         # -- consider adding collision check   
             
-            # update joint states as a command to robot
-            current_js = self.get_jointstates()
-            q = current_js + joint_vel * time_step
-            self.q = q
+    #         # update joint states as a command to robot
+    #         current_js = self.get_jointstates()
+    #         q = current_js + joint_vel * time_step
+    #         self.q = q
 
-            index += 1
-            if index == len(path)-1 and not is_arrived():
-                print('Pose is unreachable!')
-                break
+    #         index += 1
+    #         if index == len(path)-1 and not is_arrived():
+    #             print('Pose is unreachable!')
+    #             break
 
-            self._env.step(time_step)
+    #         self._env.step(time_step)
 
 
-    # -----------------------------------------------------------------------------------#
-    def ee_plus_z(self):
-        """
-        move ee in z direction locally by 0.01m
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Tz(0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    # # -----------------------------------------------------------------------------------#
+    # def ee_plus_z(self):
+    #     """
+    #     move ee in z direction locally by 0.01m
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Tz(0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    def ee_minus_z(self):
-        """
-        move ee in z direction locally by -0.01m
-        """  
-        pose = self.get_ee_pose() @ sm.SE3.Tz(-0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    # def ee_minus_z(self):
+    #     """
+    #     move ee in z direction locally by -0.01m
+    #     """  
+    #     pose = self.get_ee_pose() @ sm.SE3.Tz(-0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    def ee_plus_x(self):
-        """
-        move ee in x direction locally by 0.01m
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Tx(0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    # def ee_plus_x(self):
+    #     """
+    #     move ee in x direction locally by 0.01m
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Tx(0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    def ee_minus_x(self):
+    # def ee_minus_x(self):
 
-        """
-        move ee in x direction locally by -0.01m
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Tx(-0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    #     """
+    #     move ee in x direction locally by -0.01m
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Tx(-0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    def ee_plus_y(self):
-        """
-        move ee in y direction locally by 0.01m
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Ty(0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    # def ee_plus_y(self):
+    #     """
+    #     move ee in y direction locally by 0.01m
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Ty(0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    def ee_minus_y(self):
+    # def ee_minus_y(self):
 
-        """
-        move ee in y direction locally by -0.01m
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Ty(-0.05)
-        self.go_to_CartesianPose(pose, time=0.02)
+    #     """
+    #     move ee in y direction locally by -0.01m
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Ty(-0.05)
+    #     self.go_to_CartesianPose(pose, time=0.02)
 
-    ## orientation
-    def ee_plus_z_ori(self):
-        """
-        move ee in z direction locally by 0.1 radians
-        """
+    # ## orientation
+    # def ee_plus_z_ori(self):
+    #     """
+    #     move ee in z direction locally by 0.1 radians
+    #     """
 
-        for i in range(50):
-            self.q[6] = self.q[6] + 0.2/50
-            self.q = self.q
-            self._env.step(0.01/50)
+    #     for i in range(50):
+    #         self.q[6] = self.q[6] + 0.2/50
+    #         self.q = self.q
+    #         self._env.step(0.01/50)
 
-    def ee_minus_z_ori(self):
-        """
-        move ee in z direction locally by -0.1 radians
-        """
+    # def ee_minus_z_ori(self):
+    #     """
+    #     move ee in z direction locally by -0.1 radians
+    #     """
 
-        for i in range(50):
-            self.q[6] = self.q[6] - 0.2/50
-            self.q = self.q
-            self._env.step(0.01/50)
+    #     for i in range(50):
+    #         self.q[6] = self.q[6] - 0.2/50
+    #         self.q = self.q
+    #         self._env.step(0.01/50)
 
-    def ee_plus_x_ori(self):
-        """
-        move ee in x direction locally by 0.1 radians
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Rx(0.2)
-        self.go_to_CartesianPose(pose, time=0.01)
+    # def ee_plus_x_ori(self):
+    #     """
+    #     move ee in x direction locally by 0.1 radians
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Rx(0.2)
+    #     self.go_to_CartesianPose(pose, time=0.01)
     
-    def ee_minus_x_ori(self):
-        """
-        move ee in x direction locally by -0.1 radians
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Rx(-0.2)
-        self.go_to_CartesianPose(pose, time=0.01)
+    # def ee_minus_x_ori(self):
+    #     """
+    #     move ee in x direction locally by -0.1 radians
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Rx(-0.2)
+    #     self.go_to_CartesianPose(pose, time=0.01)
     
-    def ee_plus_y_ori(self):
-        """
-        move ee in y direction locally by 0.1 radians
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Ry(0.2)
-        self.go_to_CartesianPose(pose, time=0.01)
+    # def ee_plus_y_ori(self):
+    #     """
+    #     move ee in y direction locally by 0.1 radians
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Ry(0.2)
+    #     self.go_to_CartesianPose(pose, time=0.01)
     
-    def ee_minus_y_ori(self):
-        """
-        move ee in y direction locally by -0.1 radians
-        """
-        pose = self.get_ee_pose() @ sm.SE3.Ry(-0.2)
-        self.go_to_CartesianPose(pose, time=0.01)
+    # def ee_minus_y_ori(self):
+    #     """
+    #     move ee in y direction locally by -0.1 radians
+    #     """
+    #     pose = self.get_ee_pose() @ sm.SE3.Ry(-0.2)
+    #     self.go_to_CartesianPose(pose, time=0.01)
     
     # -----------------------------------------------------------------------------------#
     def rotate_head(self, angle):
@@ -598,7 +603,6 @@ class Sawyer(DHRobot3D):
                 continue
 
             center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-            # radi = copy.deepcopy(self._ellipsoids[i-1])
             elip = np.round((tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
             ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
 

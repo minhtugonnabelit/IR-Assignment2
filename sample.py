@@ -4,6 +4,7 @@ import spatialmath.base as smb
 import numpy as np
 from swift import Swift, Slider, Button, Label, Select, Checkbox, Radio
 from Sawyer_model.sawyer import Sawyer
+from controller import Controller
 
 import ipdb
 import copy
@@ -17,7 +18,7 @@ env.set_camera_pose([0, 0, 2], [0, 0, 0])
 robot = Sawyer(env)
 robot.q = robot._neutral
 robot.add_to_env(env)
-
+sawyer_controller = Controller(robot, env)
 
 # Loop through each link in the Sawyer and if it is a variable joint,
 # add a slider to Swift to control it
@@ -59,90 +60,6 @@ env.add(
     Button(
         lambda x: robot.home(),
         desc="Home",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_z(),
-        desc="+z",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_z(),
-        desc="-z",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_x(),
-        desc="+x",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_x(),
-        desc="-x",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_y(),
-        desc="+y",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_y(),
-        desc="-y",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_z_ori(),
-        desc="+Rz",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_z_ori(),
-        desc="-Rz",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_y_ori(),
-        desc="+Ry",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_y_ori(),
-        desc="-Ry",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_plus_x_ori(),
-        desc="+Rx",
-    )
-)
-
-env.add(
-    Button(
-        lambda x: robot.ee_minus_x_ori(),
-        desc="-Rx",
     )
 )
 
