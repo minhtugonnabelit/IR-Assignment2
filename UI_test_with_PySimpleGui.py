@@ -19,10 +19,7 @@ slider_size = (30, 30)
 # Define the theme for the GUI
 sg.theme('DarkAmber')
 
-def update_gui_thread():
-    while True:
-        new_joint_states = robot.get_jointstates()
-        window.write_event_value('-UPDATE-JOINTS-', new_joint_states)
+
 
 def getori():
     ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3])
@@ -42,9 +39,9 @@ def tab1_setup():
         sg.Text(f'Rx: {np.rad2deg(getori()[0])} deg', size=(15, 1), justification='right', key='-RX-'),
         sg.Text(f'Ry: {np.rad2deg(getori()[1])} deg', size=(15, 1), justification='right', key='-RY-'),
         sg.Text(f'Rz: {np.rad2deg(getori()[2])} deg', size=(15, 1), justification='right', key='-RZ-'),
-        sg.Button('E-stop', button_color=('white', 'red'), size=(17, 1), key='-ESTOP-', use_ttk_buttons=True, ),],
+        sg.Button('E-stop', button_color=('white', 'red'), size=(30, 1), key='-ESTOP-' ),],
 
-        [sg.Text('JS Jogging', key='-JS-', font=('Cooper Black', 15), background_color='brown')],
+        [blank((3,1)),sg.Text('Joint Space Jogging', key='-JS-', font=('Cooper Black', 15), background_color='brown'), blank((120,1)), sg.Button('ENABLE CONTROLLER', key='-ENABLE-', size=(30,1))],
         [sg.Slider(range=(sawyer_qlim[0, 0], sawyer_qlim[1, 0]), default_value=robot.q[0], orientation='h',
                 size=slider_size, key='-SLIDER0-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[0])} deg', size=(10, 1), key='-BASE-', justification='right'),],
         [sg.Slider(range=(sawyer_qlim[0, 1], sawyer_qlim[1, 1]), default_value=robot.q[1], orientation='h',
@@ -76,6 +73,7 @@ def tab1_setup():
          sg.Radio('End Effector Control', 'RADIO1', key='-END-EFFECTOR-', size=(18,1))],
 
         [sg.Button('Confirm', key='-CONFIRM-', size=(18,1)), sg.Button('Home', key='-HOME-', size=(18,1)),],
+        
     ]
     return tab1_layout
 
@@ -114,7 +112,7 @@ tab_group_layout = [
         selected_background_color='brown',
         selected_title_color='white',
         title_color='black',
-        size=(1180, 768),
+        size=(1368, 768),
         enable_events=True,
 
     )
@@ -122,22 +120,27 @@ tab_group_layout = [
 
 # Create the PySimpleGUI window with the TabGroup
 window = sg.Window('System GUI', tab_group_layout, finalize=True,
-                   size=(1280, 800), location=(0, 0), resizable=True)
+                   size=(1680, 1050), location=(0, 0), resizable=True)
+
+def update_gui_thread():
+    while True:
+        new_joint_states = robot.get_jointstates()
+        window.write_event_value('-UPDATE-JOINTS-', new_joint_states)
 
 
-slider_update_thread = threading.Thread(target=update_gui_thread, daemon=True)
-slider_update_thread.daemon = True
-slider_update_thread.start()
+slider_update_thread = threading.Thread(target=update_gui_thread, daemon=True).start()
 
 while True:
+
     event, values = window.read()
+    system_state = sawyer_controller.system_state()
 
     if event == sg.WIN_CLOSED:
         break
 
     # constantly update the joint values associated with sliders' values
     for i in range(7):
-        robot.set_joint_value(i, values[f'-SLIDER{i}-'])
+        q = robot.set_joint_value(i, values[f'-SLIDER{i}-'])
     
     # event activated with HOME button
     if event == '-HOME-':
@@ -145,56 +148,72 @@ while True:
 
     # event activated with E-stop button
     if event == '-ESTOP-':
-        pass
-
+        if system_state == "STOPPED":
+            sawyer_controller.disengage_estop()
+        else:
+            sawyer_controller.engage_estop()
+        
+    if event == '-ENABLE-':
+        sawyer_controller.enable_system()
 
     # event activated with +X button
     if event == '-PLUSX-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0.05, 0, 0), time=0.1)
+        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(0.05, 0, 0), 0.1)).start()
     
     # event activated with -X button
     if event == '-MINUSX-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(-0.05, 0, 0), time=0.1)
-    
+        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(-0.05, 0, 0), 0.1)).start()
+
     # event activated with +Y button
     if event == '-PLUSY-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0.05, 0), time=0.1)
+        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(0, 0.05, 0), 0.1), ).start()
 
     # event activated with -Y button
     if event == '-MINUSY-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, -0.05, 0), time=0.1)
+        if system_state == "ENABLED":
+            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, -0.05, 0), time=0.1)
+        else:
+            print("System not enabled. Please enable system to move robot.")
 
     # event activated with +Z button
     if event == '-PLUSZ-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, 0.05), time=0.1)
+        if system_state == "ENABLED":
+            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, 0.05), time=0.1)
+        else:
+            print("System not enabled. Please enable system to move robot.")
 
     # event activated with -Z button
     if event == '-MINUSZ-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, -0.05), time=0.1)
+        if system_state == "ENABLED":
+            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, -0.05), time=0.1)
+        else:
+            print("System not enabled. Please enable system to move robot.")
 
-    # event activated with +Roll button
-    if event == '-PLUSROLL-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rx(np.deg2rad(5)), time=0.1)
+    ### MAINTAINING ORIENTATION ###
 
-    # event activated with -Roll button
-    if event == '-MINUSROLL-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rx(np.deg2rad(-5)), time=0.1)
-    
-    # event activated with +Pitch button
-    if event == '-PLUSPITCH-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Ry(np.deg2rad(5)), time=0.1)
-    
-    # event activated with -Pitch button
-    if event == '-MINUSPITCH-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Ry(np.deg2rad(-5)), time=0.1)
-    
-    # event activated with +Yaw button
-    if event == '-PLUSYAW-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rz(np.deg2rad(5)), time=0.1)
+    # # event activated with +Roll button
+    # if event == '-PLUSROLL-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rx(np.deg2rad(5)), time=0.1)
 
-    # event activated with -Yaw button
-    if event == '-MINUSYAW-':
-        sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rz(np.deg2rad(-5)), time=0.1)
+    # # event activated with -Roll button
+    # if event == '-MINUSROLL-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rx(np.deg2rad(-5)), time=0.1)
+    
+    # # event activated with +Pitch button
+    # if event == '-PLUSPITCH-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Ry(np.deg2rad(5)), time=0.1)
+    
+    # # event activated with -Pitch button
+    # if event == '-MINUSPITCH-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Ry(np.deg2rad(-5)), time=0.1)
+    
+    # # event activated with +Yaw button
+    # if event == '-PLUSYAW-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rz(np.deg2rad(5)), time=0.1)
+
+    # # event activated with -Yaw button
+    # if event == '-MINUSYAW-':
+    #     sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3.Rz(np.deg2rad(-5)), time=0.1)
 
 
     if event == '-UPDATE-JOINTS-':
@@ -219,7 +238,8 @@ while True:
     # event activated with CONFIRM button
     if event == '-CONFIRM-':
         if values['-JOINT-']:
-            robot.move()
+            threading.Thread(target=sawyer_controller.go_to_joint_angles, args=(q, 3)).start()
+
         elif values['-END-EFFECTOR-']:
             input_values = []
 
@@ -236,6 +256,8 @@ while True:
             # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
             pose = sm.SE3(input_values[0], input_values[1], input_values[2]
                           ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
-            sawyer_controller.go_to_CartesianPose(pose, time=3)
+        
+            threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(pose, 3)).start()
+
 
 window.close()

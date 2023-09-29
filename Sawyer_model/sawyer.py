@@ -567,6 +567,7 @@ class Sawyer(DHRobot3D):
 
         """
         self._UIjs[j] = np.deg2rad(float(value))
+        return self._UIjs
 
 
     # -----------------------------------------------------------------------------------#
