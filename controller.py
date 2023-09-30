@@ -13,14 +13,14 @@ import time
 
 class Controller():
 
-    def __init__(self, robot : rtb.DHRobot, env : Swift, isSim=True) -> None:
+    def __init__(self, robot : rtb.DHRobot, env : Swift, is_sim=True) -> None:
 
         self._robot = robot
         self._env   = env
-        self._isSim = isSim
+        self._is_sim = is_sim
         self._state = 'IDLE'
-        self._joystick = self.joystick_init()
-        self._joystick.init()
+        # self._joystick = self.joystick_init()
+        # self._joystick.init()
 
     def joystick_init(self):
 
@@ -28,7 +28,8 @@ class Controller():
         pygame.init()
         joystick_count = pygame.joystick.get_count()
         if joystick_count == 0:
-            raise Exception('No joystick found')
+            joystick = None
+            # raise Exception('No joystick found')
         else:
             joystick = pygame.joystick.Joystick(0)
 
@@ -157,49 +158,57 @@ class Controller():
 
     def gamepad_control(self,enable=True):
 
-        # Print joystick information
-        joy_name = self._joystick.get_name()
-        joy_axes = self._joystick.get_numaxes()
-        joy_buttons = self._joystick.get_numbuttons()
+        self._joystick = self.joystick_init()
 
-        print(f'Your joystick ({joy_name}) has:')
-        print(f' - {joy_buttons} buttons')
-        print(f' - {joy_axes} axes')
+        if self._joystick is not None:
 
-        vel_scale = {'linear': 0.3, 'angular': 0.8}
+            # Print joystick information
+            self._joystick.init()
+            joy_name = self._joystick.get_name()
+            joy_axes = self._joystick.get_numaxes()
+            joy_buttons = self._joystick.get_numbuttons()
 
-        # Main loop to check joystick functionality
-        while enable:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+            print(f'Your joystick ({joy_name}) has:')
+            print(f' - {joy_buttons} buttons')
+            print(f' - {joy_axes} axes')
 
-            if self._joystick.get_button(4):
-                self._robot.home()
+            vel_scale = {'linear': 0.3, 'angular': 0.8}
 
-            vz = 0
-            if self._joystick.get_button(1):
-                vz = 0.5
-            elif self._joystick.get_button(2):
-                vz = -0.5
-            
-            # get linear and angular velocity
-            linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
-            angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
+            # Main loop to check joystick functionality
+            while enable:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
 
-            # combine velocities
-            ee_vel = np.hstack((linear_vel, angular_vel))
+                if self._joystick.get_button(4):
+                    self._robot.home()
 
-            # calculate joint velocities
-            joint_vel = self.solve_RMRC(ee_vel)
+                vz = 0
+                if self._joystick.get_button(1):
+                    vz = 0.5
+                elif self._joystick.get_button(2):
+                    vz = -0.5
+                
+                # get linear and angular velocity
+                linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
+                angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
 
-            # update joint states as a command to robot
-            current_js = copy.deepcopy(self._robot.q)
-            q = current_js + joint_vel * 0.01
-            self._robot.q = q
+                # combine velocities
+                ee_vel = np.hstack((linear_vel, angular_vel))
 
-            self._env.step(0.01)
+                # calculate joint velocities
+                joint_vel = self.solve_RMRC(ee_vel)
+
+                # update joint states as a command to robot
+                current_js = copy.deepcopy(self._robot.q)
+                q = current_js + joint_vel * 0.01
+                self._robot.q = q
+
+                self._env.step(0.01)
+        else:
+            print('No joystick found!')
+
 
     def solve_RMRC(self, ee_vel):
         """

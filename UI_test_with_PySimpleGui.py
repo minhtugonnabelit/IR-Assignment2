@@ -9,7 +9,8 @@ import spatialmath as sm
 import spatialmath.base as smb
 from swift import Swift
 
-from Sawyer_model.sawyer import Sawyer
+from robot.sawyer import Sawyer
+# from Sawyer_model.sawyer import Sawyer
 from controller import Controller
 
 # Define the 5size of the sliders

@@ -3,7 +3,8 @@ import spatialmath as sm
 import spatialmath.base as smb
 import numpy as np
 from swift import Swift, Slider, Button, Label, Select, Checkbox, Radio
-from Sawyer_model.sawyer import Sawyer
+# from Sawyer_model.sawyer import Sawyer
+from robot.sawyer import Sawyer
 from controller import Controller
 
 import ipdb
@@ -42,19 +43,22 @@ for link in robot.links:
 
         j += 1
 
+
+
 env.add(
     Button(
         lambda x: env.close(),
         desc="Close",
     ),
+
 )
 
-env.add(
-    Button(
-        lambda x: robot.move(),
-        desc="Confirm",
-    )
-)
+# env.add(
+#     Button(
+#         lambda x: robot.move(),
+#         desc="Confirm",
+#     )
+# )
 
 env.add(
     Button(
