@@ -9,6 +9,7 @@ import roboticstoolbox as rtb
 import spatialgeometry as geometry
 import spatialmath.base as spb
 import os
+import copy
 from abc import ABC
 
 # Useful variables
@@ -105,6 +106,24 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self._update_3dmodel()
         for link in self.links_3d:
             env.add(link)
+
+    def set_base(self, base):
+        """
+        Set base for system based on user input
+        """
+        self.base = base * self.base
+
+    def get_ee_pose(self):
+        """
+        Get end-effector pose of the robot
+        """
+        return self.fkine(self.q)
+
+    def get_jointstates(self):
+        """
+        Get robot joint states
+        """
+        return copy.deepcopy(self.q)
         
     # -----------------------------------------------------------------------------------#
     def __setattr__(self, name, value):
