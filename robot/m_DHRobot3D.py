@@ -46,6 +46,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self._link3D_dir = link3d_dir
         self._qtest = qtest
         self._qtest_transforms = qtest_transforms
+        # self.neutral = np.zeros(np.size(self.links))
         self._apply_3dmodel()
     
     # -----------------------------------------------------------------------------------#
@@ -107,11 +108,16 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         for link in self.links_3d:
             env.add(link)
 
+    # Parameters Setter and Getter
+    # -----------------------------------------------------------------------------------#
     def set_base(self, base):
         """
         Set base for system based on user input
         """
         self.base = base * self.base
+    
+    def set_neutral_js(self, js):
+        self.neutral = js
 
     def get_ee_pose(self):
         """
@@ -124,6 +130,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         Get robot joint states
         """
         return copy.deepcopy(self.q)
+    
         
     # -----------------------------------------------------------------------------------#
     def __setattr__(self, name, value):

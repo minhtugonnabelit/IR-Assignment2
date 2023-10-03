@@ -10,7 +10,6 @@ import spatialmath.base as smb
 from swift import Swift
 
 from robot.sawyer import Sawyer
-# from Sawyer_model.sawyer import Sawyer
 from controller import Controller
 
 # Define the 5size of the sliders
@@ -20,7 +19,16 @@ slider_size = (30, 30)
 # Define the theme for the GUI
 sg.theme('DarkAmber')
 
+# Create the environment and robot
+env = Swift()
+env.launch(realtime=True)
 
+# Create the Sawyer robot and set the joint limits
+robot = Sawyer(env)
+sawyer_controller = Controller(robot, env)
+sawyer_controller.go_to_home()
+sawyer_qlim = copy.deepcopy(robot.qlim)
+sawyer_qlim = np.rad2deg(sawyer_qlim)
 
 def getori():
     ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3])
@@ -43,19 +51,19 @@ def tab1_setup():
         sg.Button('E-stop', button_color=('white', 'red'), size=(30, 1), key='-ESTOP-' ),],
 
         [blank((3,1)),sg.Text('Joint Space Jogging', key='-JS-', font=('Cooper Black', 15), background_color='brown'), blank((120,1)), sg.Button('ENABLE CONTROLLER', key='-ENABLE-', size=(30,1))],
-        [sg.Slider(range=(sawyer_qlim[0, 0], sawyer_qlim[1, 0]), default_value=robot.q[0], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 0], sawyer_qlim[1, 0]), default_value=np.rad2deg(robot.q[0]), orientation='h',
                 size=slider_size, key='-SLIDER0-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[0])} deg', size=(10, 1), key='-BASE-', justification='right'),],
-        [sg.Slider(range=(sawyer_qlim[0, 1], sawyer_qlim[1, 1]), default_value=robot.q[1], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 1], sawyer_qlim[1, 1]), default_value=np.rad2deg(robot.q[1]), orientation='h',
                 size=slider_size, key='-SLIDER1-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[1])} deg', size=(10, 1), key='-J0-', justification='right')],
-        [sg.Slider(range=(sawyer_qlim[0, 2], sawyer_qlim[1, 2]), default_value=robot.q[2], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 2], sawyer_qlim[1, 2]), default_value=np.rad2deg(robot.q[2]), orientation='h',
                 size=slider_size, key='-SLIDER2-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[2])} deg', size=(10, 1), key='-J1-', justification='right')],
-        [sg.Slider(range=(sawyer_qlim[0, 3], sawyer_qlim[1, 3]), default_value=robot.q[3], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 3], sawyer_qlim[1, 3]), default_value=np.rad2deg(robot.q[3]), orientation='h',
                 size=slider_size, key='-SLIDER3-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[3])} deg', size=(10, 1), key='-J2-', justification='right')],
-        [sg.Slider(range=(sawyer_qlim[0, 4], sawyer_qlim[1, 4]), default_value=robot.q[4], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 4], sawyer_qlim[1, 4]), default_value=np.rad2deg(robot.q[4]), orientation='h',
                 size=slider_size, key='-SLIDER4-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[4])} deg', size=(10, 1), key='-J3-', justification='right')],
-        [sg.Slider(range=(sawyer_qlim[0, 5], sawyer_qlim[1, 5]), default_value=robot.q[5], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 5], sawyer_qlim[1, 5]), default_value=np.rad2deg(robot.q[5]), orientation='h',
                 size=slider_size, key='-SLIDER5-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[5])} deg', size=(10, 1), key='-J4-', justification='right')],
-        [sg.Slider(range=(sawyer_qlim[0, 6], sawyer_qlim[1, 6]), default_value=robot.q[6], orientation='h',
+        [sg.Slider(range=(sawyer_qlim[0, 6], sawyer_qlim[1, 6]), default_value=np.rad2deg(robot.q[6]), orientation='h',
                 size=slider_size, key='-SLIDER6-', enable_events=True), sg.Text(f'{np.rad2deg(robot.q[6])} deg', size=(10, 1), key='-J5-', justification='right')],
     
         [sg.Text('TCP Jogging', key='-TCP-', font=('Cooper Black', 15), background_color='brown')],
@@ -92,17 +100,6 @@ tab3_layout = [
     [sg.Button('Submit Tab 3')]
 ]
 
-# Create the environment and robot
-env = Swift()
-env.launch(realtime=True)
-
-# Create the Sawyer robot and set the joint limits
-robot = Sawyer(env)
-sawyer_controller = Controller(robot, env)
-robot.home()
-sawyer_qlim = copy.deepcopy(robot.qlim)
-sawyer_qlim = np.rad2deg(sawyer_qlim)
-
 tab_group_layout = [
     [sg.TabGroup(
         [[sg.Tab('Tab 1', tab1_setup(), background_color='brown',),
@@ -125,11 +122,12 @@ window = sg.Window('System GUI', tab_group_layout, finalize=True,
 
 def update_gui_thread():
     while True:
-        new_joint_states = robot.get_jointstates()
+        new_joint_states = np.rad2deg(robot.get_jointstates())
         window.write_event_value('-UPDATE-JOINTS-', new_joint_states)
 
 
-slider_update_thread = threading.Thread(target=update_gui_thread, daemon=True).start()
+SLIDER_UPDATE_THREAD = threading.Thread(target=update_gui_thread, daemon=True).start()
+input_values = []
 
 while True:
 
@@ -141,11 +139,29 @@ while True:
 
     # constantly update the joint values associated with sliders' values
     for i in range(7):
-        q = robot.set_joint_value(i, values[f'-SLIDER{i}-'])
+        sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+
+    input_values = []
+
+    # Loop through the input keys and convert values to float
+    for key in ['-CARTX-', '-CARTY-', '-CARTZ-', '-ROLL-', '-PITCH-', '-YAW-']:
+        input_value = values[key]
+
+        try:
+            float_value = float(input_value)
+            input_values.append(float_value)
+        except ValueError:
+            print(f"Invalid input: {input_value}")
+
+    # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
+    pose = sm.SE3(input_values[0], input_values[1], input_values[2]
+                    ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
     
+    sawyer_controller.set_cartesian_value(pose)
+
     # event activated with HOME button
     if event == '-HOME-':
-        robot.home()
+        sawyer_controller.send_command('HOME')
 
     # event activated with E-stop button
     if event == '-ESTOP-':
@@ -159,36 +175,27 @@ while True:
 
     # event activated with +X button
     if event == '-PLUSX-':
-        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(0.05, 0, 0), 0.1)).start()
+        sawyer_controller.send_command('+X')
     
     # event activated with -X button
     if event == '-MINUSX-':
-        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(-0.05, 0, 0), 0.1)).start()
+        sawyer_controller.send_command('-X')
 
     # event activated with +Y button
     if event == '-PLUSY-':
-        threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(robot.fkine(robot.q) @ sm.SE3(0, 0.05, 0), 0.1), ).start()
+        sawyer_controller.send_command('+Y')
 
     # event activated with -Y button
     if event == '-MINUSY-':
-        if system_state == "ENABLED":
-            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, -0.05, 0), time=0.1)
-        else:
-            print("System not enabled. Please enable system to move robot.")
+        sawyer_controller.send_command('-Y')
 
     # event activated with +Z button
     if event == '-PLUSZ-':
-        if system_state == "ENABLED":
-            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, 0.05), time=0.1)
-        else:
-            print("System not enabled. Please enable system to move robot.")
+        sawyer_controller.send_command('+Z')
 
     # event activated with -Z button
     if event == '-MINUSZ-':
-        if system_state == "ENABLED":
-            sawyer_controller.go_to_CartesianPose(robot.fkine(robot.q) @ sm.SE3(0, 0, -0.05), time=0.1)
-        else:
-            print("System not enabled. Please enable system to move robot.")
+        sawyer_controller.send_command('-Z')
 
     ### MAINTAINING ORIENTATION ###
 
@@ -239,26 +246,11 @@ while True:
     # event activated with CONFIRM button
     if event == '-CONFIRM-':
         if values['-JOINT-']:
-            threading.Thread(target=sawyer_controller.go_to_joint_angles, args=(q, 3)).start()
+            sawyer_controller.send_command('JOINT_ANGLES')
 
         elif values['-END-EFFECTOR-']:
-            input_values = []
-
-            # Loop through the input keys and convert values to float
-            for key in ['-CARTX-', '-CARTY-', '-CARTZ-', '-ROLL-', '-PITCH-', '-YAW-']:
-                input_value = values[key]
-
-                try:
-                    float_value = float(input_value)
-                    input_values.append(float_value)
-                except ValueError:
-                    print(f"Invalid input: {input_value}")
-
-            # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
-            pose = sm.SE3(input_values[0], input_values[1], input_values[2]
-                          ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
+            sawyer_controller.send_command('CARTESIAN_POSE')
         
-            threading.Thread(target=sawyer_controller.go_to_CartesianPose, args=(pose, 3)).start()
 
-
+sawyer_controller.clean()
 window.close()

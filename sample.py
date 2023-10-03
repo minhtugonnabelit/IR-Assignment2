@@ -53,13 +53,6 @@ env.add(
 
 )
 
-# env.add(
-#     Button(
-#         lambda x: robot.move(),
-#         desc="Confirm",
-#     )
-# )
-
 env.add(
     Button(
         lambda x: robot.home(),
