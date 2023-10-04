@@ -228,5 +228,6 @@ while True:
             sawyer_controller.send_command('CARTESIAN_POSE')
         
 
-sawyer_controller.clean()
-window.close()
+
+
+
