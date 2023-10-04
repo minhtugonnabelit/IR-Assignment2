@@ -10,7 +10,6 @@ import spatialmath as sm
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 
-import time
 
 class Controller():
     
@@ -28,10 +27,10 @@ class Controller():
         # Dispatch table
         self._dispatch = {
             "SHUTDOWN": self.shutdown,
-            "STOPPED": self.engage_estop,
+            "STOP": self.engage_estop,
             "DISENGAGE": self.disengage_estop,
-            "ENABLED": self.enable_system,
-            "DISABLED": self.disable_system,
+            "ENABLE": self.enable_system,
+            "DISABLE": self.disable_system,
             "HOME": self.go_to_home,
             "+X": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0), time=0.1),
             "-X": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0), time=0.1),
@@ -47,8 +46,6 @@ class Controller():
 
         self.thread = threading.Thread(target=self.run)
         self.thread.start()
-
-
             
     def system_activated(self):
         """
@@ -88,6 +85,7 @@ class Controller():
                     print(f'Command {command} is not recognized!')
             except queue.Empty:
                 pass
+
     def send_command(self, command):
         """
         Send command to controller
@@ -147,6 +145,9 @@ class Controller():
 
         """
         self.go_to_CartesianPose(self._ui_pose, time=3)
+
+    def update_js(self,q):
+        self._robot.q = q
 
     # --------------------------------------------------#
     # gamepad control
