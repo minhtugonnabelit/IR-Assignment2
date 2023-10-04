@@ -10,12 +10,12 @@ import os
 import numpy as np
 import spatialmath.base as smb
 import spatialgeometry as geometry
+from spatialmath.base import *
+from spatialmath import SE3
 import time
 
 from swift import Swift
-from spatialmath.base import *
-from spatialmath import SE3
-from m_DHRobot3D import M_DHRobot3D
+from robot.m_DHRobot3D import M_DHRobot3D
 
 class Astorino(M_DHRobot3D):
     
@@ -74,6 +74,9 @@ class Astorino(M_DHRobot3D):
         
         self.base = base * self.base
         self.q = qtest
+        self.set_neutral_js([0,-np.pi/2,0,0,0,0])
+        self.update_sim()
+
         
         
     def _create_DH(self):

@@ -59,7 +59,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self.links_3d = []
         for i in range(self.n + 1):
             file_name = None
-            for ext in ['.stl', '.DAE', '.ply']:
+            for ext in ['.stl', '.dae', '.ply']:
                 if os.path.exists(os.path.join(self._link3D_dir, self.link3D_names[f'link{i}'] + ext)):
                     file_name = os.path.join(self._link3D_dir, self.link3D_names[f'link{i}'] + ext)
                     break                   
@@ -82,6 +82,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         """
         Update the robot's 3D model based on the relation matrices
         """
+        print('tracing')
         link_transforms = self._get_transforms(self.q)
         for i, link in enumerate(self.links_3d):
             link.T = link_transforms[i] @ self._relation_matrices[i]

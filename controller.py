@@ -42,6 +42,7 @@ class Controller():
             "CARTESIAN_POSE": self.move_cartesian,
             "JOYSTICK": self.gamepad_control,
             "DISABLE_JOYSTICK": self.disable_gamepad,
+            "UPDATE_JOINT_STATE": self.update_js,
         }  
 
         self.thread = threading.Thread(target=self.run)
@@ -146,8 +147,9 @@ class Controller():
         """
         self.go_to_CartesianPose(self._ui_pose, time=3)
 
-    def update_js(self,q):
-        self._robot.q = q
+    def update_js(self):
+        # print(self._robot.q)
+        self._robot.q = self._ui_js
 
     # --------------------------------------------------#
     # gamepad control
