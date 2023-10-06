@@ -193,6 +193,9 @@ class RobotGUI:
             
             new_joint_states = np.rad2deg(self.sawyer.get_jointstates())
             self.window.write_event_value('-UPDATE-JOINTS-', new_joint_states)
+
+            state = self.sawyer_controller.system_state()
+            self.window.write_event_value('-UPDATE-STATE-', state)
             
     def run(self):
         q = np.zeros(7)
@@ -243,16 +246,20 @@ class RobotGUI:
                 self.window['-RX-'].update(f'Rx: {np.rad2deg(self.getori()[0]):.2f} deg')
                 self.window['-RY-'].update(f'Ry: {np.rad2deg(self.getori()[1]):.2f} deg')
                 self.window['-RZ-'].update(f'Rz: {np.rad2deg(self.getori()[2]):.2f} deg')
+            
+
+            if event == '-UPDATE-STATE-':
+
+                state = self.sawyer_controller.system_state()
+                self.window['-STATE-'].update(f'{state}')
 
 
             # event activated with E-stop button
             if event == '-ESTOP-':
                 if system_state == "STOPPED":
-                    # self.sawyer_controller.send_command('DISENGAGE')
                     self.sawyer_controller.disengage_estop()
                 else:
-                    # self.sawyer_controller.engage_estop()
-                    self.sawyer_controller.send_command('STOP')
+                    self.sawyer_controller.engage_estop()
                 
             if event == '-GAMEPAD_ENABLE-':
                 self.sawyer_controller.send_command('GAMEPAD_ENABLE')

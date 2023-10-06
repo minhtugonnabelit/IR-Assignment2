@@ -10,7 +10,7 @@ import spatialgeometry as geometry
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
-
+import ir_support
 
 class Sawyer(M_DHRobot3D):
 
