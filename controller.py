@@ -3,6 +3,7 @@ import sys
 import pygame
 import queue
 import threading
+import time
 
 import roboticstoolbox as rtb
 import numpy as np
@@ -22,6 +23,7 @@ class Controller():
         self._ui_js = np.zeros(np.size(self._robot.links))
         self._ui_pose = self._robot.fkine(self._ui_js)
         self._shutdown = False
+        self._disable_gamepad = True
         self._command_queue = queue.Queue()
 
         # Dispatch table
@@ -40,11 +42,17 @@ class Controller():
             "-Z": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05), time=0.1),
             "JOINT_ANGLES": self.move,
             "CARTESIAN_POSE": self.move_cartesian,
-            "JOYSTICK": self.gamepad_control,
-            "DISABLE_JOYSTICK": self.disable_gamepad,
+            "GAMEPAD_ENABLE": self.gamepad_control,
+            "GAMEPAD_DISABLE": self.disable_gamepad,
             "UPDATE_JOINT_STATE": self.update_js,
         }  
 
+
+    
+    def launch(self):
+        """
+        Start the controller
+        """
         self.thread = threading.Thread(target=self.run)
         self.thread.start()
             
@@ -80,7 +88,7 @@ class Controller():
             try: 
                 command = self._command_queue.get(timeout=0.01)
                 if command in self._dispatch:
-                    print(f'Executing command {command}')
+                    # print(f'Executing command {command}')
                     self._dispatch[command]()
                 else:
                     print(f'Command {command} is not recognized!')
@@ -160,6 +168,13 @@ class Controller():
         """
         self._disable_gamepad = True
 
+    # def enable_gamepad(self):
+    #     """
+    #     ### Enable gamepad
+    #     Function to enable gamepad control
+    #     """
+    #     self._disable_gamepad = False
+
     def gamepad_control(self):
         """
         ### Gamepad control
@@ -184,37 +199,52 @@ class Controller():
             vel_scale = {'linear': 0.3, 'angular': 0.8}
 
             # Main loop to check joystick functionality
-            while not self._disable_gamepad and self.system_activated():
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
+            while not self._disable_gamepad:
 
-                if self._joystick.get_button(4):
-                    self.go_to_home()
+                if self._joystick.get_button(3):
+                    if self._state == 'STOPPED':
+                        self.disengage_estop()
+                    else:
+                        self.engage_estop()
 
-                vz = 0
-                if self._joystick.get_button(1):
-                    vz = 0.5
-                elif self._joystick.get_button(2):
-                    vz = -0.5
-                
-                # get linear and angular velocity
-                linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
-                angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
+                if self._joystick.get_button(0):
+                    self.enable_system()
 
-                # combine velocities
-                ee_vel = np.hstack((linear_vel, angular_vel))
 
-                # calculate joint velocities
-                joint_vel = self.solve_RMRC(ee_vel)
+                if self.system_activated():
 
-                # update joint states as a command to robot
-                current_js = copy.deepcopy(self._robot.q)
-                q = current_js + joint_vel * 0.01
-                self._robot.q = q
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            sys.exit()
 
-                self._env.step(0.01)
+                    if self._joystick.get_button(4):
+                        self.go_to_home()
+
+                    vz = 0
+                    if self._joystick.get_button(1):
+                        vz = 0.5
+                    elif self._joystick.get_button(2):
+                        vz = -0.5
+                    
+                    # get linear and angular velocity
+                    linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
+                    angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
+
+                    # combine velocities
+                    ee_vel = np.hstack((linear_vel, angular_vel))
+
+                    # calculate joint velocities
+                    joint_vel = self.solve_RMRC(ee_vel)
+
+                    # update joint states as a command to robot
+                    current_js = copy.deepcopy(self._robot.q)
+                    q = current_js + joint_vel * 0.01
+                    self._robot.q = q
+
+                    self._env.step(0.01)
+                else:
+                    time.sleep(0.5)
         else:
             print('No joystick found!')
 
@@ -338,15 +368,21 @@ class Controller():
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))
 
         # set threshold and damping
-        w_thresh = 0.05
+        w_thresh = 0.04
         damp = 0
-        max_damp = 0.5
+        max_damp = 0.2
 
         # if manipulability is less than threshold, add damping
         if w < w_thresh:
             print(f'{self._robot.name} is near singularity!')
-            damp = (1-np.power(w/w_thresh, 2)) * max_damp
+            damp = (1-np.power(w/w_thresh, 2)) * max_damp 
+            # ee_vel = ee_vel * -1
+        # elif w < w_thresh * 0.7:
+        #     print(f'{self._robot.name} is very near singularity!')
+        #     damp = (1-np.power(w/w_thresh, 2)) * max_damp * 0.5
+        #     print(ee_vel)
 
+        
         # calculate damped least square
         j_dls = j @ np.transpose(j) @ np.linalg.inv( j @ np.transpose(j) + damp * np.eye(6) )
 

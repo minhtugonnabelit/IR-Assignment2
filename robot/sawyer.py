@@ -4,12 +4,13 @@ import time
 
 import roboticstoolbox as rtb
 import numpy as np
-import spatialmath as sm   
+import spatialmath as sm
 import spatialmath.base as smb
 import spatialgeometry as geometry
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
+
 
 class Sawyer(M_DHRobot3D):
 
@@ -78,10 +79,10 @@ class Sawyer(M_DHRobot3D):
 
         self.base = base * self.base
         self.q = qtest
-        self._head = self._add_model("Sawyer_model/head.dae", smb.transl(0, 0, 0.3811))
+        self._head = self._add_model(
+            "Sawyer_model/head.dae", smb.transl(0, 0, 0.3811))
         self.set_neutral_js([0.00, -1.18, 0.00, -2.18, 0.00, 0.57, 3.3161])
         self.update_sim()
-
 
     def _create_DH(self):
         """
@@ -94,8 +95,16 @@ class Sawyer(M_DHRobot3D):
         # kinematic parameters
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
         d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
-        alpha = [-np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
-        qlim = [[-2*np.pi, 2*np.pi] for _ in range(7)]
+        alpha = [-np.pi / 2, -np.pi / 2, -np.pi /
+                 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
+        # qlim = [[-2*np.pi, 2*np.pi] for _ in range(7)]
+        qlim = np.deg2rad([[-175, 175],
+                           [-175, 175],
+                           [-175, 175],
+                           [-175, 175],
+                           [-170.5, 170.5],
+                           [-170.5, 170.5],
+                           [-270, 270]])
 
         # offset to have the dh from toolbox match with the actual pose
         offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
@@ -121,7 +130,7 @@ class Sawyer(M_DHRobot3D):
         else:
             model = geometry.Mesh(
                 model_full_path, pose=model_placement, color=color)
-            
+
         self._env.add(model, collision_alpha=1)
         return model
 
@@ -192,12 +201,13 @@ class Sawyer(M_DHRobot3D):
         ellipsoids = []
         for i in range(len(self.links)):
 
-            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(self.a[i]) / 2 + 0.02
+            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(
+                self.a[i]) / 2 + 0.02
             major_axis = copy.deepcopy(self.d[i]) / 2
 
             ellipsoid = np.asarray(
                 [minor_axis, major_axis, minor_axis])
-            
+
             ellipsoids.append(ellipsoid)
 
         ellipsoids[6][2] = ellipsoids[6][1]
@@ -213,7 +223,7 @@ class Sawyer(M_DHRobot3D):
         if q is None:
             return self.fkine_all().A
         return self.fkine_all(q).A
-    
+
     # def is_grounded(self, q=None):
     #     """
     #     Check if robot is grounded
@@ -227,7 +237,7 @@ class Sawyer(M_DHRobot3D):
     #     """
 
     #     pass
-    
+
     # # testing
     # def self_collided_LP(self,):
     #     """
@@ -258,9 +268,8 @@ class Sawyer(M_DHRobot3D):
     #                 is_collided = True
     #                 break
 
-
     #     return is_collided
-    
+
     # # testing
     # def self_collisions_Cylinder(self, q=None):
     #     """
@@ -288,8 +297,9 @@ class Sawyer(M_DHRobot3D):
     #                 break
 
     #     return is_collided
-    
+
     # -----------------------------------------------------------------------------------#
+
     def rotate_head(self, angle):
         """
         animate head motion
@@ -338,8 +348,10 @@ class Sawyer(M_DHRobot3D):
                 continue
 
             center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-            elip = np.round((tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
-            ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
+            elip = np.round(
+                (tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
+            ob = smb.plot_ellipsoid(
+                elip, center, resolution=10, color='r', alpha=0.5)
 
 
 # ---------------------------------------------------------------------------------------#
