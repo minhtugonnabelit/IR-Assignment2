@@ -82,7 +82,6 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         """
         Update the robot's 3D model based on the relation matrices
         """
-        print('tracing')
         link_transforms = self._get_transforms(self.q)
         for i, link in enumerate(self.links_3d):
             link.T = link_transforms[i] @ self._relation_matrices[i]
