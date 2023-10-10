@@ -9,6 +9,7 @@ from swift import Swift
 from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 from controller import Controller
+from mission import Mission
 
 
 class RobotGUI:
@@ -21,21 +22,26 @@ class RobotGUI:
         sg.theme('DarkAmber')
         self.env = Swift()
         self.env.launch(realtime=True)
-
-        self.sawyer = Sawyer(self.env, base=sm.SE3(0, 1, 0))
+        
+        base_original_robot = sm.SE3(0,0.5,0)
+        transl2robot = sm.SE3(0,-1,0)
+        
+        # self.sawyer = Sawyer(self.env, base=sm.SE3(0, 1, 0))
+        self.sawyer = Sawyer(self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
 
         self.sawyer_controller = Controller(self.sawyer, self.env)
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
-        self.astorino = Astorino(self.env, base=sm.SE3(1, 0, 0))
+        self.astorino = Astorino(self.env, base= base_original_robot @ transl2robot)
         self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
 
         self.astorino_controller = Controller(self.astorino, self.env)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
-
+        
+        self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller,)
         self.window = self.create_window()
         self.update_gui_thread()
 
@@ -180,8 +186,9 @@ class RobotGUI:
     def tab3_setup(self):
         #... [omitting for brevity]
         tab3_layout = [
-            [sg.Text('This is Tab 3')],
-            [sg.Button('Submit Tab 3')]
+            [sg.Text('run mission')],
+            [sg.Button('run', key='-RUN_MISSION-' )],
+            [sg.Button('ENable system', key='-ENABLE_ALL-')],
         ]
         return tab3_layout
     
@@ -277,6 +284,15 @@ class RobotGUI:
             # event enabled with ENABLE button
             if event == '-ENABLE-':
                 self.sawyer_controller.send_command('ENABLE')
+                
+            if event == '-ENABLE_ALL-':
+                self.sawyer_controller.send_command('ENABLE')
+                self.astorino_controller.send_command('ENABLE')
+                
+            if event == '-RUN_MISSION-':
+                print('bruh')
+                self.mission.run()
+                
 
             # event activated with +X button
             if event == '-PLUSX-':
@@ -301,6 +317,8 @@ class RobotGUI:
             # event activated with -Z button
             if event == '-MINUSZ-':
                 self.sawyer_controller.send_command('-Z')
+                
+
 
 
             # event activated with CONFIRM button
@@ -310,6 +328,9 @@ class RobotGUI:
 
                 elif values['-END-EFFECTOR-']:
                     self.sawyer_controller.send_command('CARTESIAN_POSE')
+                    
+            # if event == 'START_MISSION"':
+                
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
@@ -319,3 +340,4 @@ class RobotGUI:
 if __name__ == '__main__':
     app = RobotGUI()
     app.run()
+    
