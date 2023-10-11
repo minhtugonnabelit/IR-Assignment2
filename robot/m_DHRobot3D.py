@@ -1,6 +1,6 @@
 ##  @file
 #   @brief A 3D Robot Class defined by standard DH parameters.
-#   @author Ho Minh Quang Ngo
+#   @author Ho Minh Quang Ngo and Anh Minh Tu
 #   @date Jul 20, 2023
 
 import swift
@@ -14,6 +14,7 @@ from abc import ABC
 
 # Useful variables
 from math import pi
+from ir_support import RectangularPrism, line_plane_intersection
 
 # -----------------------------------------------------------------------------------#
 class M_DHRobot3D(rtb.DHRobot, ABC):
@@ -67,7 +68,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
                 if f'color{i}' in self.link3D_names:
                     self.links_3d.append(geometry.Mesh(file_name, color = self.link3D_names[f'color{i}']))
                 else:
-                    self.links_3d.append(geometry.Mesh(file_name))
+                    self.links_3d.append(geometry.Mesh(file_name,))
             else:
                 raise ImportError(f'Cannot get 3D file at link {i}!')
 
@@ -76,6 +77,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         # Get relation matrix between the pose of the DH Link and the pose of the corresponding 3d object
         self._relation_matrices = [np.linalg.inv(link_transforms[i]) @ self._qtest_transforms[i] 
                                    for i in range(len(link_transforms))] 
+        
     
     # -----------------------------------------------------------------------------------#
     def _update_3dmodel(self):
@@ -111,25 +113,83 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
     # Parameters Setter and Getter
     # -----------------------------------------------------------------------------------#
     def set_base(self, base):
-        """
-        Set base for system based on user input
-        """
+        """ Set base for system based on user input """
         self.base = base * self.base
     
     def set_neutral_js(self, js):
+        """ Set neutral joint states for system based on user input """
         self.neutral = js
 
     def get_ee_pose(self):
-        """
-        Get end-effector pose of the robot
-        """
+        """ Get end-effector pose of the robot """
         return self.fkine(self.q)
 
     def get_jointstates(self):
-        """
-        Get robot joint states
-        """
+        """ Get robot joint states """
         return copy.deepcopy(self.q)
+    
+    # collision function:
+    def collision_check(self, q, object : geometry.Mesh):
+        """
+        """
+        # get the transforms of all links
+        ee_pose = self.fkine(q)
+        ee_sphere = geometry.Cylinder(0.03, self.d[self.n-1]/2,  pose = ee_pose)
+        d, p1, p2 = ee_sphere.closest_point(object, 5)
+        return d, p1, p2
+
+    def grounded_check(self, q, ground_height = None):
+        """
+        """
+        # if ground_height is not defined, use the base height as the ground height
+        if ground_height is None:
+            ground_height = self.base.A[2, 3]
+
+        # get the transforms of all links
+        link_transforms = self.get_link_poses(q)
+
+        # check if all links are above the ground defined
+        for j, link in enumerate(link_transforms):
+            if j <= 1:
+                continue
+            elif link[2, 3] < ground_height +  0.02:
+                return True
+        return False 
+
+    def get_ellipsoid(self):
+
+        """ Get ellipsoid of the robot """
+
+        ellipsoids = []
+        for i in range(len(self.links)):
+            
+            # special define for major and minor axis for ellipsoid
+            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(self.a[i]) / 2 + 0.02
+            major_axis = copy.deepcopy(self.d[i]) / 2
+
+            # define major and minor axis of ellipsoid
+            ellipsoid = np.asarray([minor_axis, major_axis, minor_axis])
+
+            ellipsoids.append(ellipsoid)
+
+        if self.n == 6: # 7dof robot
+            ellipsoids[6][2] = ellipsoids[6][1]
+            ellipsoids[6][1] = ellipsoids[6][0]
+        else: # 6dof robot
+            ellipsoids[5][2] = ellipsoids[5][1]
+            ellipsoids[5][1] = ellipsoids[5][0]
+
+        return ellipsoids
+
+    def get_link_poses(self, q=None):
+        """
+        :param q robot joint angles
+        :param robot -  seriallink robot model
+        :param transforms - list of transforms
+        """
+        if q is None:
+            return self.fkine_all()
+        return self.fkine_all(q)
     
         
     # -----------------------------------------------------------------------------------#

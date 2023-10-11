@@ -6,6 +6,8 @@ import spatialmath.base as smb
 import numpy as np
 import copy
 from swift import Swift
+import spatialgeometry as geometry
+
 from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 from controller import Controller
@@ -42,8 +44,15 @@ class RobotGUI:
         self.astorino_controller.go_to_home()
         
         self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller,)
+        self.collision_setup()
         self.window = self.create_window()
         self.update_gui_thread()
+
+    def collision_setup(self):
+        object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)))
+        self.sawyer_controller.update_collision_object(object)
+        self.env.add(object)
+
 
     def create_window(self):
         tab_group_layout = [
@@ -269,16 +278,15 @@ class RobotGUI:
                     self.sawyer_controller.engage_estop()
                 
             if event == '-GAMEPAD_ENABLE-':
-                self.sawyer_controller.send_command('GAMEPAD_ENABLE')
+                self.sawyer_controller.gamepad_control()
 
             if event == '-GAMEPAD_DISABLE-':
-                self.sawyer_controller.send_command('GAMEPAD_DISABLE')
-
+                self.sawyer_controller.disable_gamepad()
 
             # event activated with HOME button
             if event == '-HOME-':
                 if self.sawyer_controller._disable_gamepad is False:
-                    self.sawyer_controller.send_command('GAMEPAD_DISABLE')
+                    self.sawyer_controller.disable_gamepad()
                 self.sawyer_controller.send_command('HOME')
 
             # event enabled with ENABLE button

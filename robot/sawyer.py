@@ -126,10 +126,10 @@ class Sawyer(M_DHRobot3D):
         model_placement = self.base.A @ placement
         if color is None:
             model = geometry.Mesh(
-                model_full_path, pose=model_placement,)
+                model_full_path, pose=model_placement,collision=True)
         else:
             model = geometry.Mesh(
-                model_full_path, pose=model_placement, color=color)
+                model_full_path, pose=model_placement,collision=True, color=color)
 
         self._env.add(model, collision_alpha=1)
         return model
@@ -240,35 +240,7 @@ class Sawyer(M_DHRobot3D):
 
     # # testing
     # def self_collided_LP(self,):
-    #     """
-    #     Check self-collision of the robot using line-plance intersection
-    #     """
-    #     is_collided = False
-    #     tr = self.get_link_poses()
-
-    #     for i in range(len(tr)):
-
-    #         if i == 0:
-    #             continue
-
-    #         center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-    #         radi = copy.deepcopy(self._ellipsoids[i-1])
-    #         elip = np.round((tr[i][0:3, 0:3] @ np.diag(np.power(radi, -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
-    #         ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
-
-    #         for j in range(len(tr)):
-    #             if j == i or j == i-1:
-    #                 continue
-    #             center = (tr[j][0:3, 3] + tr[j-1][0:3, 3])/2
-    #             radi = copy.deepcopy(self._ellipsoids[j-1])
-    #             elip = np.round((tr[j][0:3, 0:3] @ np.diag(np.power(radi, -2)) @ np.transpose(tr[j][0:3, 0:3])), 3)
-    #             ob = smb.plot_ellipsoid(elip, center, resolution=10, color='r', alpha=0.5)
-
-    #             if ob.intersect(ob):
-    #                 is_collided = True
-    #                 break
-
-    #     return is_collided
+    #     pass
 
     # # testing
     # def self_collisions_Cylinder(self, q=None):
