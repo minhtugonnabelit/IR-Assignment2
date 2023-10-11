@@ -7,14 +7,16 @@ import swift
 import numpy as np
 import roboticstoolbox as rtb
 import spatialgeometry as geometry
-import spatialmath.base as spb
+import spatialmath.base as smb
 import os
 import copy
 from abc import ABC
 
 # Useful variables
 from math import pi
-from ir_support import RectangularPrism, line_plane_intersection
+# from ir_support import RectangularPrism, line_plane_intersection
+from rectangularprism import RectangularPrism
+from ir_support import line_plane_intersection, make_ellipsoid
 
 # -----------------------------------------------------------------------------------#
 class M_DHRobot3D(rtb.DHRobot, ABC):
@@ -47,7 +49,8 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self._link3D_dir = link3d_dir
         self._qtest = qtest
         self._qtest_transforms = qtest_transforms
-        # self.neutral = np.zeros(np.size(self.links))
+        self._ellipsoids = self.get_ellipsoid()
+        self._ellipsoids_meshlist = self.get_ellipsoid_meshlist()
         self._apply_3dmodel()
     
     # -----------------------------------------------------------------------------------#
@@ -68,7 +71,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
                 if f'color{i}' in self.link3D_names:
                     self.links_3d.append(geometry.Mesh(file_name, color = self.link3D_names[f'color{i}']))
                 else:
-                    self.links_3d.append(geometry.Mesh(file_name,))
+                    self.links_3d.append(geometry.Mesh(file_name, collision = True))
             else:
                 raise ImportError(f'Cannot get 3D file at link {i}!')
 
@@ -137,6 +140,59 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         ee_sphere = geometry.Cylinder(0.03, self.d[self.n-1]/2,  pose = ee_pose)
         d, p1, p2 = ee_sphere.closest_point(object, 5)
         return d, p1, p2
+    
+    def object_collision_check(self, q, vecteces, faces, normals):
+        """
+        Standard version using line-plane intersection
+        """
+        links_tf = self.get_link_poses(q)
+
+        return False
+    
+    def is_self_collision(self, q):
+        """
+        """
+        links_tf = self.get_link_poses(q)
+        links_center = []
+        for i in range(len(links_tf)-1):
+            links_center.append((links_tf[i+1] + links_tf[i]) / 2)
+
+        ellip_transforms = []
+        for i in range(len(self._ellipsoids_meshlist)):
+            ellip = []
+            # for j in range(len(self._ellipsoids_meshlist[i])):
+            #     print(np.shape(self._ellipsoids_meshlist[i])) # printed as  (3, 100, 50)
+            #     # how to transform the ellipsoid mesh points corresponded to the links_center[i] in terms of x,y,z ?
+            #     # links_center[i] is the center of the link i and have the shape of (4,4)
+            #     ellip.append(links_center[i] @ smb.transl(self._ellipsoids_meshlist[i][j][0], self._ellipsoids_meshlist[i][j][1], self._ellipsoids_meshlist[i][j][2]))
+            # ellip_transforms.append(ellip)
+
+            mesh = np.array(self._ellipsoids_meshlist[i])
+            # Reshaping the mesh points to be a two-dimensional array and adding a row of ones for homogeneous coordinates
+            homogeneous_mesh_points = np.vstack((mesh.reshape(3, -1), np.ones((1, mesh.shape[1] * mesh.shape[2]))))
+            print(np.shape(homogeneous_mesh_points))
+            # Applying the transformation
+            transformed_points = links_center[i] @ homogeneous_mesh_points
+
+            # Removing the last row to return to (x, y, z) coordinates and reshaping to the original structure
+            ellip = transformed_points[:-1, :].reshape(mesh.shape)
+            ellip_transforms.append(ellip)
+
+
+        for i in range(len(links_center)):
+            tracked_ellipsoid = ellip_transforms[i]
+            for j in range(len(links_center)):
+                if abs(j-i) <= 1:
+                    continue
+
+                
+                # if line_plane_intersection(ellip_transforms[i], self._ellipsoids[i], ellip_transforms[j], self._ellipsoids[j]):
+                #     return True
+        
+            # pass
+
+        return False
+    
 
     def grounded_check(self, q, ground_height = None):
         """
@@ -172,7 +228,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
 
             ellipsoids.append(ellipsoid)
 
-        if self.n == 6: # 7dof robot
+        if self.n == 7: # 7dof robot
             ellipsoids[6][2] = ellipsoids[6][1]
             ellipsoids[6][1] = ellipsoids[6][0]
         else: # 6dof robot
@@ -191,6 +247,14 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
             return self.fkine_all()
         return self.fkine_all(q)
     
+    def get_ellipsoid_meshlist(self):
+
+        meshlist = []
+
+        for ellipsoid in self._ellipsoids:
+            meshlist.append(make_ellipsoid(ellipsoid, np.zeros(3), is_plot = False))
+
+        return meshlist    
         
     # -----------------------------------------------------------------------------------#
     def __setattr__(self, name, value):

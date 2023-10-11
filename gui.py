@@ -50,6 +50,7 @@ class RobotGUI:
 
     def collision_setup(self):
         object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)))
+        # object = geometry.Mesh('IR-Assignemt2/cube.stl',  pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)), collision=True)
         self.sawyer_controller.update_collision_object(object)
         self.env.add(object)
 
@@ -301,7 +302,6 @@ class RobotGUI:
                 print('bruh')
                 self.mission.run()
                 
-
             # event activated with +X button
             if event == '-PLUSX-':
                 self.sawyer_controller.send_command('+X')
@@ -326,8 +326,29 @@ class RobotGUI:
             if event == '-MINUSZ-':
                 self.sawyer_controller.send_command('-Z')
                 
+            # event activated with +Roll button
+            if event == '-PLUSROLL-':
+                self.sawyer_controller.send_command('+Rx')
 
+            # event activated with -Roll button
+            if event == '-MINUSROLL-':
+                self.sawyer_controller.send_command('-Rx')
 
+            # event activated with +Pitch button
+            if event == '-PLUSPITCH-':
+                self.sawyer_controller.send_command('+Ry')
+            
+            # event activated with -Pitch button
+            if event == '-MINUSPITCH-':
+                self.sawyer_controller.send_command('-Ry')
+
+            # event activated with +Yaw button
+            if event == '-PLUSYAW-':
+                self.sawyer_controller.send_command('+Rz')
+            
+            # event activated with -Yaw button
+            if event == '-MINUSYAW-':
+                self.sawyer_controller.send_command('-Rz')
 
             # event activated with CONFIRM button
             if event == '-CONFIRM-':
