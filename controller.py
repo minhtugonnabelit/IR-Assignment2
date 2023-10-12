@@ -9,7 +9,9 @@ import spatialmath as sm
 from rectangularprism import RectangularPrism
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
+from safety import Safety
 import threading
+
 
 
 class Controller():
@@ -25,6 +27,7 @@ class Controller():
         self._shutdown = False
         self._disable_gamepad = True
         self._command_queue = queue.Queue()
+        self._safety = Safety(self._robot)
 
         # Dispatch table
         self._dispatch = {
@@ -240,13 +243,14 @@ class Controller():
                     time_step = 0.01
 
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
-                    d, p1, p2 = self._robot.collision_check(self._robot.q, self.object)
+                    d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
                     if d <= d_thresh:
                         vel = ( p1 - p2 ) / time_step
                         ee_vel[0:3] += 0.2*vel
 
                     # calculate joint velocities
-                    joint_vel = self.solve_RMRC(ee_vel)
+                    j = self._robot.jacob0(self._robot.q)
+                    joint_vel = Controller.solve_RMRC(j, ee_vel)
 
                     # update joint states as a command to robot
                     current_js = copy.deepcopy(self._robot.q)
@@ -345,28 +349,33 @@ class Controller():
             # set threshold and damping
             d_thresh = 0.01
 
+            # weight of the damping vel for collision avoidance
+            weight = 0.1
+
             # get distance between ee and object,  also extracting the closest points to use as damping velocity
-            d, p1, p2 = self._robot.collision_check(self._robot.q, self.object)
+            d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
             if d <= d_thresh:
                 vel = ( p1 - p2 ) / time_step
-                ee_vel[0:3] += 0.1*vel
+                ee_vel[0:3] += weight*vel
 
             ## END -----------------------------------------------------------------------------#
             
             # calculate joint velocities, singularity check is already included, 
             # need to update for damping with self collision check 
-            joint_vel = self.solve_RMRC(ee_vel)
+            j = self._robot.jacob0(self._robot.q)
+            joint_vel = Controller.solve_RMRC(j,ee_vel)
             
             # update joint states as a command to robot
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
             # check if ee is too close to the ground
-            if self._robot.grounded_check(q):
+            if self._safety.grounded_check(q):
                 break
                 
-            if self._robot.is_self_collision(q):
-                break
+            if self._safety.is_self_collided(q):
+                print('self collision')
+                pass
 
             self._robot.q = q
 
@@ -408,11 +417,11 @@ class Controller():
         index = 0
         while not is_arrived() and self.system_activated():
 
-            if self._robot.grounded_check(path.q[index]):
+            if self._safety.grounded_check(path.q[index]):
                 print('ee is too close to the ground')
                 break
             
-            d, p1, p2 = self._robot.collision_check(path.q[index], self.object)
+            d, p1, p2 = self._safety.collision_check(path.q[index], self.object)
             d_thresh = 0.01
             if d <= d_thresh:
                 print('ee is collided with object')
@@ -422,12 +431,12 @@ class Controller():
             index += 1
             self._env.step(time_step)
 
-    def solve_RMRC(self, ee_vel):
+    @staticmethod
+    def solve_RMRC(j, ee_vel):
         """
         ### Solve RMRC
         """
         # calculate manipulability
-        j = self._robot.jacob0(self._robot.q)
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))
 
         # set threshold and damping
@@ -436,7 +445,6 @@ class Controller():
 
         # if manipulability is less than threshold, add damping
         if w < w_thresh:
-            print(f'{self._robot.name} is near singularity!')
             damp = (1-np.power(w/w_thresh, 2)) * max_damp 
         else: 
             damp = 0
@@ -451,14 +459,6 @@ class Controller():
 
     # STATE FUNCTION
     # -----------------------------------------------------------------------------------#
-    # def system_state(self):
-    #     """
-    #     ### Get system state
-    #     Function to get system state
-    #     - @return: system state
-    #     """
-    #     return self._state
-
     def engage_estop(self):
         self._state = "STOPPED"
         print("E-stop engaged. System is halted.")

@@ -10,7 +10,7 @@ class ControllerInterface():
 
 
     def launch(self):
-        """
+        """disable_gamepa
         Start the controller
         """
         self._impl.launch()
@@ -112,6 +112,9 @@ class ControllerInterface():
         """
         return self._impl._state
     
+    def engage_estop(self):
+        self._impl.engage_estop()
+
     def disengage_estop(self):
         self._impl.disengage_estop()
 

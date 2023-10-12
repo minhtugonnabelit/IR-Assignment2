@@ -49,6 +49,7 @@ class RobotGUI:
         self.window = self.create_window()
         self.update_gui_thread()
 
+
     def collision_setup(self):
         object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)))
         self.sawyer_controller.update_collision_object(object)
@@ -213,6 +214,7 @@ class RobotGUI:
 
             state = self.sawyer_controller.system_state()
             self.window.write_event_value('-UPDATE-STATE-', state)
+
             
     def run(self):
         q = np.zeros(7)
@@ -278,87 +280,86 @@ class RobotGUI:
                 else:
                     self.sawyer_controller.engage_estop()
                 
-            if event == '-GAMEPAD_ENABLE-':
+            elif event == '-GAMEPAD_ENABLE-':
                 self.sawyer_controller.gamepad_control()
 
-            if event == '-GAMEPAD_DISABLE-':
+            elif event == '-GAMEPAD_DISABLE-':
                 self.sawyer_controller.disable_gamepad()
 
             # event activated with HOME button
-            if event == '-HOME-':
-                if self.sawyer_controller._disable_gamepad is False:
+            elif event == '-HOME-':
+                if self.sawyer_controller.disable_gamepad is False:
                     self.sawyer_controller.disable_gamepad()
                 self.sawyer_controller.send_command('HOME')
 
             # event enabled with ENABLE button
-            if event == '-ENABLE-':
+            elif event == '-ENABLE-':
                 self.sawyer_controller.send_command('ENABLE')
-                
-            if event == '-ENABLE_ALL-':
-                self.sawyer_controller.send_command('ENABLE')
-                self.astorino_controller.send_command('ENABLE')
-                
-            if event == '-RUN_MISSION-':
-                print('bruh')
-                self.mission.run()
                 
             # event activated with +X button
-            if event == '-PLUSX-':
+            elif event == '-PLUSX-':
                 self.sawyer_controller.send_command('+X')
             
             # event activated with -X button
-            if event == '-MINUSX-':
+            elif event == '-MINUSX-':
                 self.sawyer_controller.send_command('-X')
 
             # event activated with +Y button
-            if event == '-PLUSY-':
+            elif event == '-PLUSY-':
                 self.sawyer_controller.send_command('+Y')
 
             # event activated with -Y button
-            if event == '-MINUSY-':
+            elif event == '-MINUSY-':
                 self.sawyer_controller.send_command('-Y')
 
             # event activated with +Z button
-            if event == '-PLUSZ-':
+            elif event == '-PLUSZ-':
                 self.sawyer_controller.send_command('+Z')
 
             # event activated with -Z button
-            if event == '-MINUSZ-':
+            elif event == '-MINUSZ-':
                 self.sawyer_controller.send_command('-Z')
                 
             # event activated with +Roll button
-            if event == '-PLUSROLL-':
+            elif event == '-PLUSROLL-':
                 self.sawyer_controller.send_command('+Rx')
 
             # event activated with -Roll button
-            if event == '-MINUSROLL-':
+            elif event == '-MINUSROLL-':
                 self.sawyer_controller.send_command('-Rx')
 
             # event activated with +Pitch button
-            if event == '-PLUSPITCH-':
+            elif event == '-PLUSPITCH-':
                 self.sawyer_controller.send_command('+Ry')
             
             # event activated with -Pitch button
-            if event == '-MINUSPITCH-':
+            elif event == '-MINUSPITCH-':
                 self.sawyer_controller.send_command('-Ry')
 
             # event activated with +Yaw button
-            if event == '-PLUSYAW-':
+            elif event == '-PLUSYAW-':
                 self.sawyer_controller.send_command('+Rz')
             
             # event activated with -Yaw button
-            if event == '-MINUSYAW-':
+            elif event == '-MINUSYAW-':
                 self.sawyer_controller.send_command('-Rz')
 
             # event activated with CONFIRM button
-            if event == '-CONFIRM-':
+            elif event == '-CONFIRM-':
                 if values['-JOINT-']:
                     self.sawyer_controller.send_command('JOINT_ANGLES')
 
                 elif values['-END-EFFECTOR-']:
                     self.sawyer_controller.send_command('CARTESIAN_POSE')
+
+            elif event == '-ENABLE_ALL-':
+                self.sawyer_controller.send_command('ENABLE')
+                self.astorino_controller.send_command('ENABLE')
+                
+            elif event == '-RUN_MISSION-':
+                print('bruh')
+                self.mission.run()
                     
-            # if event == 'START_MISSION"':
                 
 
         self.sawyer_controller.clean()
