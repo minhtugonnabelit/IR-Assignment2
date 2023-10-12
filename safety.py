@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import matplotlib.pyplot as plt
 import spatialmath as sm
@@ -6,18 +8,21 @@ import spatialgeometry as sg
 
 import roboticstoolbox as rtb
 from robot import m_DHRobot3D
+from ir_support import make_ellipsoid, line_plane_intersection, RectangularPrism
 
 class Safety:
 
     def __init__(self, robot : m_DHRobot3D) -> None:
-        pass
 
-        def get_ellipsoid(self):
+        self.robot = robot
+        # pass
+
+    def get_ellipsoid(self):
 
         """ Get ellipsoid of the robot """
 
         ellipsoids = []
-        for i in range(len(self.links)):
+        for i in range(len(self.robot.links)):
             
             # special define for major and minor axis for ellipsoid
             minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(self.a[i]) / 2 + 0.02

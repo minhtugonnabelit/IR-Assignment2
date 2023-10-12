@@ -48,8 +48,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self._link3D_dir = link3d_dir
         self._qtest = qtest
         self._qtest_transforms = qtest_transforms
-        self._ellipsoids = self.get_ellipsoid()
-        self._ellipsoids_meshlist = self.get_ellipsoid_meshlist()
+
         self._apply_3dmodel()
     
     # -----------------------------------------------------------------------------------#
