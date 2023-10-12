@@ -302,7 +302,6 @@ class RobotGUI:
                 print('bruh')
                 self.mission.run()
                 
-
             # event activated with +X button
             if event == '-PLUSX-':
                 self.sawyer_controller.send_command('+X')
@@ -327,8 +326,29 @@ class RobotGUI:
             if event == '-MINUSZ-':
                 self.sawyer_controller.send_command('-Z')
                 
+            # event activated with +Roll button
+            if event == '-PLUSROLL-':
+                self.sawyer_controller.send_command('+Rx')
 
+            # event activated with -Roll button
+            if event == '-MINUSROLL-':
+                self.sawyer_controller.send_command('-Rx')
 
+            # event activated with +Pitch button
+            if event == '-PLUSPITCH-':
+                self.sawyer_controller.send_command('+Ry')
+            
+            # event activated with -Pitch button
+            if event == '-MINUSPITCH-':
+                self.sawyer_controller.send_command('-Ry')
+
+            # event activated with +Yaw button
+            if event == '-PLUSYAW-':
+                self.sawyer_controller.send_command('+Rz')
+            
+            # event activated with -Yaw button
+            if event == '-MINUSYAW-':
+                self.sawyer_controller.send_command('-Rz')
 
             # event activated with CONFIRM button
             if event == '-CONFIRM-':
