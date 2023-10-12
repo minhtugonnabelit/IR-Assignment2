@@ -208,18 +208,9 @@ class Controller():
 
             vel_scale = {'linear': 0.3, 'angular': 0.8}
 
+            count = 0
             # Main loop to check joystick functionality
             while not self._disable_gamepad:
-
-                if self._joystick.get_button(3):
-                    if self._state == 'STOPPED':
-                        self.disengage_estop()
-                    else:
-                        self.engage_estop()
-
-                if self._joystick.get_button(0):
-                    self.enable_system()
-
 
                 if self.system_activated():
 
@@ -252,7 +243,7 @@ class Controller():
                     d, p1, p2 = self._robot.collision_check(self._robot.q, self.object)
                     if d <= d_thresh:
                         vel = ( p1 - p2 ) / time_step
-                        ee_vel[0:3] += 0.08*vel
+                        ee_vel[0:3] += 0.2*vel
 
                     # calculate joint velocities
                     joint_vel = self.solve_RMRC(ee_vel)

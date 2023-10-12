@@ -6,6 +6,7 @@
 import swift
 import numpy as np
 import roboticstoolbox as rtb
+import spatialmath as sm
 import spatialgeometry as geometry
 import spatialmath.base as smb
 import os
@@ -16,7 +17,8 @@ from abc import ABC
 from math import pi
 # from ir_support import RectangularPrism, line_plane_intersection
 from rectangularprism import RectangularPrism
-from ir_support import line_plane_intersection, make_ellipsoid
+# from ir_support import line_plane_intersection, make_ellipsoid
+from utiliy_function import make_ellipsoid
 
 # -----------------------------------------------------------------------------------#
 class M_DHRobot3D(rtb.DHRobot, ABC):
@@ -131,87 +133,6 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         """ Get robot joint states """
         return copy.deepcopy(self.q)
     
-    # collision function:
-    def collision_check(self, q, object : geometry.Mesh):
-        """
-        """
-        # get the transforms of all links
-        ee_pose = self.fkine(q)
-        ee_sphere = geometry.Cylinder(0.03, self.d[self.n-1]/2,  pose = ee_pose)
-        d, p1, p2 = ee_sphere.closest_point(object, 5)
-        return d, p1, p2
-    
-    def object_collision_check(self, q, vecteces, faces, normals):
-        """
-        Standard version using line-plane intersection
-        """
-        links_tf = self.get_link_poses(q)
-
-        return False
-    
-    def is_self_collision(self, q):
-        """
-        """
-        links_tf = self.get_link_poses(q)
-        links_center = []
-        for i in range(len(links_tf)-1):
-            links_center.append((links_tf[i+1] + links_tf[i]) / 2)
-
-        ellip_transforms = []
-        for i in range(len(self._ellipsoids_meshlist)):
-            ellip = []
-            # for j in range(len(self._ellipsoids_meshlist[i])):
-            #     print(np.shape(self._ellipsoids_meshlist[i])) # printed as  (3, 100, 50)
-            #     # how to transform the ellipsoid mesh points corresponded to the links_center[i] in terms of x,y,z ?
-            #     # links_center[i] is the center of the link i and have the shape of (4,4)
-            #     ellip.append(links_center[i] @ smb.transl(self._ellipsoids_meshlist[i][j][0], self._ellipsoids_meshlist[i][j][1], self._ellipsoids_meshlist[i][j][2]))
-            # ellip_transforms.append(ellip)
-
-            mesh = np.array(self._ellipsoids_meshlist[i])
-            # Reshaping the mesh points to be a two-dimensional array and adding a row of ones for homogeneous coordinates
-            homogeneous_mesh_points = np.vstack((mesh.reshape(3, -1), np.ones((1, mesh.shape[1] * mesh.shape[2]))))
-            print(np.shape(homogeneous_mesh_points))
-            # Applying the transformation
-            transformed_points = links_center[i] @ homogeneous_mesh_points
-
-            # Removing the last row to return to (x, y, z) coordinates and reshaping to the original structure
-            ellip = transformed_points[:-1, :].reshape(mesh.shape)
-            ellip_transforms.append(ellip)
-
-
-        for i in range(len(links_center)):
-            tracked_ellipsoid = ellip_transforms[i]
-            for j in range(len(links_center)):
-                if abs(j-i) <= 1:
-                    continue
-
-                
-                # if line_plane_intersection(ellip_transforms[i], self._ellipsoids[i], ellip_transforms[j], self._ellipsoids[j]):
-                #     return True
-        
-            # pass
-
-        return False
-    
-
-    def grounded_check(self, q, ground_height = None):
-        """
-        """
-        # if ground_height is not defined, use the base height as the ground height
-        if ground_height is None:
-            ground_height = self.base.A[2, 3]
-
-        # get the transforms of all links
-        link_transforms = self.get_link_poses(q)
-
-        # check if all links are above the ground defined
-        for j, link in enumerate(link_transforms):
-            if j <= 1:
-                continue
-            elif link[2, 3] < ground_height +  0.02:
-                return True
-        return False 
-
     def get_ellipsoid(self):
 
         """ Get ellipsoid of the robot """
@@ -248,13 +169,117 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         return self.fkine_all(q)
     
     def get_ellipsoid_meshlist(self):
-
+        """
+        Get the ellipsoid mesh points corresponded to each link stick to their local frame"""
         meshlist = []
 
         for ellipsoid in self._ellipsoids:
             meshlist.append(make_ellipsoid(ellipsoid, np.zeros(3), is_plot = False))
 
-        return meshlist    
+        return meshlist   
+    
+    def transform_ellipsoid(self, links_center):
+
+        # get the ellipsoid mesh points corresponded to each link and transform to the world frames
+        ellip_transforms = []
+        for i in range(len(self._ellipsoids_meshlist)):
+            
+            ellip = []
+            mesh = np.array(self._ellipsoids_meshlist[i])
+
+            # Reshaping the mesh points to be a two-dimensional array and adding a row of ones for homogeneous coordinates
+            homogeneous_mesh_points = np.vstack((mesh.reshape(3, -1), np.ones((1, mesh.shape[1] * mesh.shape[2]))))
+            
+            # Applying the transformation to the mesh points with corresponding link centers for mesh points relative to world frame
+            transformed_points = links_center[i] @ homogeneous_mesh_points
+
+            # Removing the last row to return to (x, y, z) coordinates and reshaping to the original structure
+            ellip = transformed_points[:-1, :]
+            ellip_transforms.append(ellip)
+        
+        return ellip_transforms
+
+    
+    # collision function:
+    def collision_check(self, q, object : geometry.Mesh):
+        """
+        """
+        # get the transforms of all links
+        ee_pose = self.fkine(q)
+        ee_sphere = geometry.Cylinder(0.03, self.d[self.n-1]/2,  pose = ee_pose)
+        d, p1, p2 = ee_sphere.closest_point(object, 5)
+        return d, p1, p2
+    
+    def object_collision_check(self, q, vecteces, faces, normals):
+        """
+        Standard version using line-plane intersection
+        """
+        links_tf = self.get_link_poses(q)
+
+
+        return False
+    
+    def is_self_collision(self, q):
+        """
+        Self collision check using ellipsoid.
+        Principle is from extracting the ellipsoid mesh points corresponded to each link, then transform its to each link ceener to check if there is any intersection
+        """
+
+        # get the transforms of all links
+        links_tf = self.get_link_poses(q)
+
+        # get the center of each link
+        links_center = []
+        for i in range(len(links_tf)-1):
+            links_center.append((links_tf[i+1] + links_tf[i]) / 2)
+
+        # get the ellipsoid mesh points corresponded to each link and transform to the world frames
+        ellip_transforms = self.transform_ellipsoid(links_center)
+
+        # iteration through each link
+        for i, cur_center in enumerate(links_center):
+
+            # iteration through each link but avoid the currentt link and neighbor links
+            for j in range(len(links_center)):
+
+                if abs(j-i) <= 1:
+                    continue
+                
+                # iteration through each ellipsoid mesh points
+                for ellip in ellip_transforms[j]:
+                    
+                    # transform the extracted ellipsoid mesh points to the local frame of the current link
+                    transformed_ellip = np.linalg.inv(cur_center) @ ellip
+
+                    # check if the transformed ellipsoid mesh points is inside the current link
+                    if transformed_ellip[0]**2 / self._ellipsoids[i][0]**2 + transformed_ellip[1]**2 / self._ellipsoids[i][1]**2 + transformed_ellip[2]**2 / self._ellipsoids[i][2]**2 <= 1:
+                        return True
+
+        return False
+    
+
+
+    
+
+    def grounded_check(self, q, ground_height = None):
+        """
+        """
+        # if ground_height is not defined, use the base height as the ground height
+        if ground_height is None:
+            ground_height = self.base.A[2, 3]
+
+        # get the transforms of all links
+        link_transforms = self.get_link_poses(q)
+
+        # check if all links are above the ground defined
+        for j, link in enumerate(link_transforms):
+            if j <= 1:
+                continue
+            elif link[2, 3] < ground_height +  0.02:
+                return True
+        return False 
+
+
         
     # -----------------------------------------------------------------------------------#
     def __setattr__(self, name, value):
