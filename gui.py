@@ -16,6 +16,7 @@ from mission import Mission
 
 class RobotGUI:
 
+    ## switch to FULL UPPERCASE?
     _input_size = (10, 1)
     _slider_size = (30, 30)
 
