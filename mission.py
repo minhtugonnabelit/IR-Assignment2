@@ -11,12 +11,12 @@ import spatialmath as sm
 import spatialmath.base as smb
 import spatialgeometry as geometry
 from swift import Swift
-from controller import Controller
+from controller_interface import ControllerInterface
 
 
 
 class Mission():
-    def __init__(self, env : Swift, sawyer_controller: Controller, astorino_controller: Controller):
+    def __init__(self, env : Swift, sawyer_controller: ControllerInterface, astorino_controller: ControllerInterface):
         
         self.env = env
 

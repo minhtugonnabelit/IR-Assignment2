@@ -10,7 +10,7 @@ import spatialgeometry as geometry
 
 from robot.sawyer import Sawyer
 from robot.astorino import Astorino
-from controller import Controller
+from controller_interface import ControllerInterface
 from mission import Mission
 
 
@@ -33,14 +33,14 @@ class RobotGUI:
         self.sawyer = Sawyer(self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
 
-        self.sawyer_controller = Controller(self.sawyer, self.env)
+        self.sawyer_controller = ControllerInterface(self.sawyer, self.env)
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
         self.astorino = Astorino(self.env, base= base_original_robot @ transl2robot)
         self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
 
-        self.astorino_controller = Controller(self.astorino, self.env)
+        self.astorino_controller = ControllerInterface(self.astorino, self.env)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
         

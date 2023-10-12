@@ -2,19 +2,19 @@ import copy
 import sys
 import pygame
 import queue
-import threading
 import time
-
 import roboticstoolbox as rtb
 import numpy as np
 import spatialmath as sm
+from rectangularprism import RectangularPrism
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
-from rectangularprism import RectangularPrism
+import threading
+
 
 class Controller():
     
-    def __init__(self, robot : M_DHRobot3D, env : Swift, is_sim=True) -> None:
+    def __init__(self, robot : M_DHRobot3D, env : Swift, is_sim=True):
 
         self._robot = robot
         self._env   = env
@@ -30,22 +30,22 @@ class Controller():
         self._dispatch = {
             "ENABLE": self.enable_system,
             "HOME": self.go_to_home,
-            "+X": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0), time=0.1),
-            "-X": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0), time=0.1),
-            "+Y": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0), time=0.1),
-            "-Y": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0), time=0.1),
-            "+Z": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05), time=0.1),
-            "-Z": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05), time=0.1),
-            "+Rx": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
-            "-Rx": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
-            "+Ry": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
-            "-Ry": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), time=0.1),
-            "+Rz": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), time=0.1),
-            "-Rz": lambda: self.go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), time=0.1),
+            "+X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0), time=0.1),
+            "-X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0), time=0.1),
+            "+Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0), time=0.1),
+            "-Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0), time=0.1),
+            "+Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05), time=0.1),
+            "-Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05), time=0.1),
+            "+Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
+            "-Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
+            "+Ry": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
+            "-Ry": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), time=0.1),
+            "+Rz": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), time=0.1),
+            "-Rz": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), time=0.1),
             "JOINT_ANGLES": self.move,
             "CARTESIAN_POSE": self.move_cartesian,
             "GAMEPAD_ENABLE": self.gamepad_control,
-            "UPDATE_JOINT_STATE": self.update_js,
+            "UPDATE_JOINT_STATE": self._update_js,
         }  
 
     
@@ -53,7 +53,7 @@ class Controller():
         """
         Start the controller
         """
-        self.thread = threading.Thread(target=self.run)
+        self.thread = threading.Thread(target=self._run)
         self.thread.start()
             
     def system_activated(self):
@@ -76,7 +76,7 @@ class Controller():
         else: 
             self.object = obj
 
-    def joystick_init(self):
+    def _joystick_init(self):
 
         # Setup joystick
         pygame.init()
@@ -90,7 +90,7 @@ class Controller():
     
     ### GUI FUNCTION
     # -----------------------------------------------------------------------------------#
-    def run(self):
+    def _run(self):
         """
         Run the controller
         """
@@ -163,9 +163,9 @@ class Controller():
         Execute a cartesian space trajectory
 
         """
-        self.go_to_CartesianPose(self._ui_pose, time=3)
+        self._go_to_CartesianPose(self._ui_pose, time=3)
 
-    def update_js(self):
+    def _update_js(self):
         # print(self._robot.q)
         self._robot.q = self._ui_js
 
@@ -191,7 +191,7 @@ class Controller():
         Function to control robot using gamepad
         """
 
-        self._joystick = self.joystick_init()
+        self._joystick = self._joystick_init()
         self._disable_gamepad = False
 
         if self._joystick is not None:
@@ -261,7 +261,7 @@ class Controller():
 
     ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
-    def go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
+    def _go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
         
         """
         ### Move robot to desired Cartesian pose
@@ -451,13 +451,13 @@ class Controller():
 
     # STATE FUNCTION
     # -----------------------------------------------------------------------------------#
-    def system_state(self):
-        """
-        ### Get system state
-        Function to get system state
-        - @return: system state
-        """
-        return self._state
+    # def system_state(self):
+    #     """
+    #     ### Get system state
+    #     Function to get system state
+    #     - @return: system state
+    #     """
+    #     return self._state
 
     def engage_estop(self):
         self._state = "STOPPED"
