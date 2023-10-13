@@ -298,46 +298,47 @@ class Controller():
         index = 0
         while not is_arrived() and self.system_activated():
             
-            # ## Direction methods
-            # # extracting linear vel direction
-            # ee_cur_pose = self._robot.fkine(self._robot.q)
-            # distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
-            # lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
+            
+            ## Direction methods
+            # extracting linear vel direction
+            ee_cur_pose = self._robot.fkine(self._robot.q)
+            distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
+            lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
 
-            # # extracting angular vel direction
-            # s_omega = (pose.A[0:3, 0:3] @ np.transpose(
-            #     ee_cur_pose.A[0:3, 0:3]) - np.eye(3)) 
-            # ang_unit = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]] / np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
+            # extracting angular vel direction
+            s_omega = (pose.A[0:3, 0:3] @ np.transpose(
+                ee_cur_pose.A[0:3, 0:3]) - np.eye(3)) 
+            ang_unit = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]] / np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
 
-            # brake_thresh = 0.05 
-            #______________________________________
-            ## missing a orientation brake threshold
+            brake_thresh = 0.05 
+            # ______________________________________
+            # missing a orientation brake threshold
             # ___________________________________
-            # if distance < brake_thresh:
-            #     linear_vel = lin_uint * vel_scale['linear'] * distance / brake_thresh
-            #     angular_vel = ang_unit * vel_scale['linear'] * distance / brake_thresh
-            # else:
-            #     linear_vel = lin_uint * vel_scale['linear']
-            #     angular_vel = ang_unit * vel_scale['linear']
+            if distance < brake_thresh:
+                linear_vel = lin_uint * vel_scale['linear'] * distance / brake_thresh
+                angular_vel = ang_unit * vel_scale['linear'] * distance / brake_thresh
+            else:
+                linear_vel = lin_uint * vel_scale['linear']
+                angular_vel = ang_unit * vel_scale['linear']
 
-            # ee_vel = np.hstack((linear_vel, angular_vel))
+            ee_vel = np.hstack((linear_vel, angular_vel))
 
         
-            ## Linear interpolation methods
-            # get linear velocity between interpolated point and current pose of ee
-            prev_ee_pos = path[index].A[0:3, 3]
-            desired_ee_pos = path[index+1].A[0:3, 3]
+            # ## Linear interpolation methods
+            # # get linear velocity between interpolated point and current pose of ee
+            # prev_ee_pos = path[index].A[0:3, 3]
+            # desired_ee_pos = path[index+1].A[0:3, 3]
 
-            # get linear velocity between interpolated point and current pose of ee
-            lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+            # # get linear velocity between interpolated point and current pose of ee
+            # lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
-            # get angular velocity between interpolated ...
-            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
-                self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
-            ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+            # # get angular velocity between interpolated ...
+            # s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
+            #     self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+            # ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
-            # combine velocities
-            ee_vel = np.hstack((lin_vel, ang_vel))
+            # # combine velocities
+            # ee_vel = np.hstack((lin_vel, ang_vel))
 
             # @todo:
             # -- consider adding collision check   
