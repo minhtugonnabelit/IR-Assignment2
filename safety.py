@@ -359,6 +359,7 @@ if __name__ =='__main__':
     for ellip in ellip_transforms:
         ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
 
+    # plot the ellipsoid mesh points in the world frame
     fig.hold()
 
         
