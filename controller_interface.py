@@ -115,6 +115,9 @@ class ControllerInterface():
     def engage_estop(self):
         self._impl.engage_estop()
 
+    def update_estop_state(self):
+        self._impl.update_estop_state()
+
     def disengage_estop(self):
         self._impl.disengage_estop()
 
