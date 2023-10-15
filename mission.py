@@ -23,6 +23,8 @@ class Mission():
         self.sawyer_robot = sawyer_controller
         self.astorino_robot = astorino_controller
         
+
+        
     def run(self):
         print('bruh')
         qgoal_a = [0, 0, 0, 0, 0, 0]
@@ -41,4 +43,17 @@ class Mission():
 
         
 if __name__ == "__main__":
-    pass
+    env = Swift()
+    env.launch(realtime= True)
+    
+    sawyer_robot = Sawyer(env= env)
+    sawyer_robot.add_to_env(env)
+    
+    astorino_robot = Astorino(env= env)
+    astorino_robot.add_to_env(env) 
+    
+    
+    
+    # Mission(env= env, sawyer_controller= sawyer_robot, astorino_controller= astorino_robot).run
+    
+    Mission.run(self= astorino_robot)

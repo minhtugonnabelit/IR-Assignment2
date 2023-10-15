@@ -19,7 +19,8 @@ plate = Plate(pose, env)
 
 # env.hold()
 
-for i in range(10):
+
+for i in range(3):
     plate.bend(i)
     env.step(1)
 

@@ -10,7 +10,7 @@ class ControllerInterface():
 
 
     def launch(self):
-        """disable_gamepa
+        """disable_gamepad
         Start the controller
         """
         self._impl.launch()
