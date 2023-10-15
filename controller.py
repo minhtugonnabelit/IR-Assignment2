@@ -215,12 +215,21 @@ class Controller():
             # Main loop to check joystick functionality
             while not self._disable_gamepad:
 
-                if self.system_activated():
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
 
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            pygame.quit()
-                            sys.exit()
+                if self._joystick.get_button(3):
+                    if self._state == 'STOPPED':
+                        self.disengage_estop()
+                    else:
+                        self.engage_estop()
+
+                if self._joystick.get_button(5):
+                    self.enable_system()
+
+                if self.system_activated():
 
                     if self._joystick.get_button(4):
                         self.go_to_home()
@@ -241,12 +250,13 @@ class Controller():
                     # collision avoidance damping
                     d_thresh = 0.01
                     time_step = 0.01
+                    gamepad_gain = 0.8
 
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
                     d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
                     if d <= d_thresh:
                         vel = ( p1 - p2 ) / time_step
-                        ee_vel[0:3] += 0.2*vel
+                        ee_vel[0:3] += gamepad_gain*vel
 
                     # calculate joint velocities
                     j = self._robot.jacob0(self._robot.q)
@@ -255,16 +265,32 @@ class Controller():
                     # update joint states as a command to robot
                     current_js = copy.deepcopy(self._robot.q)
                     q = current_js + joint_vel * time_step
+
+                    # check if ee is too close to the ground
+                    if self._safety.grounded_check(q):
+                        self._state = 'STOPPED'
+
+                    if self._safety.is_self_collided(q):
+                        self._state = 'STOPPED'
+
+
                     self._robot.q = q
 
                     self._env.step(time_step)
-                else:
-                    time.sleep(0.5)
         else:
             print('No joystick found!')
 
     ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
+    def is_arrived(self, pose : sm.SE3, tolerance=0.001):
+        ee_pose = self._robot.fkine(self._robot.q)
+        poss_diff = np.diff(ee_pose.A - pose.A)
+        if np.all(np.abs(poss_diff) < tolerance):
+            print('Provided goal is Done')
+            return True
+
+        return False
+    
     def _go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
         
         """
@@ -283,20 +309,10 @@ class Controller():
 
         path = rtb.ctraj(current_ee_pose, pose, t=step)
 
-        # get ee carterian pose difference wih desired pose
-        def is_arrived():
-            ee_pose = self._robot.fkine(self._robot.q)
-            poss_diff = np.diff(ee_pose.A - pose.A)
-            if np.all(np.abs(poss_diff) < tolerance):
-                print('done')
-                return True
-
-            return False
-
         vel_scale = {'linear': 0.6, 'angular': 0.8}
 
         index = 0
-        while not is_arrived() and self.system_activated():
+        while not self.is_arrived(pose,tolerance) and self.system_activated():
             
             
             ## Direction methods
@@ -372,16 +388,16 @@ class Controller():
 
             # check if ee is too close to the ground
             if self._safety.grounded_check(q):
-                break
+                self._state = 'STOPPED'
                 
             if self._safety.is_self_collided(q):
-                print('self collision')
-                pass
+                self._state = 'STOPPED'
+                # pass
 
             self._robot.q = q
 
             index += 1
-            if index == len(path)-1 and not is_arrived():
+            if index == len(path)-1 and not self.is_arrived(pose,tolerance):
                 print('Pose is unreachable!')
                 break
 
@@ -442,7 +458,7 @@ class Controller():
 
         # set threshold and damping
         w_thresh = 0.04
-        max_damp = 0.2
+        max_damp = 0.5
 
         # if manipulability is less than threshold, add damping
         if w < w_thresh:
@@ -451,18 +467,26 @@ class Controller():
             damp = 0
 
         # calculate damped least square
-        j_dls = np.transpose(j) @ np.linalg.inv( j @ np.transpose(j) + damp * np.eye(6) )
+        j_dls = j @ np.transpose(j) @ np.linalg.inv( j @ np.transpose(j) + damp * np.eye(6) )
 
         # get joint velocities, if robot is in singularity, use damped least square
-        joint_vel = j_dls @ np.transpose(ee_vel)
+        joint_vel = np.linalg.pinv(j) @ j_dls @ np.transpose(ee_vel)
 
         return joint_vel
+    
+    
 
     # STATE FUNCTION
     # -----------------------------------------------------------------------------------#
     def engage_estop(self):
         self._state = "STOPPED"
         print("E-stop engaged. System is halted.")
+
+    def update_estop_state(self):
+        if self._state == 'ENABLED' or self._state == 'IDLE':
+            self._state = 'STOPPED'
+        else:
+            self._state = 'IDLE'
 
     def disengage_estop(self):
         if self._state == "STOPPED":

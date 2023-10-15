@@ -275,13 +275,15 @@ class RobotGUI:
 
             # event activated with E-stop button
             if event == '-ESTOP-':
-                if system_state == "STOPPED":
-                    self.sawyer_controller.disengage_estop()
-                else:
-                    self.sawyer_controller.engage_estop()
+                self.sawyer_controller.update_estop_state()
+                # if system_state == "STOPPED":
+                #     self.sawyer_controller.disengage_estop()
+                # else:
+                #     self.sawyer_controller.engage_estop()
                 
             elif event == '-GAMEPAD_ENABLE-':
-                self.sawyer_controller.gamepad_control()
+                self.sawyer_controller.send_command("GAMEPAD_ENABLE")
+                # self.sawyer_controller.gamepad_control()
 
             elif event == '-GAMEPAD_DISABLE-':
                 self.sawyer_controller.disable_gamepad()

@@ -97,7 +97,6 @@ class Sawyer(M_DHRobot3D):
         d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
         alpha = [-np.pi / 2, -np.pi / 2, -np.pi /
                  2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
-        # qlim = [[-2*np.pi, 2*np.pi] for _ in range(7)]
         qlim = np.deg2rad([[-175, 175],
                            [-175, 175],
                            [-175, 175],

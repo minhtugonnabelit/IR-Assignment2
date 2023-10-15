@@ -14,6 +14,7 @@ from ir_support import make_ellipsoid, line_plane_intersection, RectangularPrism
 
 from robot.m_DHRobot3D import M_DHRobot3D
 from robot.sawyer import Sawyer
+from robot.astorino import Astorino
 
 # import for testing purpose
 from swift import Swift, Slider
@@ -46,10 +47,11 @@ class Safety:
         """ Get ellipsoid of the robot """
 
         ellipsoids = []
+        thickness = 0.05
         for i in range(len(self.robot.links)):
             
             # special define for major and minor axis for ellipsoid
-            minor_axis = 0.03 if self.robot.a[i] == 0 else copy.deepcopy(self.robot.a[i]) / 2 + 0.02
+            minor_axis = thickness if self.robot.a[i] == 0 else copy.deepcopy(self.robot.a[i]) / 2 + thickness
             major_axis = copy.deepcopy(self.robot.d[i]) / 2
 
             # define major and minor axis of ellipsoid
@@ -73,7 +75,7 @@ class Safety:
         meshlist = []
 
         for ellipsoid in self._ellipsoids:
-            meshlist.append(self._make_ellipsoid(ellipsoid, np.zeros(3)))
+            meshlist.append(Safety._make_ellipsoid(ellipsoid, np.zeros(3), density=(40,20)))
 
         return meshlist   
     
@@ -88,19 +90,89 @@ class Safety:
 
             # Reshaping the mesh points to be a two-dimensional array and adding a row of ones for homogeneous coordinates
             homogeneous_mesh_points = np.vstack((mesh.reshape(3, -1), np.ones((1, mesh.shape[1] * mesh.shape[2]))))
-            # mesh_points = mesh.reshape(3, -1)
             
             # Applying the transformation to the mesh points with corresponding link centers for mesh points relative to world frame
             transformed_points = links_center[i] @ homogeneous_mesh_points
 
-            # Removing the last row to return to (x, y, z) coordinates and reshaping to the original structure
-            ellip = transformed_points[:-1, :]
-            ellip_transforms.append(ellip)
+            # normalize the homogenous part of the transformed points
+            w = transformed_points[-1, :]
+            normalized_points = transformed_points / w
+
+            # Removing the last row to return to (x, y, z, 1) coordinates to support computation optimization
+            ellip_transforms.append(normalized_points)
         
-        print(np.shape(ellip_transforms))
         return ellip_transforms
 
+    def get_link_centers(links_tf):
+
+        """
+        Get the center of each link"""
+
+        links_center = []
+        for i in range(len(links_tf)-1):
+
+            # keep orientation of end of link
+            tf = copy.deepcopy(links_tf[i+1].A)
+
+            # set the center of the link to be the average of the end of link and the start of link
+            tf[0:3,3] = (links_tf[i+1].A[0:3,3] + links_tf[i].A[0:3,3]) / 2
+            links_center.append(tf)
+
+        return links_center
     
+
+    
+    # -------------------------------------------------------------------#
+    ######################################################################
+    # MAINTAINING
+    # def object_collision_check(self, q, vecteces, faces, normals):
+
+    #     """
+    #     Standard version using line-plane intersection 
+    #     # MAINTAINING"""
+
+    #     links_tf = self.get_link_poses(q)
+
+
+    #     return False
+    
+    # ## so called most stable collision check up to now
+    # def is_collision(self, q_matrix, faces, vertex, face_normals, return_once_found = True):
+    #     """
+    #     This is based upon the output of questions 2.5 and 2.6
+    #     Given a robot model (robot), and trajectory (i.e. joint state vector) (q_matrix)
+    #     and triangle obstacles in the environment (faces,vertex,face_normals)
+    #     """
+    #     result = False
+
+    #     for i, q in enumerate(q_matrix):
+
+    #         # Get the transform of every joint (i.e. start and end of every link)
+    #         tr = self.get_link_poses(q)
+            
+    #         # Go through each link and also each triangle face
+    #         for i in range(np.size(tr,2)-1):
+    #             for j, face in enumerate(faces):
+    #                 vert_on_plane = vertex[face][0]
+    #                 intersect_p, check = line_plane_intersection(face_normals[j], 
+    #                                                             vert_on_plane, 
+    #                                                             tr[i][:3,3], 
+    #                                                             tr[i+1][:3,3])
+    #                 # list of all triangle combination in a face
+    #                 triangle_list  = np.array(list(combinations(face,3)),dtype= int)
+    #                 if check == 1:
+    #                     for triangle in triangle_list:
+    #                         if self._is_intersection_point_inside_triangle(intersect_p, vertex[triangle]):
+
+    #                             result = True
+    #                             if return_once_found:
+    #                                 return result
+    #                             break
+    #     return result
+
+    # -------------------------------------------------------------------#
+    ######################################################################
+
     # collision function:
     def collision_check(self, q, object : geometry.Mesh):
 
@@ -117,100 +189,50 @@ class Safety:
         # check if the closest point between the end-effector and the object is within the virtual sphere
         return ee_sphere.closest_point(object, 5)
     
-    # -------------
-    # MAINTAINING
-    def object_collision_check(self, q, vecteces, faces, normals):
-
-        """
-        Standard version using line-plane intersection
-        """
-        links_tf = self.get_link_poses(q)
-
-
-        return False
-    
-    ## so called most stable collision check up to now
-    def is_collision(self, q_matrix, faces, vertex, face_normals, return_once_found = True):
-        """
-        This is based upon the output of questions 2.5 and 2.6
-        Given a robot model (robot), and trajectory (i.e. joint state vector) (q_matrix)
-        and triangle obstacles in the environment (faces,vertex,face_normals)
-        """
-        result = False
-
-        for i, q in enumerate(q_matrix):
-
-            # Get the transform of every joint (i.e. start and end of every link)
-            tr = self.get_link_poses(q)
-            
-            # Go through each link and also each triangle face
-            for i in range(np.size(tr,2)-1):
-                for j, face in enumerate(faces):
-                    vert_on_plane = vertex[face][0]
-                    intersect_p, check = line_plane_intersection(face_normals[j], 
-                                                                vert_on_plane, 
-                                                                tr[i][:3,3], 
-                                                                tr[i+1][:3,3])
-                    # list of all triangle combination in a face
-                    triangle_list  = np.array(list(combinations(face,3)),dtype= int)
-                    if check == 1:
-                        for triangle in triangle_list:
-                            if self._is_intersection_point_inside_triangle(intersect_p, vertex[triangle]):
-
-                                result = True
-                                if return_once_found:
-                                    return result
-                                break
-        return result
-
     ## self collision check with ellipsoid mesh extracted for each link
     # -------------
-    # MAINTAINING
     def is_self_collided(self, q):
         """
         Self collision check using ellipsoid.
-        Principle is from extracting the ellipsoid mesh points corresponded to each link, then transform its to each link ceener to check if there is any intersection
+        Principle is from extracting the ellipsoid mesh points corresponded to each link, 
+        then transform its to each link ceener to check if there is any intersection
         """
 
-        # get the transforms of all links
+        # get the transforms of all links end and center
         links_tf = self.get_link_poses(q)
-
-        # get the center of each link
-        links_center = []
-        for i in range(len(links_tf)-1):
-            links_center.append((links_tf[i+1] + links_tf[i]) / 2)
+        links_center = Safety.get_link_centers(links_tf)
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
         ellip_transforms = self.transform_ellipsoid(links_center)
 
         # iteration through each link
-        for i, cur_center in enumerate(links_center):
+        for i, center in enumerate(links_center):
 
             # iteration through each link but avoid the currentt link and neighbor links
             for j in range(len(links_center)):
 
                 if abs(j-i) <= 1:
                     continue
-                
+            
                 # iteration through each ellipsoid mesh points
-                for ellip in np.transpose(ellip_transforms[j][:]):
-                    
+                for point in np.transpose(ellip_transforms[j][:]):
+                         
                     # transform the extracted ellipsoid mesh points to the local frame of the current link
-                    transformed_ellip = np.linalg.inv(cur_center) @ smb.transl(ellip)
+                    transformed_point = np.linalg.inv(center) @ point
 
-                    for point in transformed_ellip:
-                        if point[0]**2 / self._ellipsoids[i][0]**2 + point[1]**2 / self._ellipsoids[i][1]**2 + point[2]**2 / self._ellipsoids[i][2]**2 <= 1:
-                            return True
-                    # # check if the transformed ellipsoid mesh points is inside the current link
-                    # if transformed_ellip[0]**2 / self._ellipsoids[i][0]**2 + transformed_ellip[1]**2 / self._ellipsoids[i][1]**2 + transformed_ellip[2]**2 / self._ellipsoids[i][2]**2 <= 1:
-                    #     return True
+                    # return once collision is detected
+                    if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
+                        print(j)
+                        return True
 
         return False
     
     ## function to check if the robot is hit the ground
     def grounded_check(self, q, ground_height = None):
+
         """
-        """
+        Function to check if any link of the robot is hit the ground height defined """
+
         # if ground_height is not defined, use the base height as the ground height
         if ground_height is None:
             ground_height = self.robot.base.A[2, 3]
@@ -254,8 +276,8 @@ class Safety:
 
         return True  # intersect_p is in Triangle
 
+    def _make_ellipsoid(ellipsoid_info, center, u=None, v=None, density=(10,5)):
 
-    def _make_ellipsoid(self, ellipsoid_info, center, u=None, v=None):
         """
         Simple custom function to create an ellipsoid.
         
@@ -264,9 +286,11 @@ class Safety:
         :param color: color for ellipsoid
         :param u: list of azimuthal angle in spherical coordinates (optional)
         :param v: list of polar angle in spherical coordinates (optional)
+        :param density: density of the ellipsoid surface (optional)
         :param ax: axis to plot on (optional)
         :return surface object & tuple of mesh data (X, Y, Z)
         """
+
         if np.shape(ellipsoid_info) == (1, 3) or np.shape(ellipsoid_info) == (3,):
             lengths = ellipsoid_info
             eigenvectors = np.eye(3)
@@ -278,9 +302,9 @@ class Safety:
 
         # Ellipsoid surface
         if u is None:
-            u = np.linspace(0, 2 * np.pi, 40)
+            u = np.linspace(0, 2 * np.pi, density[0])
         if v is None:
-            v = np.linspace(0, np.pi, 20)
+            v = np.linspace(0, np.pi, density[1])
 
         # Generate surface points of the ellipsoid
         X = []
@@ -302,63 +326,41 @@ class Safety:
         Y = np.array(Y).reshape(len(u), len(v))
         Z = np.array(Z).reshape(len(u), len(v))
     
-
         return (X,Y,Z)
     
 
-
+## TESTING SPACE
 if __name__ =='__main__':
 
     env = Swift()
     env.launch()
 
-    sawyer = Sawyer(env)
+    # sawyer = Sawyer(env)
+    # sawyer_safety = Safety(sawyer)
+
+    sawyer = Astorino(env)
     sawyer_safety = Safety(sawyer)
+    
+    fig = sawyer.plot(q=sawyer.neutral, block=False, )
+    ax = fig.ax
 
+    # get the transforms of all links
+    links_tf = sawyer_safety.get_link_poses(sawyer.neutral)
 
+    # get the center of each link
+    links_center = Safety.get_link_centers(links_tf)
 
-    # # This is our callback funciton from the sliders in Swift which set
-    # # the joint angles of our robot to the value of the sliders
-    # def set_joint(j, value):
-    #     sawyer.q[j] = np.deg2rad(float(value))
-    #     sawyer.q = sawyer.q
+    # get the ellipsoid mesh points corresponded to each link and transform to the world frames
+    ellip_transforms = sawyer_safety.transform_ellipsoid(links_center)
 
+    # eliminate the last column of the ellipsoid mesh points
+    ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
 
-    # # Loop through each link in the Panda and if it is a variable joint,
-    # # add a slider to Swift to control it
-    # j = 0
-    # for link in sawyer.links:
-    #     if link.isjoint:
+    for ellip in ellip_transforms:
+        ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
 
-    #         # We use a lambda as the callback function from Swift
-    #         # j=j is used to set the value of j rather than the variable j
-    #         # We use the HTML unicode format for the degree sign in the unit arg
-    #         env.add(
-    #             Slider(
-    #                 lambda x, j=j: set_joint(j, x),
-    #                 min=np.round(np.rad2deg(link.qlim[0]), 2),
-    #                 max=np.round(np.rad2deg(link.qlim[1]), 2),
-    #                 step=1,
-    #                 value=np.round(np.rad2deg(sawyer.q[j]), 2),
-    #                 desc="Panda Joint " + str(j),
-    #                 unit="&#176;",
-    #             )
-    #         )
+    # plot the ellipsoid mesh points in the world frame
+    fig.hold()
 
-    #         j += 1
-
-
-    # while True:
-    #     # Process the event queue from Swift, this invokes the callback functions
-    #     # from the sliders if the slider value was changed
-    #     # env.process_events()
-
-    #     # Update the environment with the new robot pose
-    #     env.step(0)
-
-    #     if sawyer_safety.is_self_collided(sawyer.q):
-    #         print('self collision')
-
-    #     time.sleep(0.01)
         
         
