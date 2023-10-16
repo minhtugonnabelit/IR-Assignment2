@@ -41,6 +41,23 @@ class Safety:
         if q is None:
             return self.robot.fkine_all()
         return self.robot.fkine_all(q)
+    
+    def get_link_centers(links_tf):
+
+        """
+        Get the center of each link"""
+
+        links_center = []
+        for i in range(len(links_tf)-1):
+
+            # keep orientation of end of link
+            tf = copy.deepcopy(links_tf[i+1].A)
+
+            # set the center of the link to be the average of the end of link and the start of link
+            tf[0:3,3] = (links_tf[i+1].A[0:3,3] + links_tf[i].A[0:3,3]) / 2
+            links_center.append(tf)
+
+        return links_center
 
     def get_ellipsoid(self):
 
@@ -59,10 +76,10 @@ class Safety:
 
             ellipsoids.append(ellipsoid)
 
-        if self.robot.n == 7: # 7dof robot
+        if self.robot.n == 7:   # 7dof robot
             ellipsoids[6][2] = ellipsoids[6][1]
             ellipsoids[6][1] = ellipsoids[6][0]
-        else: # 6dof robot
+        else:                   # 6dof robot
             ellipsoids[5][2] = ellipsoids[5][1]
             ellipsoids[5][1] = ellipsoids[5][0]
 
@@ -103,25 +120,6 @@ class Safety:
         
         return ellip_transforms
 
-    def get_link_centers(links_tf):
-
-        """
-        Get the center of each link"""
-
-        links_center = []
-        for i in range(len(links_tf)-1):
-
-            # keep orientation of end of link
-            tf = copy.deepcopy(links_tf[i+1].A)
-
-            # set the center of the link to be the average of the end of link and the start of link
-            tf[0:3,3] = (links_tf[i+1].A[0:3,3] + links_tf[i].A[0:3,3]) / 2
-            links_center.append(tf)
-
-        return links_center
-    
-
-    
     # -------------------------------------------------------------------#
     ######################################################################
     # MAINTAINING
@@ -328,6 +326,31 @@ class Safety:
     
         return (X,Y,Z)
     
+    def test_ellipsoid_mesh(self):
+
+        fig = self.robot.plot(q=sawyer.neutral, block=False, )
+        ax = fig.ax
+
+        # get the transforms of all links
+        links_tf = self.get_link_poses(self.robot.neutral)
+
+        # get the center of each link
+        links_center = Safety.get_link_centers(links_tf)
+
+        # get the ellipsoid mesh points corresponded to each link and transform to the world frames
+        ellip_transforms = sawyer_safety.transform_ellipsoid(links_center)
+
+        # eliminate the last column of the ellipsoid mesh points
+        ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
+
+        for ellip in ellip_transforms:
+            ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
+
+        # plot the ellipsoid mesh points in the world frame
+        fig.hold()
+
+
+    
 
 ## TESTING SPACE
 if __name__ =='__main__':
@@ -335,32 +358,13 @@ if __name__ =='__main__':
     env = Swift()
     env.launch()
 
-    # sawyer = Sawyer(env)
-    # sawyer_safety = Safety(sawyer)
-
-    sawyer = Astorino(env)
+    sawyer = Sawyer(env)
     sawyer_safety = Safety(sawyer)
+
+    # sawyer = Astorino(env)
+    # sawyer_safety = Safety(sawyer)
+    sawyer_safety.test_ellipsoid_mesh()
     
-    fig = sawyer.plot(q=sawyer.neutral, block=False, )
-    ax = fig.ax
-
-    # get the transforms of all links
-    links_tf = sawyer_safety.get_link_poses(sawyer.neutral)
-
-    # get the center of each link
-    links_center = Safety.get_link_centers(links_tf)
-
-    # get the ellipsoid mesh points corresponded to each link and transform to the world frames
-    ellip_transforms = sawyer_safety.transform_ellipsoid(links_center)
-
-    # eliminate the last column of the ellipsoid mesh points
-    ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
-
-    for ellip in ellip_transforms:
-        ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
-
-    # plot the ellipsoid mesh points in the world frame
-    fig.hold()
 
         
         
