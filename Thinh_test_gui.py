@@ -51,8 +51,10 @@ class RobotGUI:
         self.window = self.create_window()
         self.update_gui_thread()
         
-        self.event_queue = queue.Queue()
-
+        self.button_and_slider_keys = ['-SLIDER0-', '-SLIDER1-', '-SLIDER2-', '-SLIDER3-', '-SLIDER4-', '-SLIDER5-', '-SLIDER6-',
+                                       '-MINUSPITCH-', '-MINUSROLL-', '-MINUSYAW-', '-MINUSX-', '-MINUSY-', '-MINUSZ-', '-PLUSPITCH-', '-PLUSROLL-', '-PLUSX-', '-PLUSY-', '-PLUSYAW-', '-PLUSZ-',     
+                                       '-END-EFFECTOR-', '-JOINT-',
+                                       '-CONFIRM-', '-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
 
     def create_window(self):
         tab_group_layout = [
@@ -65,12 +67,12 @@ class RobotGUI:
                 selected_title_color='black',
                 title_color='black',
                 size=self._window_size,
-                
                 enable_events=True
             )]
         ]
         window = sg.Window('System GUI', tab_group_layout, finalize=True,
                            size=self._window_size, location=(0, 0), resizable=False)
+        
         return window
 
     def update_gui_thread(self):
@@ -86,7 +88,6 @@ class RobotGUI:
             self.window.write_event_value('-UPDATE-STATE-', state)
             time.sleep(0.05)
     
-
     def tab1_setup(self):
         headers = [[
             sg.Text(f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]} m', size=(15, 1), justification='right', key='-X-', background_color= 'black'),
@@ -166,7 +167,7 @@ class RobotGUI:
             
             [sg.Frame('Message', 
                 [
-                [sg.Multiline(size=(67, 6), key='-OUTPUT-', background_color='black', text_color='white')]
+                [sg.Multiline(size=(67, 6), key='-MSG-', background_color='black', text_color='white')]
                 ], background_color= 'black', font=('Cooper Black', 15), title_location= sg.TITLE_LOCATION_TOP)
             ]
             
@@ -188,10 +189,10 @@ class RobotGUI:
             ],
 
             [
-            sg.Button('ENABLE CONTROLLER', key='-ENABLE-', size=(20,1), pad=(5,5)),
-            sg.Button('Gamepad Mode', size=(15, 1), key='-GAMEPAD_ENABLE-' ),
-            sg.Button('Disable Gamepad', size=(15, 1), key='-GAMEPAD_DISABLE-' ),
-            sg.Button('E-stop', button_color=('white', 'red'), size=(30, 1), key='-ESTOP-' )
+            sg.Button('ENABLE CONTROLLER' ,key='-ENABLE-', size=(20,1), pad=(5,5)),
+            sg.Button('GAMEPAD MODE'      ,key='-GAMEPAD_ENABLE-', size=(15, 1) ),
+            sg.Button('DISABLE GAMEPAD'   ,key='-GAMEPAD_DISABLE-' , size=(18, 1)),
+            sg.Button('EMERGENCY STOP'    ,key='-ESTOP-', button_color=('white', 'red'), size=(30, 1) )
             ],
             
             [
@@ -276,6 +277,7 @@ class RobotGUI:
         return tab3_layout
     
     def run(self):
+        self.window['-MSG-'].print('Press ENABLE Button to Start Controlling')
         while True:
             event, values = self.window.read()
             system_state = self.sawyer_controller.system_state()
@@ -291,7 +293,6 @@ class RobotGUI:
             input_values = []
             for key in ['-CARTX-', '-CARTY-', '-CARTZ-', '-ROLL-', '-PITCH-', '-YAW-']:
                 input_value = values[key]
-
                 try:
                     float_value = float(input_value)
                     input_values.append(float_value)
@@ -321,30 +322,35 @@ class RobotGUI:
                 self.window['-RX-'].update(f'Rx: {np.rad2deg(self.getori()[0]):.2f} deg')
                 self.window['-RY-'].update(f'Ry: {np.rad2deg(self.getori()[1]):.2f} deg')
                 self.window['-RZ-'].update(f'Rz: {np.rad2deg(self.getori()[2]):.2f} deg')
-            
-
-            if event == '-UPDATE-STATE-':
-
+        
+            elif event == '-UPDATE-STATE-':
                 state = self.sawyer_controller.system_state()
                 self.window['-STATE-'].update(f'{state}')
-                if state == 'IDLE': self.window['-STATE-'].update(text_color= 'purple' ,background_color='yellow')
-                elif state == 'ENABLED': self.window['-STATE-'].update(text_color= 'white' ,background_color='green')
-                elif state == 'STOPPED': self.window['-STATE-'].update(text_color= 'white' ,background_color='red')
-
-
-            # event activated with E-stop button
-            if event == '-ESTOP-':
-                state = self.sawyer_controller.system_state()
-                if not state == 'IDLE': self.sawyer_controller.update_estop_state()
-
+                if state == 'IDLE': 
+                    self.window['-STATE-'].update(text_color= 'purple' ,background_color='yellow')
+                    for key in self.button_and_slider_keys:
+                        if key != '-ENABLE-':
+                            self.window[key].update(disabled = True)
+                    
+                elif state == 'ENABLED': 
+                    self.window['-STATE-'].update(text_color= 'white' ,background_color='green')
+                    for key in self.button_and_slider_keys:
+                        if key == '-ENABLE-':
+                            self.window[key].update(disabled = True)
+                        else: self.window[key].update(disabled = False)
+                    
+                elif state == 'STOPPED': 
+                    self.window['-STATE-'].update(text_color= 'white' ,background_color='red')
+                    for key in self.button_and_slider_keys:
+                        if key != '-ESTOP-':
+                            self.window[key].update(disabled = True)
+                    
+                if not values['-JOINT-'] and not values['-END-EFFECTOR-']:
+                    self.window['-CONFIRM-'].update('Choose\n Control Options',disabled = True)
+                elif values['-JOINT-'] or values['-END-EFFECTOR-']:
+                    self.window['-CONFIRM-'].update('Confirm')
                 
-            elif event == '-GAMEPAD_ENABLE-':
-                self.sawyer_controller.send_command("GAMEPAD_ENABLE")
-                # self.sawyer_controller.gamepad_control()
-
-            elif event == '-GAMEPAD_DISABLE-':
-                self.sawyer_controller.disable_gamepad()
-
+                
             # event activated with HOME button
             elif event == '-HOME-':
                 if self.sawyer_controller.disable_gamepad is False:
@@ -354,7 +360,43 @@ class RobotGUI:
             # event enabled with ENABLE button
             elif event == '-ENABLE-':
                 self.sawyer_controller.send_command('ENABLE')
+                state = self.sawyer_controller.system_state()
+                if state == 'IDLE': 
+                    self.window['-MSG-'].update('')
+                    self.window['-MSG-'].print('System is Ready')
+                    self.window['-ENABLE-'].update(disabled = True)
+                    
+            # event activated with E-stop button
+            elif event == '-ESTOP-':
+                state = self.sawyer_controller.system_state()
                 
+                if state == 'ENABLED': 
+                    self.window['-MSG-'].print('The Sawyer Robot has been stopped. Release Button E-stop to Activate')
+                    self.window['-ESTOP-'].update('Release EMERGENCY STOP')
+                elif state == 'STOPPED':
+                    self.window['-MSG-'].print('Press ENABLE Button to Start Controlling')
+                    self.window['-ENABLE-'].update(disabled = False)
+                    self.window['-ESTOP-'].update('EMERGENCY STOP')
+
+                if not state == 'IDLE': 
+                    self.sawyer_controller.update_estop_state()
+                
+            # event activated with CONFIRM button
+            elif event == '-CONFIRM-':
+                if values['-JOINT-']:
+                    self.sawyer_controller.send_command('JOINT_ANGLES')
+                                
+                elif values['-END-EFFECTOR-']:
+                    self.sawyer_controller.send_command('CARTESIAN_POSE')
+                
+            
+            elif event == '-GAMEPAD_ENABLE-':
+                self.sawyer_controller.send_command("GAMEPAD_ENABLE")
+                # self.sawyer_controller.gamepad_control()
+
+            elif event == '-GAMEPAD_DISABLE-':
+                self.sawyer_controller.disable_gamepad()
+            
             # event activated with +X button
             elif event == '-PLUSX-':
                 self.sawyer_controller.send_command('+X')
@@ -403,14 +445,6 @@ class RobotGUI:
             elif event == '-MINUSYAW-':
                 self.sawyer_controller.send_command('-Rz')
 
-            # event activated with CONFIRM button
-            elif event == '-CONFIRM-':
-                if values['-JOINT-']:
-                    self.sawyer_controller.send_command('JOINT_ANGLES')
-
-                elif values['-END-EFFECTOR-']:
-                    self.sawyer_controller.send_command('CARTESIAN_POSE')
-
             elif event == '-ENABLE_ALL-':
                 self.sawyer_controller.send_command('ENABLE')
                 self.astorino_controller.send_command('ENABLE')
@@ -423,8 +457,6 @@ class RobotGUI:
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
         self.window.close()
-
-
 
 
     def getori(self):
