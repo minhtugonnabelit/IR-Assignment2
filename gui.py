@@ -45,15 +45,16 @@ class RobotGUI:
         
         self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller,)
         self.collision_setup()
+
         self.window = self.create_window()
         self.update_gui_thread()
 
 
     def collision_setup(self):
         object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)))
-        self.sawyer_controller.update_collision_object(object)
+        self.mission.update_collision_object(object)
+        # self.sawyer_controller.update_collision_object(object)
         self.env.add(object)
-
 
     def create_window(self):
         tab_group_layout = [
