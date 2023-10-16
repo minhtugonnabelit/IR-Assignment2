@@ -18,10 +18,10 @@ from controller_interface import ControllerInterface
 class Mission():
     def __init__(self, env : Swift, sawyer_controller: ControllerInterface, astorino_controller: ControllerInterface):
         
-        self.env = env
+        self._env = env
 
-        self.sawyer_robot = sawyer_controller
-        self.astorino_robot = astorino_controller
+        self._sawyer_robot = sawyer_controller
+        self._astorino_robot = astorino_controller
         
 
         
@@ -29,7 +29,7 @@ class Mission():
         print('bruh')
         qgoal_a = [0, 0, 0, 0, 0, 0]
         # qtraj_a = rtb.jtraj(self.astorino_robot._robot.q, qgoal_a, 50).q
-        self.astorino_robot.go_to_joint_angles(qgoal_a)
+        self._astorino_robot.go_to_joint_angles(qgoal_a)
         
         
         # for q in qtraj_a:
@@ -51,9 +51,6 @@ if __name__ == "__main__":
     
     astorino_robot = Astorino(env= env)
     astorino_robot.add_to_env(env) 
-    
-    
-    
     # Mission(env= env, sawyer_controller= sawyer_robot, astorino_controller= astorino_robot).run
     
     Mission.run(self= astorino_robot)

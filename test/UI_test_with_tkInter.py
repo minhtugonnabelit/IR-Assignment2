@@ -2,7 +2,7 @@ import threading
 import time
 import tkinter as tk
 from tkinter import ttk
-import ttkbootstrap as ttks
+# import ttkbootstrap as ttks
 import roboticstoolbox as rtb
 import spatialmath as sm
 # from Sawyer_model.sawyer import Sawyer
