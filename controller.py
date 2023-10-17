@@ -374,7 +374,6 @@ class Controller():
             
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             self.avoidance = False
-            print(self.avoidance)
             if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
                 self.avoidance = True
                 print('line_plane ee is nearly collided with object')
