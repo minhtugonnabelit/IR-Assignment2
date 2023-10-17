@@ -29,6 +29,7 @@ class Controller():
         self._disable_gamepad = True
         self._command_queue = queue.Queue()
         self._safety = Safety(self._robot)
+        self._robot_busy = False
 
         # Dispatch table
         self._dispatch = {
@@ -302,8 +303,11 @@ class Controller():
         if np.all(np.abs(poss_diff) < tolerance):
             print('Provided goal is Done')
             return True
-
         return False
+    
+    def _get_busy_status(self):
+        return self._robot_busy
+
     
     def _go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
         
@@ -327,7 +331,7 @@ class Controller():
 
         index = 0
         while not self.is_arrived(pose,tolerance) and self.system_activated():
-            
+            self._robot_busy = True
             # # Direction methods
             # # extracting linear vel direction
             # ee_cur_pose = self._robot.fkine(self._robot.q)
@@ -417,6 +421,8 @@ class Controller():
                 break
 
             self._env.step(time_step)
+            
+        self._robot_busy = False
 
     def go_to_joint_angles(self, q : np.ndarray, time=1, tolerance=0.0001):
             
@@ -443,12 +449,11 @@ class Controller():
             if np.all(np.abs(poss_diff) < tolerance):
                 print('done')
                 return True
-
             return False
 
         index = 0
         while not is_arrived() and self.system_activated():
-            
+            self._robot_busy = True
             if isinstance(self.object, RectangularPrism):
                 if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
                     print('line_plane ee is collided with object')
@@ -473,6 +478,8 @@ class Controller():
             self._robot.q = path.q[index]
             index += 1
             self._env.step(time_step)
+
+        self._robot_busy = False
 
     @staticmethod
     def solve_RMRC(j, ee_vel):

@@ -112,6 +112,9 @@ class ControllerInterface():
         """
         self._impl.move_cartesian()
 
+    def get_busy_status(self):
+        return self._impl._get_busy_status()
+        
 
     # STATE FUNCTION
     def system_state(self):
