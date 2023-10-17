@@ -2,7 +2,6 @@ import copy
 
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import spatialmath as sm
 import spatialmath.base as smb
 import spatialgeometry as geometry
@@ -10,15 +9,12 @@ from itertools import combinations
 
 
 import roboticstoolbox as rtb
-from ir_support import make_ellipsoid, line_plane_intersection, RectangularPrism
-
+from ir_support import line_plane_intersection
 from robot.m_DHRobot3D import M_DHRobot3D
 from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 
-# import for testing purpose
-from swift import Swift, Slider
-import time
+from swift import Swift
 
 class Safety:
 
@@ -64,12 +60,12 @@ class Safety:
         """ Get ellipsoid of the robot """
 
         ellipsoids = []
-        thickness = 0.05
+        thickness = 0.08
         for i in range(len(self.robot.links)):
             
             # special define for major and minor axis for ellipsoid
             minor_axis = thickness if self.robot.a[i] == 0 else copy.deepcopy(self.robot.a[i]) / 2 + thickness
-            major_axis = copy.deepcopy(self.robot.d[i]) / 2
+            major_axis = copy.deepcopy(self.robot.d[i]) / 2 + thickness
 
             # define major and minor axis of ellipsoid
             ellipsoid = np.asarray([minor_axis, major_axis, minor_axis])
@@ -92,7 +88,7 @@ class Safety:
         meshlist = []
 
         for ellipsoid in self._ellipsoids:
-            meshlist.append(Safety._make_ellipsoid(ellipsoid, np.zeros(3), density=(40,20)))
+            meshlist.append(Safety._make_ellipsoid(ellipsoid, np.zeros(3)))
 
         return meshlist   
     
@@ -120,56 +116,64 @@ class Safety:
         
         return ellip_transforms
 
-    # -------------------------------------------------------------------#
-    ######################################################################
-    # MAINTAINING
-    # def object_collision_check(self, q, vecteces, faces, normals):
+    def _ee_line_offset(self, tr, offset):
+        
+        """  Get lines offset from ee general line"""
 
-    #     """
-    #     Standard version using line-plane intersection 
-    #     # MAINTAINING"""
-
-    #     links_tf = self.get_link_poses(q)
-
-
-    #     return False
-    
-    # ## so called most stable collision check up to now
-    # def is_collision(self, q_matrix, faces, vertex, face_normals, return_once_found = True):
-    #     """
-    #     This is based upon the output of questions 2.5 and 2.6
-    #     Given a robot model (robot), and trajectory (i.e. joint state vector) (q_matrix)
-    #     and triangle obstacles in the environment (faces,vertex,face_normals)
-    #     """
-    #     result = False
-
-    #     for i, q in enumerate(q_matrix):
-
-    #         # Get the transform of every joint (i.e. start and end of every link)
-    #         tr = self.get_link_poses(q)
+        lines = []
             
-    #         # Go through each link and also each triangle face
-    #         for i in range(np.size(tr,2)-1):
-    #             for j, face in enumerate(faces):
-    #                 vert_on_plane = vertex[face][0]
-    #                 intersect_p, check = line_plane_intersection(face_normals[j], 
-    #                                                             vert_on_plane, 
-    #                                                             tr[i][:3,3], 
-    #                                                             tr[i+1][:3,3])
-    #                 # list of all triangle combination in a face
-    #                 triangle_list  = np.array(list(combinations(face,3)),dtype= int)
-    #                 if check == 1:
-    #                     for triangle in triangle_list:
-    #                         if self._is_intersection_point_inside_triangle(intersect_p, vertex[triangle]):
+        lastlink_norm = np.linalg.norm(tr[-1].A[:3,3] - tr[-2].A[:3,3])
+        start1 = smb.transl(0,offset,-lastlink_norm) @ tr[-1].A
+        line1 = {'start': start1, 
+                    'end': smb.transl(0,0,lastlink_norm*2) @ start1}
+        
+        start2 = smb.transl(0,-offset,-lastlink_norm) @ tr[-1].A
+        line2 = {'start': start2,
+                    'end': smb.transl(0,0,lastlink_norm*2) @ start2}
+        
+        start3 = smb.transl(offset,0,-lastlink_norm) @ tr[-1].A
+        line3 = {'start': start3,
+                    'end': smb.transl(0,0,lastlink_norm*2) @ start3}
+        
+        start4 = smb.transl(-offset,0,-lastlink_norm) @ tr[-1].A
+        line4 = {'start': start4,
+                    'end': smb.transl(0,0,lastlink_norm*2) @ start4}
+        
+        lines.append(line1)
+        lines.append(line2)
+        lines.append(line3)
+        lines.append(line4)
 
-    #                             result = True
-    #                             if return_once_found:
-    #                                 return result
-    #                             break
-    #     return result
+        return lines
+    
+    def collision_check_ee(self, q, vertecies, faces, face_normals, return_once_found = True):
+        """
+        Collision check using the closest point between the end-effector and the object,
+        with offset line for additional 4 sides of the end-effector to ensure the boundary of near collision
+        """
+        result = False
+        offset = 0.05
 
-    # -------------------------------------------------------------------#
-    ######################################################################
+        tr = self.get_link_poses(q)
+
+        # offset the end-effector to create a virtual box
+        lines = self._ee_line_offset(tr, offset)
+        for line in lines:
+            for j, face in enumerate(faces):
+                vert_on_plane = vertecies[face][0]
+                intersect_p, check = line_plane_intersection(face_normals[j], 
+                                                            vert_on_plane, 
+                                                            line['start'][:3,3], 
+                                                            line['end'][:3,3])
+                triangle_list  = np.array(list(combinations(face,3)),dtype= int)
+                if check == 1:
+                    for triangle in triangle_list:
+                        if Safety._is_intersection_point_inside_triangle(intersect_p, vertecies[triangle]):
+                            result = True
+                            if return_once_found:
+                                return result
+                            break
+        return result
 
     # collision function:
     def collision_check(self, q, object : geometry.Mesh):
@@ -182,8 +186,8 @@ class Safety:
         ee_pose = self.robot.fkine(q)
 
         # map a virtual sphere to the end-effector 
-        ee_sphere = geometry.Cylinder(0.03, self.robot.d[self.robot.n-1]/2,  pose = ee_pose)
-
+        ee_sphere = geometry.Cylinder(0.05, self.robot.d[self.robot.n-1],  pose = ee_pose)
+    
         # check if the closest point between the end-effector and the object is within the virtual sphere
         return ee_sphere.closest_point(object, 5)
     
@@ -204,12 +208,13 @@ class Safety:
         ellip_transforms = self.transform_ellipsoid(links_center)
 
         # iteration through each link
-        for i, center in enumerate(links_center):
+        for i, center in enumerate(links_center, start=0):
 
             # iteration through each link but avoid the currentt link and neighbor links
             for j in range(len(links_center)):
 
-                if abs(j-i) <= 1:
+                # skip 2 neighbor links
+                if abs(j-i) <= 2:
                     continue
             
                 # iteration through each ellipsoid mesh points
@@ -220,7 +225,7 @@ class Safety:
 
                     # return once collision is detected
                     if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
-                        print(j)
+                        print(f'link {j} is collided with link {i}')
                         return True
 
         return False
@@ -327,12 +332,20 @@ class Safety:
         return (X,Y,Z)
     
     def test_ellipsoid_mesh(self):
+        """
+        Test function to plot ellipsoid along with robot stick model """
 
         fig = self.robot.plot(q=sawyer.neutral, block=False, )
         ax = fig.ax
 
         # get the transforms of all links
         links_tf = self.get_link_poses(self.robot.neutral)
+        ee_lines = self._ee_line_offset(links_tf, 0.05)
+
+        for line in ee_lines:
+            ax.plot([line['start'][0,3], line['end'][0,3]], 
+                    [line['start'][1,3], line['end'][1,3]], 
+                    [line['start'][2,3], line['end'][2,3]], c='r', linewidth=0.5)
 
         # get the center of each link
         links_center = Safety.get_link_centers(links_tf)
@@ -345,7 +358,7 @@ class Safety:
 
         for ellip in ellip_transforms:
             ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
-
+        
         # plot the ellipsoid mesh points in the world frame
         fig.hold()
 
@@ -361,8 +374,6 @@ if __name__ =='__main__':
     sawyer = Sawyer(env)
     sawyer_safety = Safety(sawyer)
 
-    # sawyer = Astorino(env)
-    # sawyer_safety = Safety(sawyer)
     sawyer_safety.test_ellipsoid_mesh()
     
 

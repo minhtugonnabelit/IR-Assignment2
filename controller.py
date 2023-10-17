@@ -6,6 +6,7 @@ import time
 import roboticstoolbox as rtb
 import numpy as np
 import spatialmath as sm
+import spatialgeometry as geometry
 from rectangularprism import RectangularPrism
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
@@ -33,12 +34,12 @@ class Controller():
         self._dispatch = {
             "ENABLE": self.enable_system,
             "HOME": self.go_to_home,
-            "+X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0), time=0.1),
-            "-X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0), time=0.1),
-            "+Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0), time=0.1),
-            "-Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0), time=0.1),
-            "+Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05), time=0.1),
-            "-Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05), time=0.1),
+            "+X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0),),
+            "-X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0),),
+            "+Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0),),
+            "-Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0),),
+            "+Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05),),
+            "-Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05),),
             "+Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
             "-Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
             "+Ry": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
@@ -69,15 +70,29 @@ class Controller():
             print(f'System is not enabled. Current state: {self._state}')
             return False
 
-    def update_collision_object(self, obj):
+    def update_collision_object(self, side, center):
         """
         Update collision object
         """
-        if isinstance(obj, RectangularPrism):
-            self.object = obj
-            self.vertices, self.faces, self.normals = obj.get_data()
-        else: 
-            self.object = obj
+        # create RectangularPrism object for line_plane collision check
+        self.object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center[0:3,3])
+        self.vertices, self.faces, self.normals = self.object.get_data()
+
+        # create Cuboid object for collision avoidance
+        self.avoidance_object = geometry.Cuboid(side, pose=center)
+
+        return self.avoidance_object
+
+    # def update_collision_object(self, obj):
+    #     """
+    #     Update collision object
+    #     """
+        
+    #     if isinstance(obj, RectangularPrism):
+    #         self.object = obj
+    #         self.vertices, self.faces, self.normals = obj.get_data()
+    #     else: 
+    #         self.object = obj
 
     def _joystick_init(self):
 
@@ -169,7 +184,6 @@ class Controller():
         self._go_to_CartesianPose(self._ui_pose, time=3)
 
     def _update_js(self):
-        # print(self._robot.q)
         self._robot.q = self._ui_js
 
     # --------------------------------------------------#
@@ -303,7 +317,7 @@ class Controller():
 
         """
 
-        step = 100
+        step = 50
         time_step = time/step
         current_ee_pose = self._robot.fkine(self._robot.q)
 
@@ -314,66 +328,68 @@ class Controller():
         index = 0
         while not self.is_arrived(pose,tolerance) and self.system_activated():
             
-            
-            ## Direction methods
-            # extracting linear vel direction
-            ee_cur_pose = self._robot.fkine(self._robot.q)
-            distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
-            lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
+            # # Direction methods
+            # # extracting linear vel direction
+            # ee_cur_pose = self._robot.fkine(self._robot.q)
+            # distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
+            # if np.isnan(distance) or distance < 0.005:
+            #     lin_uint = np.array([0.0, 0.0, 0.0])
+            #     distance = float(0.0)
+            # else:
+            #     lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
+            # # extracting angular vel direction
+            # s_omega = (pose.A[0:3, 0:3] @ np.transpose(
+            #     ee_cur_pose.A[0:3, 0:3]) - np.eye(3))
+            # orientation_error = np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
+            # ang_unit = np.array([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]) / orientation_error
+            # # brake_thresh = 0.01
+            # # ______________________________________
+            # # missing a orientation brake threshold
+            # # ___________________________________
+            # # if distance < brake_thresh or orientation_error < brake_thresh:
+            # #     linear_vel = lin_uint * vel_scale['linear'] * (distance / brake_thresh)**2
+            # #     angular_vel = ang_unit * vel_scale['linear'] * (orientation_error / brake_thresh)**2
+            # # else:
+            # linear_vel = lin_uint * vel_scale['linear']
+            # angular_vel = ang_unit * 2
 
-            # extracting angular vel direction
-            s_omega = (pose.A[0:3, 0:3] @ np.transpose(
-                ee_cur_pose.A[0:3, 0:3]) - np.eye(3)) 
-            ang_unit = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]] / np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
+            # ee_vel = np.hstack((linear_vel, angular_vel))
+            # print(ee_vel)
 
-            brake_thresh = 0.05 
-            # ______________________________________
-            # missing a orientation brake threshold
-            # ___________________________________
-            if distance < brake_thresh:
-                linear_vel = lin_uint * vel_scale['linear'] * distance / brake_thresh
-                angular_vel = ang_unit * vel_scale['linear'] * distance / brake_thresh
-            else:
-                linear_vel = lin_uint * vel_scale['linear']
-                angular_vel = ang_unit * vel_scale['linear']
+            ## Linear interpolation methods
+            # get linear velocity between interpolated point and current pose of ee
+            prev_ee_pos = path[index].A[0:3, 3]
+            desired_ee_pos = path[index+1].A[0:3, 3]
 
-            ee_vel = np.hstack((linear_vel, angular_vel))
+            # get linear velocity between interpolated point and current pose of ee
+            lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
-        
-            # ## Linear interpolation methods
-            # # get linear velocity between interpolated point and current pose of ee
-            # prev_ee_pos = path[index].A[0:3, 3]
-            # desired_ee_pos = path[index+1].A[0:3, 3]
+            # get angular velocity between interpolated ...
+            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
+                self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+            ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
-            # # get linear velocity between interpolated point and current pose of ee
-            # lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
-
-            # # get angular velocity between interpolated ...
-            # s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
-            #     self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
-            # ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
-
-            # # combine velocities
-            # ee_vel = np.hstack((lin_vel, ang_vel))
-
-            # @todo:
-            # -- consider adding collision check   
-            # apply object collision to have a new path, could change 
-            # loop condition of while loop
+            # combine velocities
+            ee_vel = np.hstack((lin_vel, ang_vel))
             
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
+            self.avoidance = False
+            print(self.avoidance)
+            if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                self.avoidance = True
+                print('line_plane ee is nearly collided with object')
 
-            # set threshold and damping
-            d_thresh = 0.01
+            if self.avoidance is True:
+                # set threshold and damping
+                d_thresh = 0.01
 
-            # weight of the damping vel for collision avoidance
-            weight = 0.1
-
-            # get distance between ee and object,  also extracting the closest points to use as damping velocity
-            d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
-            if d <= d_thresh:
-                vel = ( p1 - p2 ) / time_step
-                ee_vel[0:3] += weight*vel
+                # weight of the damping vel for collision avoidance
+                weight = 0.1
+                # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                if d <= d_thresh:
+                    vel = ( p1 - p2 ) / time_step
+                    ee_vel[0:3] += weight*vel
 
             ## END -----------------------------------------------------------------------------#
             
@@ -386,13 +402,13 @@ class Controller():
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
-            # check if ee is too close to the ground
+            # check if robot body is too close to the ground
             if self._safety.grounded_check(q):
                 self._state = 'STOPPED'
-                
+            
+            # check if ee is self collided
             if self._safety.is_self_collided(q):
                 self._state = 'STOPPED'
-                # pass
 
             self._robot.q = q
 
@@ -433,16 +449,27 @@ class Controller():
 
         index = 0
         while not is_arrived() and self.system_activated():
-
-            if self._safety.grounded_check(path.q[index]):
-                print('ee is too close to the ground')
-                break
             
-            d, p1, p2 = self._safety.collision_check(path.q[index], self.object)
-            d_thresh = 0.01
-            if d <= d_thresh:
-                print('ee is collided with object')
-                break
+            if isinstance(self.object, RectangularPrism):
+                if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
+                    print('line_plane ee is collided with object')
+                    break
+
+            else:
+                d, p1, p2 = self._safety.collision_check(path.q[index], self.object)
+                d_thresh = 0.01
+                if d <= d_thresh:
+                    print('ee is collided with object')
+                    break
+
+
+            # check if robot body is too close to the ground
+            if self._safety.grounded_check(path.q[index]):
+                self._state = 'STOPPED'
+            
+            # check if ee is self collided
+            if self._safety.is_self_collided(path.q[index]):
+                self._state = 'STOPPED'
 
             self._robot.q = path.q[index]
             index += 1

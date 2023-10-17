@@ -12,6 +12,7 @@ from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 from controller_interface import ControllerInterface
 from mission import Mission
+from rectangularprism import RectangularPrism
 
 import queue
 import time
@@ -464,9 +465,11 @@ class RobotGUI:
         return ori
 
     def collision_setup(self):
-        object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(self.sawyer.base.A @ smb.transl(0.5,0.2,0.2)))
-        self.sawyer_controller.update_collision_object(object)
-        self.env.add(object)
+
+        side = [0.1, 0.1, 0.1]
+        center=self.sawyer.base.A @ smb.transl(0.7,0.2,0.2)
+        viz_object = self.sawyer_controller.update_collision_object(side, center)
+        obj_id = self.env.add(viz_object)
          
     def blank(self, size):
         return sg.Text('', size=size, background_color='brown')

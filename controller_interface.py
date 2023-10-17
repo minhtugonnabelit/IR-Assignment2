@@ -22,12 +22,17 @@ class ControllerInterface():
         """
         return self._impl.system_activated()
 
-
-    def update_collision_object(self, obj):
+    def update_collision_object(self, side, center):
         """
         Update collision object
         """
-        self._impl.update_collision_object(obj)
+        return self._impl.update_collision_object(side, center)
+
+    # def update_collision_object(self, obj):
+    #     """
+    #     Update collision object
+    #     """
+    #     self._impl.update_collision_object(obj)
 
 
     def gamepad_control(self):
@@ -81,6 +86,11 @@ class ControllerInterface():
         """
         self._impl.set_joint_value(j, value)
 
+    def update_js(self):
+        """
+        Update joint states
+        """
+        self._impl._update_js()
 
     def move(self):
         """
