@@ -1,0 +1,35 @@
+// {
+// 	"version": "2.0.0",
+// 	"tasks": [
+// 		{
+// 			"type": "cmake",
+// 			"label": "CMake: build",
+// 			"command": "build",
+// 			"targets": [
+// 				"[N/A - Select Kit]"
+// 			],
+// 			"group": "build",
+// 			"problemMatcher": [],
+// 			"detail": "CMake template build task"
+// 		}
+// 	]
+// }
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Python Script",
+            "type": "shell",
+            "command": "python",
+            "args": ["${file}"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            }
+        }
+    ]
+}

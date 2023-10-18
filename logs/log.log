@@ -1,0 +1,21 @@
+2023-10-17 10:03:37,955,INFO,logging_demo.py,init_log,161,Saving logs to: /home/anhminhtu/git/IR-Assignment2/logs/log.log
+2023-10-17 10:03:37,955,DEBUG,logging_demo.py,main,183,Here is an example DEBUG log message
+2023-10-17 10:03:37,955,INFO,logging_demo.py,main,185,Here is an example INFO log message
+2023-10-17 10:03:37,955,WARNING,logging_demo.py,main,187,Here is an example WARNING log message
+2023-10-17 10:03:37,955,ERROR,logging_demo.py,main,189,Here is an example ERROR log message
+2023-10-17 10:03:37,955,CRITICAL,logging_demo.py,main,191,Here is an example CRITICAL log message
+2023-10-17 10:06:17,305,INFO,logging_demo.py,init_log,147,Saving logs to: /home/anhminhtu/git/IR-Assignment2/logs/log.log
+2023-10-17 10:06:17,305,DEBUG,logging_demo.py,main,164,Here is an example DEBUG log message
+2023-10-17 10:06:17,305,INFO,logging_demo.py,main,166,Here is an example INFO log message
+2023-10-17 10:06:17,305,WARNING,logging_demo.py,main,168,Here is an example WARNING log message
+2023-10-17 10:06:17,305,ERROR,logging_demo.py,main,170,Here is an example ERROR log message
+2023-10-17 10:06:17,305,CRITICAL,logging_demo.py,main,172,Here is an example CRITICAL log message
+2023-10-17 10:06:17,306,INFO,logging_demo.py,main,176,Your int was 42
+2023-10-17 10:06:17,306,INFO,logging_demo.py,main,180,Your string was Hello!
+2023-10-17 10:06:17,306,INFO,logging_demo.py,main,184,Your floats were [1.2, 3.14, 10.0]
+2023-10-17 10:10:58,543,INFO,logging_demo.py,init_log,144,Saving logs to: /home/anhminhtu/git/IR-Assignment2/logs/log.log
+2023-10-17 10:10:58,543,DEBUG,logging_demo.py,main,161,Here is an example DEBUG log message
+2023-10-17 10:10:58,543,INFO,logging_demo.py,main,163,Here is an example INFO log message
+2023-10-17 10:10:58,543,WARNING,logging_demo.py,main,165,Here is an example WARNING log message
+2023-10-17 10:10:58,543,ERROR,logging_demo.py,main,167,Here is an example ERROR log message
+2023-10-17 10:10:58,543,CRITICAL,logging_demo.py,main,169,Here is an example CRITICAL log message
