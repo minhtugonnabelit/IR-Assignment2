@@ -81,7 +81,7 @@ class Sawyer(M_DHRobot3D):
         self.q = qtest
         self._head = self._add_model(
             "Sawyer_model/head.dae", smb.transl(0, 0, 0.3811))
-        self.set_neutral_js([0.00, -1.18, 0.00, -2.18, 0.00, 0.57, 3.3161])
+        self.set_neutral_js(self._NEUTRAL)
         self.update_sim()
 
     def _create_DH(self):

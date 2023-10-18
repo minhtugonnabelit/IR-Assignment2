@@ -19,6 +19,7 @@ from robot.m_DHRobot3D import M_DHRobot3D
 
 class Astorino(M_DHRobot3D):
     
+    _NEUTRAL = [0, -np.pi/2, 0, 0, 0, 0]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
     # def __init__(self, links, link3D_names, link3d_dir, name=None, qtest=None, qtest_transforms=None):
     #     super().__init__(links, link3D_names, link3d_dir, name, qtest, qtest_transforms)
@@ -74,7 +75,7 @@ class Astorino(M_DHRobot3D):
         
         self.base = base * self.base
         self.q = qtest
-        self.set_neutral_js([0,-np.pi/2,0,0,0,0])
+        self.set_neutral_js(self._NEUTRAL)
         self.update_sim()
 
         

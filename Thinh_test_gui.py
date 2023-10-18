@@ -764,7 +764,8 @@ class RobotGUI:
 
         side = [0.1, 0.1, 0.1]
         center=self.sawyer.base.A @ smb.transl(0.7,0.2,0.2)
-        viz_object = self.sawyer_controller.update_collision_object(side, center)
+        viz_object = self.mission.update_collision_object(side, center)
+        # viz_object = self.sawyer_controller.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          
     def blank(self, size):

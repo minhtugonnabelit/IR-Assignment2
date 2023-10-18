@@ -37,23 +37,6 @@ class Safety:
         if q is None:
             return self.robot.fkine_all()
         return self.robot.fkine_all(q)
-    
-    def get_link_centers(links_tf):
-
-        """
-        Get the center of each link"""
-
-        links_center = []
-        for i in range(len(links_tf)-1):
-
-            # keep orientation of end of link
-            tf = copy.deepcopy(links_tf[i+1].A)
-
-            # set the center of the link to be the average of the end of link and the start of link
-            tf[0:3,3] = (links_tf[i+1].A[0:3,3] + links_tf[i].A[0:3,3]) / 2
-            links_center.append(tf)
-
-        return links_center
 
     def get_ellipsoid(self):
 
@@ -81,6 +64,8 @@ class Safety:
 
         return ellipsoids
     
+
+
     def get_ellipsoid_meshlist(self):
         
         """ Get the ellipsoid mesh points corresponded to each link stick to their local frame """
@@ -115,8 +100,25 @@ class Safety:
             ellip_transforms.append(normalized_points)
         
         return ellip_transforms
+    
+    def get_link_centers(links_tf):
 
-    def _ee_line_offset(self, tr, offset):
+        """
+        Get the center of each link"""
+
+        links_center = []
+        for i in range(len(links_tf)-1):
+
+            # keep orientation of end of link
+            tf = copy.deepcopy(links_tf[i+1].A)
+
+            # set the center of the link to be the average of the end of link and the start of link
+            tf[0:3,3] = (links_tf[i+1].A[0:3,3] + links_tf[i].A[0:3,3]) / 2
+            links_center.append(tf)
+
+        return links_center
+
+    def _ee_line_offset(tr, offset):
         
         """  Get lines offset from ee general line"""
 
@@ -157,7 +159,7 @@ class Safety:
         tr = self.get_link_poses(q)
 
         # offset the end-effector to create a virtual box
-        lines = self._ee_line_offset(tr, offset)
+        lines = Safety._ee_line_offset(tr, offset)
         for line in lines:
             for j, face in enumerate(faces):
                 vert_on_plane = vertecies[face][0]
@@ -207,8 +209,24 @@ class Safety:
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
         ellip_transforms = self.transform_ellipsoid(links_center)
 
+        # if self.robot.name == 'Sawyer':
+        #     headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
+        #     head_ellipsoid = Safety._make_ellipsoid([0.05,0.15,0.10],headplace[0:3,3])
+        #     head_ellipsoid = np.array(head_ellipsoid)
+        #     head_ellipsoid = np.vstack((head_ellipsoid.reshape(3, -1), np.ones((1, head_ellipsoid.shape[1] * head_ellipsoid.shape[2]))))
+
         # iteration through each link
         for i, center in enumerate(links_center, start=0):
+
+            # if self.robot.name == 'Sawyer':
+            #     if i >= 3:
+            #         print('checking collision with head')
+            #         for point in np.transpose(head_ellipsoid):
+            #             transformed_point = np.linalg.inv(center) @ point
+            #             if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
+            #                 print(f'link {i} is collided with head')
+            #                 return True
+                
 
             # iteration through each link but avoid the currentt link and neighbor links
             for j in range(len(links_center)):
@@ -340,7 +358,7 @@ class Safety:
 
         # get the transforms of all links
         links_tf = self.get_link_poses(self.robot.neutral)
-        ee_lines = self._ee_line_offset(links_tf, 0.05)
+        ee_lines = Safety._ee_line_offset(links_tf, 0.05)
 
         for line in ee_lines:
             ax.plot([line['start'][0,3], line['end'][0,3]], 
@@ -356,8 +374,17 @@ class Safety:
         # eliminate the last column of the ellipsoid mesh points
         ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
 
+        if self.robot.name == 'Sawyer':
+            # headplace = self.robot.base.A @ smb.transl(0,0,0.3811+0.23/2)
+            headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
+            head_ellipsoid = Safety._make_ellipsoid([0.05,0.15,0.15],headplace[0:3,3])
+            head_ellipsoid = np.array(head_ellipsoid)
+            head_ellipsoid = head_ellipsoid.reshape(3, -1)
+
         for ellip in ellip_transforms:
             ax.scatter(ellip[0,:], ellip[1,:], ellip[2,:], c='r', s=1)
+
+        ax.scatter(head_ellipsoid[0,:], head_ellipsoid[1,:], head_ellipsoid[2,:], c='r', s=1)
         
         # plot the ellipsoid mesh points in the world frame
         fig.hold()

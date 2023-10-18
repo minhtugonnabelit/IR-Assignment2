@@ -30,6 +30,7 @@ class Controller():
         self._command_queue = queue.Queue()
         self._safety = Safety(self._robot)
         self._robot_busy = False
+        self.object = None
 
         # Dispatch table
         self._dispatch = {
@@ -84,17 +85,6 @@ class Controller():
 
         return self.avoidance_object
 
-    # def update_collision_object(self, obj):
-    #     """
-    #     Update collision object
-    #     """
-        
-    #     if isinstance(obj, RectangularPrism):
-    #         self.object = obj
-    #         self.vertices, self.faces, self.normals = obj.get_data()
-    #     else: 
-    #         self.object = obj
-
     def _joystick_init(self):
 
         # Setup joystick
@@ -117,7 +107,6 @@ class Controller():
             try: 
                 command = self._command_queue.get(timeout=0.01)
                 if command in self._dispatch:
-                    # print(f'Executing command {command}')
                     self._dispatch[command]()
                 else:
                     print(f'Command {command} is not recognized!')
@@ -196,13 +185,6 @@ class Controller():
         """
         self._disable_gamepad = True
 
-    # def enable_gamepad(self):
-    #     """
-    #     ### Enable gamepad
-    #     Function to enable gamepad control
-    #     """
-    #     self._disable_gamepad = False
-
     def gamepad_control(self):
         """
         ### Gamepad control
@@ -216,17 +198,8 @@ class Controller():
 
             # Print joystick information
             self._joystick.init()
-            joy_name = self._joystick.get_name()
-            joy_axes = self._joystick.get_numaxes()
-            joy_buttons = self._joystick.get_numbuttons()
-
-            print(f'Your joystick ({joy_name}) has:')
-            print(f' - {joy_buttons} buttons')
-            print(f' - {joy_axes} axes')
-
             vel_scale = {'linear': 0.3, 'angular': 0.8}
 
-            count = 0
             # Main loop to check joystick functionality
             while not self._disable_gamepad:
 
@@ -268,10 +241,11 @@ class Controller():
                     gamepad_gain = 0.8
 
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
-                    d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
-                    if d <= d_thresh:
-                        vel = ( p1 - p2 ) / time_step
-                        ee_vel[0:3] += gamepad_gain*vel
+                    if self.object is not None:
+                        d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
+                        if d <= d_thresh:
+                            vel = ( p1 - p2 ) / time_step
+                            ee_vel[0:3] += gamepad_gain*vel
 
                     # calculate joint velocities
                     j = self._robot.jacob0(self._robot.q)
@@ -288,9 +262,7 @@ class Controller():
                     if self._safety.is_self_collided(q):
                         self._state = 'STOPPED'
 
-
                     self._robot.q = q
-
                     self._env.step(time_step)
         else:
             print('No joystick found!')
@@ -378,21 +350,22 @@ class Controller():
             
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             self.avoidance = False
-            if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
-                self.avoidance = True
-                print('line_plane ee is nearly collided with object')
+            if self.object is not None:
+                if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                    self.avoidance = True
+                    print('line_plane ee is nearly collided with object')
 
-            if self.avoidance is True:
-                # set threshold and damping
-                d_thresh = 0.01
+                if self.avoidance is True:
+                    # set threshold and damping
+                    d_thresh = 0.01
 
-                # weight of the damping vel for collision avoidance
-                weight = 0.1
-                # get distance between ee and object,  also extracting the closest points to use as damping velocity
-                d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
-                if d <= d_thresh:
-                    vel = ( p1 - p2 ) / time_step
-                    ee_vel[0:3] += weight*vel
+                    # weight of the damping vel for collision avoidance
+                    weight = 0.1
+                    # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                    d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                    if d <= d_thresh:
+                        vel = ( p1 - p2 ) / time_step
+                        ee_vel[0:3] += weight*vel
 
             ## END -----------------------------------------------------------------------------#
             
@@ -454,18 +427,10 @@ class Controller():
         index = 0
         while not is_arrived() and self.system_activated():
             self._robot_busy = True
-            if isinstance(self.object, RectangularPrism):
-                if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
-                    print('line_plane ee is collided with object')
+            if self.object is not None:
+                if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                    print('line_plane ee is nearly collided with object')
                     break
-
-            else:
-                d, p1, p2 = self._safety.collision_check(path.q[index], self.object)
-                d_thresh = 0.01
-                if d <= d_thresh:
-                    print('ee is collided with object')
-                    break
-
 
             # check if robot body is too close to the ground
             if self._safety.grounded_check(path.q[index]):

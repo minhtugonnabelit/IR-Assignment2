@@ -21,30 +21,38 @@ class Mission():
 
         self._env = env
 
-        # self._sawyer_robot = sawyer_controller
-        # self._astorino_robot = astorino_controller
+        # -----------------
+        self.sawyer_controller = controller1
+        self.astorino_controller = controller2
+        #----------------
         
+    def home_system(self):
+        """
+        Homing both robot arms"""
 
+        self.astorino_controller.send_command('HOME')
+        self.sawyer_controller.send_command('HOME')
+        print(self.astorino_controller._impl._robot.q)
         
+    def launch_system(self):
+        """
+        Launching both robot arms"""
+
+        self.astorino_controller.launch()
+        self.sawyer_controller.launch()
+
+    def enable_system(self):
+        """
+        Enable both robot arms"""
+
+        self.astorino_controller.send_command('ENABLE')
+        self.sawyer_controller.send_command('ENABLE')
+
     def run(self):
         print('bruh')
         qgoal_a = [0, 0, 0, 0, 0, 0]
-        # qtraj_a = rtb.jtraj(self.astorino_robot._robot.q, qgoal_a, 50).q
-        self._astorino_robot.go_to_joint_angles(qgoal_a)
+        self.astorino_controller.go_to_joint_angles(qgoal_a)
         
-        
-
-        # init swift environment
-        self.env = env
-
-        # init robots controller inside mission
-        # self.sawyer_robot = controller1
-        # self.astorino_robot = controller2
-                
-    def run(self):
-        print('bruh')
-        qgoal_a = [0, 0, 0, 0, 0, 0]
-        self.astorino_robot.go_to_joint_angles(qgoal_a)
         # qtraj_a = rtb.jtraj(self.astorino_robot._robot.q, qgoal_a, 50).q
 
 
@@ -52,10 +60,12 @@ class Mission():
         #     self.astorino_robot._robot.q = q
         #     self.env.step(0.02)
         
-    def update_collision_object(self, object):
+    def update_collision_object(self, side, center):
 
-        self.sawyer_robot.update_collision_object(object)
-        self.astorino_robot.update_collision_object(object)
+        viz_object = self.sawyer_controller.update_collision_object(side, center)
+        self.astorino_controller.update_collision_object(side, center)
+
+        return viz_object
 
     
     def test(self):
@@ -68,14 +78,12 @@ if __name__ == "__main__":
     env.launch(realtime= True)
     
     sawyer_robot = Sawyer(env= env)
-    sawyer_robot.add_to_env(env)
+    sawyer_controller = ControllerInterface(sawyer_robot, env= env)
     
-    astorino_robot = Astorino(env= env)
-    astorino_robot.add_to_env(env) 
-
-    # Mission(env= env, sawyer_controller= sawyer_robot, astorino_controller= astorino_robot).run
+    astorino_robot = Astorino(env= env, base= sm.SE3(0,1,0))
+    astorino_controller = ControllerInterface(astorino_robot, env= env)
     
-    Mission.run(self= astorino_robot)
-
-    Mission(env= env, sawyer_controller= sawyer_robot, astorino_controller= astorino_robot).run()
-
+    mission = Mission(env, sawyer_controller, astorino_controller)
+    mission.launch_system() # only called once when both controller havent been launched, otherwise, dont do this
+    mission.enable_system() # only called when controllers need to be enabled
+    mission.home_system()
