@@ -182,6 +182,9 @@ class Controller():
         else:
             self._robot.q = self._ui_js
 
+
+    def _update_robot_js(self):
+        self._ui_js = self._robot.q
     # --------------------------------------------------#
     # gamepad control
     def disable_gamepad(self):
@@ -451,7 +454,6 @@ class Controller():
             self._robot.q = path.q[index]
             index += 1
             self._env.step(time_step)
-
         self._robot_busy = False
 
     @staticmethod

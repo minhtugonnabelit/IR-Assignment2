@@ -92,6 +92,9 @@ class ControllerInterface():
         Update joint states
         """
         self._impl._update_js()
+    
+    def update_robot_js(self):
+        self._impl._update_robot_js()
 
     def move(self):
         """
