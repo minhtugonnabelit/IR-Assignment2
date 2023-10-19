@@ -16,6 +16,23 @@ from rectangularprism import RectangularPrism
 
 import queue
 import time
+import logging
+import os
+import argparse
+
+# The default log filename
+LOG_FILE_NAME = "log_gui_01.log"
+LOG_FORMAT_FILE = "%(asctime)s,%(levelname)s,%(filename)s,%(funcName)s,%(lineno)d,%(message)s"  # Here is how a log will format to a file
+LOG_FORMAT_CONSOLE = "%(asctime)s\t%(levelname)s: %(message)s"                                  # Here is how a log will format to the console
+
+def load_args():
+    parser = argparse.ArgumentParser(
+        description="Logging mode toggle here", formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help="Enable debug outputs")
+
+    return parser.parse_args()
 
 class RobotGUI:
 
@@ -24,29 +41,36 @@ class RobotGUI:
     _slider_size = (21, 13)
     _window_size = (900,700) # Width x Height
 
-    def __init__(self):
+    def __init__(self, args=None):
 
         sg.theme('DarkAmber')
+
+        ## Initialize environment and logging system
         self.env = Swift()
         self.env.launch(realtime=True)
+        if args.verbose:
+            log_level=logging.DEBUG
+        else:
+            log_level=logging.INFO
+        self.log = RobotGUI._init_log(log_level)
         
+        ## Initialize robot and controller
         base_original_robot = sm.SE3(0,0.5,0)
         transl2robot = sm.SE3(0,-1,0)
         
         self.sawyer = Sawyer(self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
-
-        self.sawyer_controller = ControllerInterface(self.sawyer, self.env)
+        self.sawyer_controller = ControllerInterface(self.sawyer, self.env, self.log)
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
         self.astorino = Astorino(self.env, base= base_original_robot @ transl2robot)
         self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
-
-        self.astorino_controller = ControllerInterface(self.astorino, self.env)
+        self.astorino_controller = ControllerInterface(self.astorino, self.env, self.log)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
         
+        ## initialize mission manager
         self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller,)
         self.collision_setup()
         self.window = self.create_window()
@@ -801,11 +825,55 @@ class RobotGUI:
          
     def blank(self, size):
         return sg.Text('', size=size, background_color='brown')
+    
+    def _init_log(log_level):
+
+        # First, lets get the root logger
+        log = logging.getLogger('root')
+
+        # Create a new log file and setup logging to a file
+        log_file = RobotGUI._create_new_logfile(LOG_FILE_NAME)
+        file_handler = logging.FileHandler(log_file, mode='a')
+        formatter_file = logging.Formatter(LOG_FORMAT_FILE)
+        file_handler.setFormatter(formatter_file)
+        file_handler.setLevel(logging.DEBUG)
+
+        # Create a log file to go to the console
+        stream_handler = logging.StreamHandler()
+        formatter_console = logging.Formatter(LOG_FORMAT_CONSOLE)
+        stream_handler.setFormatter(formatter_console)
+
+        # Here you can optionally set the name of the log
+        stream_handler.set_name("console_log")
+
+        # Set the log level for the console output (based on what we passed into this function)
+        stream_handler.setLevel(log_level)
+
+        # Set the main logging level to debug so the file handler can support it. The stream handler (to console) will use the level set above.
+        log.setLevel(logging.DEBUG)
+        log.addHandler(file_handler)
+        log.addHandler(stream_handler)
+        log.info(f"Saving logs to: {file_handler.baseFilename}")
+
+        return log
+
+    def _create_new_logfile(basename):
+
+        # Create a directory where we want to save the log file
+        current_dir = os.path.dirname(__file__)
+        log_dir = os.path.join(current_dir, "logs")
+
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        full_filename = os.path.join(log_dir, f"{basename}")
+        return full_filename
 
 
 
 if __name__ == '__main__':
-    app = RobotGUI()
+    args = load_args()
+    app = RobotGUI(args)
     app.run()
     
 

@@ -12,12 +12,13 @@ from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 from safety import Safety
 import threading
+import logging
 
 
 
 class Controller():
     
-    def __init__(self, robot : M_DHRobot3D, env : Swift, is_sim=True):
+    def __init__(self, robot : M_DHRobot3D, env : Swift, log: logging, is_sim=True):
 
         self._robot = robot
         self._env   = env
@@ -28,9 +29,10 @@ class Controller():
         self._shutdown = False
         self._disable_gamepad = True
         self._command_queue = queue.Queue()
-        self._safety = Safety(self._robot)
+        self._safety = Safety(self._robot, log)
         self._robot_busy = False
         self.object = None
+        self._log = log
 
         # Dispatch table
         self._dispatch = {
@@ -240,12 +242,19 @@ class Controller():
                     time_step = 0.01
                     gamepad_gain = 0.8
 
-                    # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                    self.is_collided = False
                     if self.object is not None:
-                        d, p1, p2 = self._safety.collision_check(self._robot.q, self.object)
-                        if d <= d_thresh:
-                            vel = ( p1 - p2 ) / time_step
-                            ee_vel[0:3] += gamepad_gain*vel
+                        if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                            self.is_collided = True
+                            self._log.warning('line_plane ee is nearly collided with object')
+                            
+                        if self.is_collided is True:
+                            # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                            d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                            if d <= d_thresh:
+                                vel = ( p1 - p2 ) / time_step
+                                ee_vel[0:3] += gamepad_gain*vel
+
 
                     # calculate joint velocities
                     j = self._robot.jacob0(self._robot.q)
@@ -258,14 +267,17 @@ class Controller():
                     # check if ee is too close to the ground
                     if self._safety.grounded_check(q):
                         self._state = 'STOPPED'
+                        continue
 
                     if self._safety.is_self_collided(q):
                         self._state = 'STOPPED'
+                        continue
 
                     self._robot.q = q
                     self._env.step(time_step)
         else:
-            print('No joystick found!')
+            self._log.error('No joystick found!')
+            # print('No joystick found!')
 
     ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
@@ -273,13 +285,16 @@ class Controller():
         ee_pose = self._robot.fkine(self._robot.q)
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
-            print('Provided goal is Done')
+            self._log.info('Provided goal is Done')
+            # print('Provided goal is Done')
             return True
         return False
     
     def _get_busy_status(self):
         return self._robot_busy
 
+    def robot_is_collided(self):
+        return self.is_collided
     
     def _go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
         
@@ -295,9 +310,7 @@ class Controller():
 
         step = 50
         time_step = time/step
-        current_ee_pose = self._robot.fkine(self._robot.q)
-
-        path = rtb.ctraj(current_ee_pose, pose, t=step)
+        path = rtb.ctraj(self._robot.fkine(self._robot.q), pose, t=step)
 
         vel_scale = {'linear': 0.6, 'angular': 0.8}
 
@@ -349,18 +362,21 @@ class Controller():
             ee_vel = np.hstack((lin_vel, ang_vel))
             
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
-            self.avoidance = False
+            self.is_collided = False
             if self.object is not None:
                 if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
-                    self.avoidance = True
-                    print('line_plane ee is nearly collided with object')
+                    self.is_collided = True
+                    self._log.warning('line_plane ee is nearly collided with object')
+                    # break
 
-                if self.avoidance is True:
+                if self.is_collided is True:
+
                     # set threshold and damping
                     d_thresh = 0.01
 
                     # weight of the damping vel for collision avoidance
-                    weight = 0.1
+                    weight = 0.5
+
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
                     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
                     if d <= d_thresh:
@@ -369,8 +385,7 @@ class Controller():
 
             ## END -----------------------------------------------------------------------------#
             
-            # calculate joint velocities, singularity check is already included, 
-            # need to update for damping with self collision check 
+            # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
             joint_vel = Controller.solve_RMRC(j,ee_vel)
             
@@ -378,19 +393,15 @@ class Controller():
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
-            # check if robot body is too close to the ground
-            if self._safety.grounded_check(q):
+            # check safety functionality before sending to execute
+            if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                 self._state = 'STOPPED'
-            
-            # check if ee is self collided
-            if self._safety.is_self_collided(q):
-                self._state = 'STOPPED'
+                break
 
             self._robot.q = q
-
             index += 1
             if index == len(path)-1 and not self.is_arrived(pose,tolerance):
-                print('Pose is unreachable!')
+                self._log.info('Pose is unreachable!')
                 break
 
             self._env.step(time_step)
@@ -402,7 +413,6 @@ class Controller():
         """
         ### Move robot to desired joint angles
         Function to move robot to desired joint angles. 
-        This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
         - @param q: desired joint angles           
         - @param time: time to complete the motion
         - @param tolerance: tolerance to consider the robot has reached the desired pose
@@ -411,34 +421,32 @@ class Controller():
 
         step = 100
         time_step = time/step
-        current_js = self._robot.q
 
-        path = rtb.jtraj(current_js, q, t=step)
+        # Defined polynomial trajectory
+        path = rtb.jtraj(self._robot.q, q, t=step)
 
-        # get ee carterian pose difference wih desired pose
+        # Get ee carterian pose difference wih desired pose
         def is_arrived():
-            js = self._robot.q
+            js = copy.deepcopy(self._robot.q)
             poss_diff = np.diff(js - q)
             if np.all(np.abs(poss_diff) < tolerance):
-                print('done')
+                self._log.info('Provided joint states is Done')
                 return True
             return False
-
+        
         index = 0
         while not is_arrived() and self.system_activated():
             self._robot_busy = True
             if self.object is not None:
-                if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
-                    print('line_plane ee is nearly collided with object')
+                if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
+                    self._log.warning('line_plane ee is nearly collided with object')
+                    self._state = 'STOPPED'
                     break
 
             # check if robot body is too close to the ground
-            if self._safety.grounded_check(path.q[index]):
+            if self._safety.grounded_check(path.q[index]) or self._safety.is_self_collided(path.q[index]):
                 self._state = 'STOPPED'
-            
-            # check if ee is self collided
-            if self._safety.is_self_collided(path.q[index]):
-                self._state = 'STOPPED'
+                break
 
             self._robot.q = path.q[index]
             index += 1
@@ -478,7 +486,8 @@ class Controller():
     # -----------------------------------------------------------------------------------#
     def engage_estop(self):
         self._state = "STOPPED"
-        print("E-stop engaged. System is halted.")
+        self._log.info("E-stop engaged. System is halted.")
+        # print("E-stop engaged. System is halted.")
 
     def update_estop_state(self):
         if self._state == 'ENABLED' or self._state == 'IDLE':
@@ -489,16 +498,19 @@ class Controller():
     def disengage_estop(self):
         if self._state == "STOPPED":
             self._state = "IDLE"
-            print("E-stop disengaged. System is now idle and awaiting enable.")
+            self._log.info("E-stop disengaged. System is now idle and awaiting enable.")
+            # print("E-stop disengaged. System is now idle and awaiting enable.")
 
     def enable_system(self):
         if self._state == "IDLE":
             self._state = "ENABLED"
-            print("System is enabled. Ready for operation.")
+            self._log.info("System is enabled. Ready for operation.")
+            # print("System is enabled. Ready for operation.")
 
     def disable_system(self):
         if self._state == "ENABLED":
             self._state = "IDLE"
-            print("System is disabled. Back to idle state.")
+            self._log.info("System is disabled. Back to idle state.")
+            # print("System is disabled. Back to idle state.")
 
    

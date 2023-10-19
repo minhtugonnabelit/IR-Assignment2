@@ -1,4 +1,5 @@
 import copy
+import logging
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,9 +19,10 @@ from swift import Swift
 
 class Safety:
 
-    def __init__(self, robot : M_DHRobot3D) -> None:
+    def __init__(self, robot : M_DHRobot3D, log : logging) -> None:
 
         self.robot = robot
+        self._log = log
 
         # get ellipsoid parameters (x,y,z) with major and minor axis allocated to a and d respectively
         self._ellipsoids = self.get_ellipsoid()
@@ -64,8 +66,6 @@ class Safety:
 
         return ellipsoids
     
-
-
     def get_ellipsoid_meshlist(self):
         
         """ Get the ellipsoid mesh points corresponded to each link stick to their local frame """
@@ -209,25 +209,23 @@ class Safety:
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
         ellip_transforms = self.transform_ellipsoid(links_center)
 
-        # if self.robot.name == 'Sawyer':
-        #     headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
-        #     head_ellipsoid = Safety._make_ellipsoid([0.05,0.15,0.10],headplace[0:3,3])
-        #     head_ellipsoid = np.array(head_ellipsoid)
-        #     head_ellipsoid = np.vstack((head_ellipsoid.reshape(3, -1), np.ones((1, head_ellipsoid.shape[1] * head_ellipsoid.shape[2]))))
+        if self.robot.name == 'Sawyer':
+            headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
+            head_ellipsoid = Safety._make_ellipsoid([0.05,0.15,0.10],headplace[0:3,3])
+            head_ellipsoid = np.array(head_ellipsoid)
+            head_ellipsoid = np.vstack((head_ellipsoid.reshape(3, -1), np.ones((1, head_ellipsoid.shape[1] * head_ellipsoid.shape[2]))))
 
         # iteration through each link
         for i, center in enumerate(links_center, start=0):
 
-            # if self.robot.name == 'Sawyer':
-            #     if i >= 3:
-            #         print('checking collision with head')
-            #         for point in np.transpose(head_ellipsoid):
-            #             transformed_point = np.linalg.inv(center) @ point
-            #             if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
-            #                 print(f'link {i} is collided with head')
-            #                 return True
+            if self.robot.name == 'Sawyer':
+                if i >= 3:
+                    for point in np.transpose(head_ellipsoid):
+                        transformed_point = np.linalg.inv(center) @ point
+                        if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
+                            self._log.warning(f'link {i} is collided with head')
+                            return True
                 
-
             # iteration through each link but avoid the currentt link and neighbor links
             for j in range(len(links_center)):
 
@@ -243,7 +241,7 @@ class Safety:
 
                     # return once collision is detected
                     if np.sum(transformed_point[0:3]**2 / self._ellipsoids[i]**2) <= 1:
-                        print(f'link {j} is collided with link {i}')
+                        self._log.warning(f'link {j} is collided with link {i}')
                         return True
 
         return False
@@ -265,7 +263,7 @@ class Safety:
         for j, link in enumerate(link_transforms):
             if j <= 1:
                 continue
-            elif link[2, 3] < ground_height +  0.02:
+            elif link[2, 3] < ground_height +  0.05:
                 return True
         return False 
     

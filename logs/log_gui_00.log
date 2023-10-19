@@ -1,0 +1,2 @@
+2023-10-19 12:15:24,826,INFO,Thinh_test_gui.py,_init_log,856,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_00.log
+2023-10-19 12:15:26,925,INFO,controller.py,is_arrived,433,Provided joint states is Done

@@ -2,11 +2,12 @@ from abc import abstractmethod, ABC
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 from controller import Controller
+import logging
 
 class ControllerInterface():
 
-    def __init__(self, robot : M_DHRobot3D, env : Swift, is_sim=True):
-        self._impl = Controller(robot, env, is_sim)
+    def __init__(self, robot : M_DHRobot3D, env : Swift, log : logging,is_sim=True):
+        self._impl = Controller(robot, env, log, is_sim)
 
 
     def launch(self):
