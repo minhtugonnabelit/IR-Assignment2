@@ -176,7 +176,11 @@ class Controller():
         self._go_to_CartesianPose(self._ui_pose, time=3)
 
     def _update_js(self):
-        self._robot.q = self._ui_js
+        # check safety functionality before sending to execute
+        if self._safety.grounded_check(self._ui_js) or self._safety.is_self_collided(self._ui_js):
+            self._state = 'STOPPED'
+        else:
+            self._robot.q = self._ui_js
 
     # --------------------------------------------------#
     # gamepad control
@@ -265,11 +269,7 @@ class Controller():
                     q = current_js + joint_vel * time_step
 
                     # check if ee is too close to the ground
-                    if self._safety.grounded_check(q):
-                        self._state = 'STOPPED'
-                        continue
-
-                    if self._safety.is_self_collided(q):
+                    if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                         self._state = 'STOPPED'
                         continue
 

@@ -622,7 +622,11 @@ class RobotGUI:
         #------------------------------------------------------------------- sawyer
         # constantly update the joint values associated with sliders' values
         for i in range(7):
-            self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+            # self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+            if event == f'-SLIDER{i}-':
+                    self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+                    self.sawyer_controller.update_js() 
+                    self.env.step(0)
         
         # Loop through the input keys and convert values to float
         input_values = []
@@ -632,7 +636,7 @@ class RobotGUI:
                 float_value = float(input_value)
                 input_values.append(float_value)
             except ValueError:
-                print(f"Invalid input: {input_value}")
+                self.log.warning(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
         pose = sm.SE3(input_values[0], input_values[1], input_values[2]

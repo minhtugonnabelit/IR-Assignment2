@@ -233,7 +233,13 @@ class RobotGUI:
             
             # constantly update the joint values associated with sliders' values
             for i in range(7):
-                self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+                # self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+                if event == f'-SLIDER{i}-':
+                    self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+                    self.sawyer_controller.update_js() 
+                    self.env.step(0)
+
+            
         
             # Loop through the input keys and convert values to float
             input_values = []

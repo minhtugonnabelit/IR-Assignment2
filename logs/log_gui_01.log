@@ -1,0 +1,18 @@
+2023-10-19 12:29:42,439,INFO,Thinh_test_gui.py,_init_log,856,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-19 12:29:44,813,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:30:48,344,INFO,Thinh_test_gui.py,_init_log,860,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-19 12:30:50,346,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:30:53,352,INFO,controller.py,enable_system,507,System is enabled. Ready for operation.
+2023-10-19 12:31:34,301,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:54:51,539,INFO,Thinh_test_gui.py,_init_log,859,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-19 12:55:37,264,INFO,Thinh_test_gui.py,_init_log,859,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-19 12:55:39,274,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:55:48,433,INFO,controller.py,enable_system,507,System is enabled. Ready for operation.
+2023-10-19 12:55:55,388,WARNING,controller.py,go_to_joint_angles,442,line_plane ee is nearly collided with object
+2023-10-19 12:56:01,278,INFO,controller.py,enable_system,507,System is enabled. Ready for operation.
+2023-10-19 12:56:05,791,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:56:14,432,WARNING,controller.py,go_to_joint_angles,442,line_plane ee is nearly collided with object
+2023-10-19 12:56:16,655,INFO,controller.py,enable_system,507,System is enabled. Ready for operation.
+2023-10-19 12:56:21,270,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:56:29,565,INFO,controller.py,is_arrived,433,Provided joint states is Done
+2023-10-19 12:56:35,900,INFO,controller.py,is_arrived,433,Provided joint states is Done
