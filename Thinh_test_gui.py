@@ -22,7 +22,7 @@ import os
 import argparse
 
 # The default log filename
-LOG_FILE_NAME = "log_gui_01.log"
+LOG_FILE_NAME = f"log_gui_{os.curdir}.log"
 LOG_FORMAT_FILE = "%(asctime)s,%(levelname)s,%(filename)s,%(funcName)s,%(lineno)d,%(message)s"  # Here is how a log will format to a file
 LOG_FORMAT_CONSOLE = "%(asctime)s\t%(levelname)s: %(message)s"                                  # Here is how a log will format to the console
 
@@ -86,8 +86,8 @@ class RobotGUI:
         
         self.button_and_slider_keys_sawyer = ['-SLIDER0-', '-SLIDER1-', '-SLIDER2-', '-SLIDER3-', '-SLIDER4-', '-SLIDER5-', '-SLIDER6-',
                                        '-MINUSPITCH-', '-MINUSROLL-', '-MINUSYAW-', '-MINUSX-', '-MINUSY-', '-MINUSZ-', '-PLUSPITCH-', '-PLUSROLL-', '-PLUSX-', '-PLUSY-', '-PLUSYAW-', '-PLUSZ-',     
-                                       '-END-EFFECTOR-', '-JOINT-', '-RJOINT-',
-                                       '-CONFIRM-', '-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
+                                       '-END-EFFECTOR-', '-RJOINT-',
+                                       '-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
         
         self.button_and_slider_keys_astorino = ['-A_SLIDER0-', '-A_SLIDER1-', '-A_SLIDER2-', '-A_SLIDER3-', '-A_SLIDER4-', '-A_SLIDER5-',
                                        '-A_MINUSPITCH-', '-A_MINUSROLL-', '-A_MINUSYAW-', '-A_MINUSX-', '-A_MINUSY-', '-A_MINUSZ-', '-A_PLUSPITCH-', '-A_PLUSROLL-', '-A_PLUSX-', '-A_PLUSY-', '-A_PLUSYAW-', '-A_PLUSZ-',     
@@ -127,44 +127,20 @@ class RobotGUI:
             # Update Real time sliders for sawyer
             if self.sawyer_controller.get_busy_status():
                 self.flag_busy = True
-            
-            
-
-            self.window['-MSG-'].print(self.choose_confirm)
-            
     
             if not self.sawyer_controller.get_busy_status() and self.flag_busy:
                 for i in range(7):
                     value = round(np.rad2deg(self.sawyer.q[i]),0)
                     self.window['-SLIDER' + str(i) + '-'].update(value = value)
                     self.window.refresh()
-                    if not self.choose_confirm: self.sawyer_controller.update_robot_js()
-                    else: self.sawyer_controller.update_js()
-                    self.window['-MSG-'].print('NHU CON CAC')
+                    self.sawyer_controller.update_robot_js()
                     time.sleep(0.01)
                 self.flag_busy = False
                 
-            # if self.home_pressed and not self.flag_busy:
-            #     self.home_pressed = False
-            
                 
-            # while self.sawyer_controller.get_busy_status():
-            #     for i in range(7):
-            #         new_joint_states_sawyer = np.rad2deg(self.sawyer.get_jointstates())
-            #         self.window.write_event_value('-UPDATE-JOINTS-', new_joint_states_sawyer)
-            #         state_sawyer = self.sawyer_controller.system_state()
-            #         self.window.write_event_value('-UPDATE-STATE-', state_sawyer)
-            #         self.window['-SLIDER' + str(i) + '-'].update(value = round(np.rad2deg(self.sawyer.q[i]),1))
-                    
-            #         self.window.refresh()
-            #         time.sleep(0.01)
-                    
-            # for i in range(7):
-            #     self.window['-SLIDER' + str(i) + '-'].update(enable_events = True)
-            
-            
-            
-            
+                
+                
+                            
             new_joint_states_astorino = np.rad2deg(self.astorino.get_jointstates())
             self.window.write_event_value('-A_UPDATE-JOINTS-', new_joint_states_astorino)
             state_astorino = self.astorino_controller.system_state()
@@ -272,8 +248,7 @@ class RobotGUI:
         ]
         
         type_of_control = [
-            [sg.Radio('Confirm Jogging', 'RADIO1', default=True, key='-JOINT-', size=(20,1), pad= (5,3))],
-            [sg.Radio('Real-time Jogging','RADIO1', key= '-RJOINT-', size=(20,1), pad= (5,3))],
+            [sg.Radio('Real-time Jogging','RADIO1', key= '-RJOINT-', size=(20,1), pad= (5,3), default= True)],
             [sg.Radio('Input End-effector', 'RADIO1', key='-END-EFFECTOR-', size=(20,1), pad= (5,3))]
             
         ]
@@ -686,7 +661,7 @@ class RobotGUI:
                 # self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
                 if event == f'-SLIDER{i}-':
                         self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
-                        self.sawyer_controller.update_js()  # HAS A PROBLEM WITH UPDATE_JS()
+                        self.sawyer_controller.update_js()
                         self.env.step(0)
         else: 
             for i in range(7):
@@ -767,10 +742,10 @@ class RobotGUI:
                     if key != '-ESTOP-':
                         self.window[key].update(disabled = True)
                 
-            if not values['-JOINT-'] and not values['-END-EFFECTOR-'] and not values['-RJOINT-']:
+            if not values['-END-EFFECTOR-'] and not values['-RJOINT-']:
                 self.window['-CONFIRM-'].update('Choose\n Control Options',disabled = True)
-            elif values['-JOINT-'] or values['-END-EFFECTOR-']:
-                self.window['-CONFIRM-'].update('Confirm')
+            elif values['-END-EFFECTOR-']:
+                self.window['-CONFIRM-'].update('Confirm', disabled = False)
                 self.choose_confirm = True
             elif values['-RJOINT-']:
                 self.window['-CONFIRM-'].update('Sliders\n Control Mode', disabled = True)
@@ -813,12 +788,8 @@ class RobotGUI:
 
             
         # event activated with CONFIRM button
-        elif event == '-CONFIRM-':
-            if values['-JOINT-']:
-                self.sawyer_controller.send_command('JOINT_ANGLES')
-                
-                            
-            elif values['-END-EFFECTOR-']:
+        elif event == '-CONFIRM-':                            
+            if values['-END-EFFECTOR-']:
                 self.sawyer_controller.send_command('CARTESIAN_POSE')
                 
             
