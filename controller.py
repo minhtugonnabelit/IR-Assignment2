@@ -107,22 +107,15 @@ class Controller():
         """
         while not self._shutdown:
             try: 
-                # if self._command_queue.empty():
-                #     continue
-                # print(self._command_queue[0])
-                # if not self._command_queue.empty():
-                #     print(self._command_queue[0])
                 command = self._command_queue.get(timeout=0.01)
-                
-                if not self._command_queue.empty():
-                    print('dit con me may luon TAM, may ngu vai lon, toan thich the hien, time mangaemnt thi nhu cc ma doi lam')
-
                 if command in self._dispatch:
                     self._dispatch[command]()
                 else:
                     print(f'Command {command} is not recognized!')
             except queue.Empty:
                 pass
+
+            time.sleep(0.5)
 
     def send_command(self, command):
         """
