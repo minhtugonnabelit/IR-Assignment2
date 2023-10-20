@@ -199,6 +199,14 @@ class Astorino(M_DHRobot3D):
 
         self._env.hold()
     
+    
+#----------- CLASS GRIPPER
+class Gripper_Astorino():
+    def __init__(self):
+        self.Gripper_Astorino_Right = GripperRIGHT_Astorino()
+        self.Gripper_Astorino_Left = GripperRIGHT_Astorino()
+    
+    
 # ---------------------------------------------------------------------------------------#
 if __name__ == "__main__":
 

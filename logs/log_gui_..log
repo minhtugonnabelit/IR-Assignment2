@@ -1,0 +1,2 @@
+2023-10-20 18:50:45,687,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_..log
+2023-10-20 18:50:48,556,INFO,controller.py,is_arrived,436,Provided joint states is Done

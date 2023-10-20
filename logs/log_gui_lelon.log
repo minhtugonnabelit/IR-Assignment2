@@ -1,0 +1,81 @@
+2023-10-20 19:02:21,212,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:02:24,217,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:02:28,498,INFO,controller.py,enable_system,518,System is enabled. Ready for operation.
+2023-10-20 19:02:41,200,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:02:41,276,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:02:46,221,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:03:01,274,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:03:01,345,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:03:04,560,INFO,controller.py,_go_to_CartesianPose,416,Pose is unreachable!
+2023-10-20 19:03:22,525,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:03:22,525,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:03:36,254,INFO,controller.py,_go_to_CartesianPose,416,Pose is unreachable!
+2023-10-20 19:12:24,130,WARNING,Thinh_test_gui.py,sawyer_teach_pendant,678,Invalid input: sd
+2023-10-20 19:14:50,124,INFO,Thinh_test_gui.py,_init_log,902,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:14:52,965,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:15:02,472,INFO,controller.py,enable_system,518,System is enabled. Ready for operation.
+2023-10-20 19:18:58,726,INFO,Thinh_test_gui.py,_init_log,909,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:19:01,013,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:19:09,426,INFO,controller.py,enable_system,518,System is enabled. Ready for operation.
+2023-10-20 19:19:19,762,WARNING,Thinh_test_gui.py,sawyer_teach_pendant,678,Invalid input: sdf
+2023-10-20 19:20:36,349,INFO,Thinh_test_gui.py,_init_log,903,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:20:38,632,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:20:42,431,INFO,controller.py,enable_system,518,System is enabled. Ready for operation.
+2023-10-20 19:20:59,208,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:20:59,208,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:21:06,657,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 19:35:13,674,INFO,Thinh_test_gui.py,_init_log,897,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:35:33,742,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:35:33,852,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:35:53,935,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:35:54,045,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:36:14,071,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:36:14,182,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:36:29,958,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-20 19:36:29,959,ERROR,server.py,handler,242,connection handler failed
+Traceback (most recent call last):
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 959, in transfer_data
+    message = await self.read_message()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1029, in read_message
+    frame = await self.read_data_frame(max_size=self.max_size)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1104, in read_data_frame
+    frame = await self.read_frame(max_size)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1161, in read_frame
+    frame = await Frame.read(
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\framing.py", line 95, in read
+    mask_bits = await reader(4)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\streams.py", line 712, in readexactly
+    raise self._exception
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\proactor_events.py", line 299, in _loop_reading
+    self._read_fut = self._loop._proactor.recv(self._sock, 32768)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\windows_events.py", line 454, in recv
+    ov.WSARecv(conn.fileno(), nbytes, flags)
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\server.py", line 240, in handler
+    await self.ws_handler(self)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\server.py", line 1186, in _ws_handler
+    return await cast(
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\swift\SwiftRoute.py", line 320, in serve
+    await self.expect_message(websocket, expected)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\swift\SwiftRoute.py", line 325, in expect_message
+    recieved = await websocket.recv()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 568, in recv
+    await self.ensure_open()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 935, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedError: no close frame received or sent
+2023-10-20 19:36:30,023,INFO,server.py,handler,268,connection closed
+2023-10-20 19:58:28,414,INFO,Thinh_test_gui.py,_init_log,897,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:58:48,401,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 19:58:48,518,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 19:59:07,560,INFO,Thinh_test_gui.py,_init_log,897,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 19:59:09,890,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 20:00:47,723,INFO,Thinh_test_gui.py,_init_log,897,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-20 20:00:50,076,INFO,controller.py,is_arrived,445,Provided joint states is Done
+2023-10-20 20:11:34,711,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 20:11:34,713,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-20 20:11:34,713,INFO,server.py,handler,268,connection closed

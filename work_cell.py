@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 
 import roboticstoolbox as rtb
 import spatialgeometry as geometry
@@ -19,6 +20,7 @@ class WorkCell():
 
         # add human model
         self._human = self._add_model('worker.stl', sm.SE3(-0.341478, 0, 0), color = (1.0, 0.0, 0.0, 1.0))
+        # self._cart = self._add_model('CART_ply.PLY', sm.SE3(x0.341478, 0, 0))
 
     def workcell_setup(self):
 
@@ -35,9 +37,22 @@ class WorkCell():
 
 
     def move_human(self, pose):
+        """
+
+        Args:
+            pose (_type_): _description_
+        """
         self._human.T = pose
         self._env.step(0)
         
+    def get_human_pose(self):
+        """
+        Getter for human pose to use in work cell safety checking
+
+        Returns:
+            _type_: _description_
+        """
+        return copy.deepcopy(self._human.T)
 
     def _add_model(self, file_path, placement, color=None):
         """

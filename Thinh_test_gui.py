@@ -86,7 +86,7 @@ class RobotGUI:
         
         self.button_and_slider_keys_sawyer = ['-SLIDER0-', '-SLIDER1-', '-SLIDER2-', '-SLIDER3-', '-SLIDER4-', '-SLIDER5-', '-SLIDER6-',
                                        '-MINUSPITCH-', '-MINUSROLL-', '-MINUSYAW-', '-MINUSX-', '-MINUSY-', '-MINUSZ-', '-PLUSPITCH-', '-PLUSROLL-', '-PLUSX-', '-PLUSY-', '-PLUSYAW-', '-PLUSZ-',     
-                                       '-END-EFFECTOR-', '-RJOINT-',
+                                       '-END-EFFECTOR-', '-RJOINT-', '-CARTX-', '-CARTY-', '-CARTZ-', '-ROLL-', '-PITCH-', '-YAW-',
                                        '-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
         
         self.button_and_slider_keys_astorino = ['-A_SLIDER0-', '-A_SLIDER1-', '-A_SLIDER2-', '-A_SLIDER3-', '-A_SLIDER4-', '-A_SLIDER5-',
@@ -136,18 +136,12 @@ class RobotGUI:
                     self.sawyer_controller.update_robot_js()
                     time.sleep(0.01)
                 self.flag_busy = False
-                
-                
-                
-                
-                            
+                                
             new_joint_states_astorino = np.rad2deg(self.astorino.get_jointstates())
             self.window.write_event_value('-A_UPDATE-JOINTS-', new_joint_states_astorino)
             state_astorino = self.astorino_controller.system_state()
             self.window.write_event_value('-A_UPDATE-STATE-', state_astorino)
-            
-            
-            
+
             time.sleep(0.5)
     
     def tab1_setup(self):
@@ -746,9 +740,11 @@ class RobotGUI:
                 self.window['-CONFIRM-'].update('Choose\n Control Options',disabled = True)
             elif values['-END-EFFECTOR-']:
                 self.window['-CONFIRM-'].update('Confirm', disabled = False)
+
                 self.choose_confirm = True
             elif values['-RJOINT-']:
                 self.window['-CONFIRM-'].update('Sliders\n Control Mode', disabled = True)
+
                 self.choose_confirm = False
             
             
