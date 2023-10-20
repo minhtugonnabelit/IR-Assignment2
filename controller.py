@@ -7,6 +7,7 @@ import roboticstoolbox as rtb
 import numpy as np
 import spatialmath as sm
 import spatialgeometry as geometry
+import spatialmath.base as smb
 from rectangularprism import RectangularPrism
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
@@ -321,6 +322,9 @@ class Controller():
         while not self.is_arrived(pose,tolerance) and self.system_activated():
             self._robot_busy = True
             # # Direction methods
+
+
+
             # # extracting linear vel direction
             # ee_cur_pose = self._robot.fkine(self._robot.q)
             # distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
@@ -329,7 +333,17 @@ class Controller():
             #     distance = float(0.0)
             # else:
             #     lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
-            # # extracting angular vel direction
+                
+            # # # extracting angular vel direction
+            # # quat_current = smb.r2q(ee_cur_pose.A[0:3, 0:3])
+            # # quat_desired = smb.r2q(pose.A[0:3, 0:3])
+
+            # # # get quaternion error by qe = q_desired * conj(q_current)
+            # # quat_error = smb.qqmul(quat_desired, smb.qconj(quat_current))
+            # # error_angle = smb.qangle(quat_current, quat_desired)
+            # # quat_current.
+
+
             # s_omega = (pose.A[0:3, 0:3] @ np.transpose(
             #     ee_cur_pose.A[0:3, 0:3]) - np.eye(3))
             # orientation_error = np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
