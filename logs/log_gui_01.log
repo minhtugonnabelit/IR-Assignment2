@@ -1257,3 +1257,82 @@
 2023-10-20 17:36:35,672,INFO,controller.py,is_arrived,450,Provided joint states is Done
 2023-10-20 17:38:14,056,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/log_gui_01.log
 2023-10-20 17:38:19,477,INFO,controller.py,is_arrived,450,Provided joint states is Done
+2023-10-20 17:43:01,893,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 17:43:04,049,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:17,230,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:43:23,996,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:38,322,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:43,580,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:44,452,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:44,892,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:45,162,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:45,368,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:43:45,574,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:44:03,432,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:44:12,981,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:44:27,263,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:45:01,391,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:45:10,408,WARNING,safety.py,is_self_collided,244,link 6 is collided with link 1
+2023-10-20 17:45:10,443,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 1
+2023-10-20 17:45:10,467,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 0
+2023-10-20 17:45:10,524,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 0
+2023-10-20 17:45:19,332,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:45:22,408,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 0
+2023-10-20 17:45:26,102,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:45:28,504,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 1
+2023-10-20 17:45:28,515,WARNING,safety.py,is_self_collided,244,link 6 is collided with link 1
+2023-10-20 17:45:40,311,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:45:48,334,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 17:45:48,363,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 17:45:48,394,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 17:45:48,469,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 17:45:48,734,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 17:45:52,967,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:14,458,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:46:20,550,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:28,459,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:33,347,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:39,370,WARNING,safety.py,is_self_collided,244,link 4 is collided with link 0
+2023-10-20 17:46:39,398,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:39,420,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:39,434,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:39,449,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:39,469,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:39,512,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:43,830,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:46,669,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:49,243,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:51,270,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:54,081,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 17:46:56,152,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:56,160,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 17:46:56,167,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-20 18:05:24,185,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:05:26,384,INFO,controller.py,is_arrived,449,Provided joint states is Done
+2023-10-20 18:06:28,360,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:06:30,372,INFO,controller.py,is_arrived,449,Provided joint states is Done
+2023-10-20 18:08:26,899,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:08:29,011,INFO,controller.py,is_arrived,451,Provided joint states is Done
+2023-10-20 18:12:11,910,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:12:14,143,INFO,controller.py,is_arrived,451,Provided joint states is Done
+2023-10-20 18:13:36,937,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:13:39,363,INFO,controller.py,is_arrived,453,Provided joint states is Done
+2023-10-20 18:14:58,911,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:15:01,144,INFO,controller.py,is_arrived,455,Provided joint states is Done
+2023-10-20 18:16:22,373,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:16:24,797,INFO,controller.py,is_arrived,455,Provided joint states is Done
+2023-10-20 18:26:01,293,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:26:03,629,INFO,controller.py,is_arrived,455,Provided joint states is Done
+2023-10-20 18:26:41,733,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:26:44,304,INFO,controller.py,is_arrived,455,Provided joint states is Done
+2023-10-20 18:27:21,183,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:27:23,194,INFO,controller.py,is_arrived,455,Provided joint states is Done
+2023-10-20 18:28:28,910,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:28:30,885,INFO,controller.py,is_arrived,457,Provided joint states is Done
+2023-10-20 18:39:18,542,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:39:20,616,INFO,controller.py,is_arrived,458,Provided joint states is Done
+2023-10-20 18:39:24,541,INFO,controller.py,enable_system,531,System is enabled. Ready for operation.
+2023-10-20 18:39:31,841,INFO,controller.py,is_arrived,458,Provided joint states is Done
+2023-10-20 18:39:55,025,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 18:39:57,156,INFO,controller.py,is_arrived,458,Provided joint states is Done
+2023-10-20 18:42:23,284,INFO,controller.py,enable_system,531,System is enabled. Ready for operation.

@@ -25,7 +25,7 @@ class Controller():
         self._env   = env
         self._is_sim = is_sim
         self._state = 'IDLE'
-        self._ui_js = np.zeros(np.size(self._robot.links))
+        self._ui_js = self._robot.q
         self._ui_pose = self._robot.fkine(self._ui_js)
         self._shutdown = False
         self._disable_gamepad = True
@@ -108,7 +108,16 @@ class Controller():
         """
         while not self._shutdown:
             try: 
+                # if self._command_queue.empty():
+                #     continue
+                # print(self._command_queue[0])
+                # if not self._command_queue.empty():
+                #     print(self._command_queue[0])
                 command = self._command_queue.get(timeout=0.01)
+                
+                if not self._command_queue.empty():
+                    print('dit con me may luon TAM, may ngu vai lon, toan thich the hien, time mangaemnt thi nhu cc ma doi lam')
+
                 if command in self._dispatch:
                     self._dispatch[command]()
                 else:
