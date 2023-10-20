@@ -1251,3 +1251,9 @@
 2023-10-20 14:38:54,614,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
 2023-10-20 14:39:30,997,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log_gui_01.log
 2023-10-20 14:39:37,631,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 17:34:56,121,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 17:35:01,185,INFO,controller.py,is_arrived,450,Provided joint states is Done
+2023-10-20 17:36:30,487,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 17:36:35,672,INFO,controller.py,is_arrived,450,Provided joint states is Done
+2023-10-20 17:38:14,056,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/log_gui_01.log
+2023-10-20 17:38:19,477,INFO,controller.py,is_arrived,450,Provided joint states is Done
