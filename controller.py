@@ -79,7 +79,7 @@ class Controller():
         Update collision object
         """
         # create RectangularPrism object for line_plane collision check
-        self.object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center[0:3,3])
+        self.object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center.A[0:3,3])
         self.vertices, self.faces, self.normals = self.object.get_data()
 
         # create Cuboid object for collision avoidance

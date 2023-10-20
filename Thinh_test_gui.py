@@ -22,7 +22,7 @@ import os
 import argparse
 
 # The default log filename
-LOG_FILE_NAME = f"log_gui_{os.curdir}.log"
+LOG_FILE_NAME = f"log_gui_{os.getlogin()}.log"
 LOG_FORMAT_FILE = "%(asctime)s,%(levelname)s,%(filename)s,%(funcName)s,%(lineno)d,%(message)s"  # Here is how a log will format to a file
 LOG_FORMAT_CONSOLE = "%(asctime)s\t%(levelname)s: %(message)s"                                  # Here is how a log will format to the console
 
