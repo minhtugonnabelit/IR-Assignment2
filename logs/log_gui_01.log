@@ -1257,3 +1257,159 @@
 2023-10-20 17:36:35,672,INFO,controller.py,is_arrived,450,Provided joint states is Done
 2023-10-20 17:38:14,056,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/log_gui_01.log
 2023-10-20 17:38:19,477,INFO,controller.py,is_arrived,450,Provided joint states is Done
+2023-10-20 18:03:38,444,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:03:41,692,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:03:59,681,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:04:03,874,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:04:03,874,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:04:11,463,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:23,888,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:04:23,996,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:04:30,342,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:32,425,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:33,361,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:43,985,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:04:43,986,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:04:44,358,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:56,674,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:04:58,535,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:05:05,018,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:05:05,843,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:05:05,843,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:05:14,309,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:05:15,543,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:05:16,515,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:05:16,664,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:07:21,167,INFO,Thinh_test_gui.py,_init_log,930,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:07:24,103,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:07:30,635,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:07:48,444,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:07:48,520,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:07:56,076,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:08:08,532,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:08:08,603,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:08:10,512,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:08:25,821,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:08:32,325,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:08:32,409,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:08:39,867,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:08:52,431,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:08:52,505,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:08:59,963,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:24,838,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:10:24,839,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:10:44,111,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:54,225,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:56,544,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:56,876,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:57,079,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:57,294,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:10:58,934,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:26:53,847,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:26:53,847,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:26:57,185,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:01,695,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:07,033,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:11,292,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:13,826,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:27:13,826,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:27:15,381,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:19,743,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:24,166,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:29,270,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:33,659,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:27:36,013,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:27:36,013,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:27:39,353,INFO,controller.py,is_arrived,292,Provided goal is Done
+2023-10-20 18:29:09,192,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:29:09,274,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:29:10,718,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:10,871,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:10,948,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,036,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,114,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,197,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,274,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,357,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,441,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,517,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,600,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,684,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,767,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,844,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:11,937,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,010,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,093,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,181,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,253,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,341,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:12,413,WARNING,controller.py,_go_to_CartesianPose,384,line_plane ee is nearly collided with object
+2023-10-20 18:29:17,574,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:29:26,094,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:29:32,746,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:29:32,833,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:29:36,493,INFO,controller.py,_go_to_CartesianPose,419,Pose is unreachable!
+2023-10-20 18:29:45,237,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:29:51,784,INFO,controller.py,_go_to_CartesianPose,419,Pose is unreachable!
+2023-10-20 18:29:52,887,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:29:52,961,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:30:00,197,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:30:07,225,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:30:12,995,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:30:12,996,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:30:16,044,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:33:42,951,INFO,Thinh_test_gui.py,_init_log,925,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:33:45,877,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:33:51,184,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:34:02,989,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:34:03,066,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:34:04,911,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:36:01,835,INFO,Thinh_test_gui.py,_init_log,924,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:36:04,211,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:36:07,949,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:36:21,844,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:36:21,845,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:36:25,709,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:36:37,799,INFO,controller.py,_go_to_CartesianPose,419,Pose is unreachable!
+2023-10-20 18:36:41,875,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:36:42,499,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:36:51,028,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:36:57,902,INFO,controller.py,_go_to_CartesianPose,419,Pose is unreachable!
+2023-10-20 18:38:46,114,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:38:48,899,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:38:52,400,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:39:30,333,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:39:32,600,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:39:41,400,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:39:56,621,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:39:58,904,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:40:04,010,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:40:17,068,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:40:24,259,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:40:26,498,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:40:32,068,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:40:40,884,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:40:45,261,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:40:45,334,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:40:45,557,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:40:45,606,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:40:45,772,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:40:53,366,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:40:58,782,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-20 18:40:58,783,INFO,server.py,handler,268,connection closed
+2023-10-20 18:42:20,552,INFO,Thinh_test_gui.py,_init_log,901,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_01.log
+2023-10-20 18:42:22,853,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:42:27,117,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
+2023-10-20 18:42:40,596,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-20 18:42:40,596,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-20 18:42:41,936,INFO,controller.py,is_arrived,448,Provided joint states is Done
+2023-10-20 18:42:47,865,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:47,936,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:47,978,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,019,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,068,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,117,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,158,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,207,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:42:48,250,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-20 18:43:32,998,INFO,controller.py,enable_system,521,System is enabled. Ready for operation.
