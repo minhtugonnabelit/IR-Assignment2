@@ -12,6 +12,7 @@ from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 from controller_interface import ControllerInterface
 from mission import Mission
+from work_cell import WorkCell
 from rectangularprism import RectangularPrism
 
 import queue
@@ -54,8 +55,12 @@ class RobotGUI:
             log_level=logging.INFO
         self.log = RobotGUI._init_log(log_level)
         
+        # Init environment object:
+        self.cell_center = sm.SE3(0,0,0)
+        self.work_cell = WorkCell(self.env, self.cell_center)
+
         ## Initialize robot and controller
-        base_original_robot = sm.SE3(0,0.5,0)
+        base_original_robot = self.cell_center @ sm.SE3(0,0.5,0)
         transl2robot = sm.SE3(0,-1,0)
         
         self.sawyer = Sawyer(self.env, base= base_original_robot)
@@ -887,10 +892,9 @@ class RobotGUI:
 
     def collision_setup(self):
 
-        side = [0.1, 0.1, 0.1]
-        center=self.sawyer.base.A @ smb.transl(0.7,0.2,0.2)
+        side = [0.2, 0.2, 0.2]
+        center= self.cell_center @ smb.transl(0.7,0.2,0.2)
         viz_object = self.mission.update_collision_object(side, center)
-        # viz_object = self.sawyer_controller.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          
     def blank(self, size):

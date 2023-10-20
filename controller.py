@@ -323,8 +323,6 @@ class Controller():
             self._robot_busy = True
             # # Direction methods
 
-
-
             # # extracting linear vel direction
             # ee_cur_pose = self._robot.fkine(self._robot.q)
             # distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
