@@ -156,6 +156,7 @@ class Controller():
     def move(self):
         """
         Execute a joint space trajectory
+
         """
         self.go_to_joint_angles(self._ui_js, time=3)
 
@@ -164,12 +165,14 @@ class Controller():
     def set_cartesian_value(self, pose):
         """
         Set cartesian value
+
         """
         self._ui_pose = pose
     
     def move_cartesian(self):
         """
         Execute a cartesian space trajectory
+
         """
         self._go_to_CartesianPose(self._ui_pose, time=3)
 
@@ -182,10 +185,7 @@ class Controller():
 
 
     def _update_robot_js(self):
-        """
-        """
         self._ui_js = self._robot.q
-        
     # --------------------------------------------------#
     # gamepad control
     def disable_gamepad(self):
@@ -257,7 +257,6 @@ class Controller():
                             self._log.warning('line_plane ee is nearly collided with object')
                             
                         if self.is_collided is True:
-
                             # get distance between ee and object,  also extracting the closest points to use as damping velocity
                             d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
                             if d <= d_thresh:
@@ -282,18 +281,17 @@ class Controller():
                     self._env.step(time_step)
         else:
             self._log.error('No joystick found!')
+            # print('No joystick found!')
 
     ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
     def is_arrived(self, pose : sm.SE3, tolerance=0.001):
-
         ee_pose = self._robot.fkine(self._robot.q)
         poss_diff = np.diff(ee_pose.A - pose.A)
-
         if np.all(np.abs(poss_diff) < tolerance):
             self._log.info('Provided goal is Done')
+            # print('Provided goal is Done')
             return True
-        
         return False
     
     def _get_busy_status(self):
@@ -503,6 +501,7 @@ class Controller():
     def engage_estop(self):
         self._state = "STOPPED"
         self._log.info("E-stop engaged. System is halted.")
+        # print("E-stop engaged. System is halted.")
 
     def update_estop_state(self):
         if self._state == 'ENABLED' or self._state == 'IDLE':
@@ -514,15 +513,18 @@ class Controller():
         if self._state == "STOPPED":
             self._state = "IDLE"
             self._log.info("E-stop disengaged. System is now idle and awaiting enable.")
+            # print("E-stop disengaged. System is now idle and awaiting enable.")
 
     def enable_system(self):
         if self._state == "IDLE":
             self._state = "ENABLED"
             self._log.info("System is enabled. Ready for operation.")
+            # print("System is enabled. Ready for operation.")
 
     def disable_system(self):
         if self._state == "ENABLED":
             self._state = "IDLE"
             self._log.info("System is disabled. Back to idle state.")
+            # print("System is disabled. Back to idle state.")
 
    
