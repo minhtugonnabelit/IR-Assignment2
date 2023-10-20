@@ -893,7 +893,7 @@ class RobotGUI:
     def collision_setup(self):
 
         side = [0.2, 0.2, 0.2]
-        center= self.cell_center @ smb.transl(0.7,0.2,0.2)
+        center= self.cell_center @ sm.SE3(0.7,0.2,0.2)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          
