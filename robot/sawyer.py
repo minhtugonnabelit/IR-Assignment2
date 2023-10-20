@@ -138,7 +138,6 @@ class Sawyer(M_DHRobot3D):
         Reconfigure robot to home position set by user
 
         """
-        self._ellipsoids = self.get_ellipsoid()
         self.add_to_env(self._env)
 
     def get_workspace(self):
@@ -188,88 +187,7 @@ class Sawyer(M_DHRobot3D):
         print('max y: ', np.max(pc_y), 'min y: ', np.min(pc_y))
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
-
-    # COLISION and SAFETY FUNCTION
-    # -----------------------------------------------------------------------------------#
-
-    def get_ellipsoid(self):
-        """
-        Get ellipsoid of the robot
-        """
-
-        ellipsoids = []
-        for i in range(len(self.links)):
-
-            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(
-                self.a[i]) / 2 + 0.02
-            major_axis = copy.deepcopy(self.d[i]) / 2
-
-            ellipsoid = np.asarray(
-                [minor_axis, major_axis, minor_axis])
-
-            ellipsoids.append(ellipsoid)
-
-        ellipsoids[6][2] = ellipsoids[6][1]
-        ellipsoids[6][1] = ellipsoids[6][0]
-        return ellipsoids
-
-    def get_link_poses(self, q=None):
-        """
-        :param q robot joint angles
-        :param robot -  seriallink robot model
-        :param transforms - list of transforms
-        """
-        if q is None:
-            return self.fkine_all().A
-        return self.fkine_all(q).A
-
-    # def is_grounded(self, q=None):
-    #     """
-    #     Check if robot is grounded
-    #     """
-    #     pass
-
-    # # testing
-    # def is_collided_with_object(self, q=None):
-    #     """
-    #     Check if robot is collided with object
-    #     """
-
-    #     pass
-
-    # # testing
-    # def self_collided_LP(self,):
-    #     pass
-
-    # # testing
-    # def self_collisions_Cylinder(self, q=None):
-    #     """
-    #     Check self-collision of the robot using cylinder intersection
-    #     """
-    #     is_collided = False
-    #     tr = self.get_link_poses(q)
-
-    #     for i in range(len(tr)):
-
-    #         if i == 0:
-    #             continue
-
-    #         center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-    #         radi = copy.deepcopy(self._ellipsoids[i-1])
-    #         ob = geometry.Cylinder(center, radi[0], radi[1])
-    #         for j in range(len(tr)):
-    #             if j == i or j == i-1:
-    #                 continue
-    #             center = (tr[j][0:3, 3] + tr[j-1][0:3, 3])/2
-    #             radi = copy.deepcopy(self._ellipsoids[j-1])
-    #             ob2 = geometry.Cylinder(center, radi[0], radi[1])
-    #             if ob.intersect(ob2):
-    #                 is_collided = True
-    #                 break
-
-    #     return is_collided
-
-    # -----------------------------------------------------------------------------------#
+    
 
     def rotate_head(self, angle):
         """
