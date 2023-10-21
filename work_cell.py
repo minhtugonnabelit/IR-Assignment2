@@ -19,8 +19,15 @@ class WorkCell():
         self._center = cell_location
 
         # add human model
-        self._human = self._add_model('worker.stl', sm.SE3(-0.341478, 0, 0), color = (1.0, 0.0, 0.0, 1.0))
-        # self._cart = self._add_model('CART_ply.PLY', sm.SE3(x0.341478, 0, 0))
+        self._human = self._add_model('worker.stl', sm.SE3(2, 2, 0), color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
+        self._cart = self._add_model('cart.dae', sm.SE3(0.5, 0, 0) @ sm.SE3.Rz(-90,'deg'))
+        self._desk = self._add_model('desk.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.4, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
+        self._3dprinter_bed_0 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.9, 0.87))
+        self._3dprinter_body_0 = self._add_model('3dprinter_body.dae', sm.SE3(-0.4, 0.9, 0.81))
+        self._3dprinter_bed_1 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.4, 0.87))
+        self._3dprinter_body_1 = self._add_model('3dprinter_body.dae', sm.SE3(-0.4, 0.4, 0.81))
+
 
     def workcell_setup(self):
 

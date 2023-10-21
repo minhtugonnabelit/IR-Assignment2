@@ -60,8 +60,8 @@ class RobotGUI:
         self.work_cell = WorkCell(self.env, self.cell_center)
 
         ## Initialize robot and controller
-        base_original_robot = self.cell_center @ sm.SE3(0,0.5,0)
-        transl2robot = sm.SE3(0,-1,0)
+        base_original_robot = self.cell_center @ sm.SE3(0.4,0.8,0.65)
+        transl2robot = sm.SE3(0,-1.4,0.163)
         
         self.sawyer = Sawyer(self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
@@ -80,18 +80,18 @@ class RobotGUI:
         self.collision_setup()
         self.window = self.create_window()
         self.update_gui_thread()
-        self.home_pressed = False
-        self.flag_busy = False
-        self.choose_confirm = False
+
+        self.flag_busy_sawyer = False
+        self.flag_busy_astorino = False
         
         self.button_and_slider_keys_sawyer = ['-SLIDER0-', '-SLIDER1-', '-SLIDER2-', '-SLIDER3-', '-SLIDER4-', '-SLIDER5-', '-SLIDER6-',
                                        '-MINUSPITCH-', '-MINUSROLL-', '-MINUSYAW-', '-MINUSX-', '-MINUSY-', '-MINUSZ-', '-PLUSPITCH-', '-PLUSROLL-', '-PLUSX-', '-PLUSY-', '-PLUSYAW-', '-PLUSZ-',     
                                        '-END-EFFECTOR-', '-RJOINT-', '-CARTX-', '-CARTY-', '-CARTZ-', '-ROLL-', '-PITCH-', '-YAW-',
-                                       '-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
+                                       '-CONFIRM-','-ENABLE-', '-ESTOP-', '-GAMEPAD_DISABLE-', '-GAMEPAD_ENABLE-', '-HOME-']
         
         self.button_and_slider_keys_astorino = ['-A_SLIDER0-', '-A_SLIDER1-', '-A_SLIDER2-', '-A_SLIDER3-', '-A_SLIDER4-', '-A_SLIDER5-',
                                        '-A_MINUSPITCH-', '-A_MINUSROLL-', '-A_MINUSYAW-', '-A_MINUSX-', '-A_MINUSY-', '-A_MINUSZ-', '-A_PLUSPITCH-', '-A_PLUSROLL-', '-A_PLUSX-', '-A_PLUSY-', '-A_PLUSYAW-', '-A_PLUSZ-',     
-                                       '-A_END-EFFECTOR-', '-A_JOINT-',
+                                       '-A_END-EFFECTOR-', '-A_RJOINT-', '-A_CARTX-', '-A_CARTY-', '-A_CARTZ-', '-A_ROLL-', '-A_PITCH-', '-A_YAW-',
                                        '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_DISABLE-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
 
     def create_window(self):
@@ -120,27 +120,43 @@ class RobotGUI:
   
     def gui_updater(self):
         while True:
+            #--------------- SAWYER
             new_joint_states_sawyer = np.rad2deg(self.sawyer.get_jointstates())
             self.window.write_event_value('-UPDATE-JOINTS-', new_joint_states_sawyer)
             state_sawyer = self.sawyer_controller.system_state()
             self.window.write_event_value('-UPDATE-STATE-', state_sawyer)
             # Update Real time sliders for sawyer
             if self.sawyer_controller.get_busy_status():
-                self.flag_busy = True
+                self.flag_busy_sawyer = True
     
-            if not self.sawyer_controller.get_busy_status() and self.flag_busy:
+            if not self.sawyer_controller.get_busy_status() and self.flag_busy_sawyer:
                 for i in range(7):
                     value = round(np.rad2deg(self.sawyer.q[i]),0)
                     self.window['-SLIDER' + str(i) + '-'].update(value = value)
                     self.window.refresh()
                     self.sawyer_controller.update_robot_js()
                     time.sleep(0.01)
-                self.flag_busy = False
+                self.flag_busy_sawyer = False
                                 
+                                
+            #------------------ ASTORINO
             new_joint_states_astorino = np.rad2deg(self.astorino.get_jointstates())
             self.window.write_event_value('-A_UPDATE-JOINTS-', new_joint_states_astorino)
             state_astorino = self.astorino_controller.system_state()
             self.window.write_event_value('-A_UPDATE-STATE-', state_astorino)
+            # Update Real time sliders for ASTORINO
+            if self.astorino_controller.get_busy_status():
+                self.flag_busy_astorino = True
+    
+            if not self.astorino_controller.get_busy_status() and self.flag_busy_astorino:
+                for i in range(6):
+                    value = round(np.rad2deg(self.astorino.q[i]),0)
+                    self.window['-A_SLIDER' + str(i) + '-'].update(value = value)
+                    self.window.refresh()
+                    self.astorino_controller.update_robot_js()
+                    time.sleep(0.01)
+                self.flag_busy_astorino = False
+            
 
             time.sleep(0.5)
     
@@ -296,85 +312,85 @@ class RobotGUI:
         ]]
 
         left_column = [
-            [sg.Frame('Joint Space Jogging',
+            [sg.Frame('Joint Space Jogging', 
                 [
                     [sg.Slider(range=(self.astorino_qlim[0, 0], self.astorino_qlim[1, 0]), default_value=np.rad2deg(self.astorino.q[0]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER0-', enable_events=True, tick_interval=0.1),
+                        size=self._slider_size, key='-A_SLIDER0-', enable_events=True, tick_interval=0.1), 
                     sg.Text('L1:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[0])} deg', size=(6, 1), key='-A_BASE-', justification='right'),
                     ],
-
+                    
                     [sg.Slider(range=(self.astorino_qlim[0, 1], self.astorino_qlim[1, 1]), default_value=np.rad2deg(self.astorino.q[1]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER1-', enable_events=True),
+                        size=self._slider_size, key='-A_SLIDER1-', enable_events=True), 
                     sg.Text('L2:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[1])} deg', size=(6, 1), key='-A_J0-', justification='right')
                     ],
-
+                    
                     [sg.Slider(range=(self.astorino_qlim[0, 2], self.astorino_qlim[1, 2]), default_value=np.rad2deg(self.astorino.q[2]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER2-', enable_events=True),
+                        size=self._slider_size, key='-A_SLIDER2-', enable_events=True), 
                     sg.Text('L3:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[2])} deg', size=(6, 1), key='-A_J1-', justification='right')
                     ],
-
+                    
                     [sg.Slider(range=(self.astorino_qlim[0, 3], self.astorino_qlim[1, 3]), default_value=np.rad2deg(self.astorino.q[3]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER3-', enable_events=True),
+                        size=self._slider_size, key='-A_SLIDER3-', enable_events=True), 
                     sg.Text('L4:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[3])} deg', size=(6, 1), key='-A_J2-', justification='right')
                     ],
-
+                    
                     [sg.Slider(range=(self.astorino_qlim[0, 4], self.astorino_qlim[1, 4]), default_value=np.rad2deg(self.astorino.q[4]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER4-', enable_events=True),
+                        size=self._slider_size, key='-A_SLIDER4-', enable_events=True), 
                     sg.Text('L5:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[4])} deg', size=(6, 1), key='-A_J3-', justification='right')
                     ],
-
+                    
                     [sg.Slider(range=(self.astorino_qlim[0, 5], self.astorino_qlim[1, 5]), default_value=np.rad2deg(self.astorino.q[5]), orientation='h',
-                        size=self._slider_size, key='-A_SLIDER5-', enable_events=True),
+                        size=self._slider_size, key='-A_SLIDER5-', enable_events=True), 
                     sg.Text('L6:', size=(2, 1), background_color= 'black'),
                     sg.Text(f'{np.rad2deg(self.astorino.q[5])} deg', size=(6, 1), key='-A_J4-', justification='right')
-                    ],
-                ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                    ]
+                ], element_justification= 'center', background_color= 'black', font=('Cooper Black', 15), title_location= sg.TITLE_LOCATION_TOP)
             ]
         ]
 
         right_column = [
             [
                 sg.Column(
-                [
+                [ 
                     [
                     sg.Frame('TCP Jogging',
                         [
-                            [sg.Button('+X', key='-A_PLUSX-', size=self._input_size), sg.Button('+Y', key='-A_PLUSY-', size=self._input_size), sg.Button('+Z', key='-A_PLUSZ-', size=self._input_size)],
-                            [sg.Button('-X', key='-A_MINUSX-', size=self._input_size), sg.Button('-Y', key='-A_MINUSY-', size=self._input_size), sg.Button('-Z', key='-A_MINUSZ-', size=self._input_size)],
+                            [sg.Button('+X',    key='-A_PLUSX-', size=self._input_size), sg.Button('+Y', key='-A_PLUSY-', size=self._input_size), sg.Button('+Z', key='-A_PLUSZ-', size=self._input_size)],
+                            [sg.Button('-X',    key='-A_MINUSX-', size=self._input_size), sg.Button('-Y',key='-A_MINUSY-', size=self._input_size), sg.Button('-Z', key='-A_MINUSZ-', size=self._input_size)],
                             [sg.Button('+Roll', key='-A_PLUSROLL-', size=self._input_size), sg.Button('+Pitch', key='-A_PLUSPITCH-', size=self._input_size), sg.Button('+Yaw', key='-A_PLUSYAW-', size=self._input_size)],
-                            [sg.Button('-Roll', key='-A_MINUSROLL-', size=self._input_size), sg.Button('-Pitch', key='-A_MINUSPITCH-', size=self._input_size), sg.Button('-Yaw', key='-A_MINUSYAW-', size=self._input_size)]
+                            [sg.Button('-Roll', key='-A_MINUSROLL-', size=self._input_size), sg.Button('-Pitch',key='-A_MINUSPITCH-', size=self._input_size), sg.Button('-Yaw', key='-A_MINUSYAW-', size=self._input_size)]
                         ], element_justification= 'center', background_color= 'black', font=('Cooper Black', 15), title_location= sg.TITLE_LOCATION_TOP, vertical_alignment= 'top')
                     ]
                 ], background_color= 'black'),
-         
+                
                 sg.Column(
                 [
                     [
                     sg.Frame('Input End-effector',
                         [
-                            [sg.Text('X:', size=(2, 1), background_color='black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTX-'), sg.Text('Roll: ', size=(4, 1), background_color='black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_ROLL-')],
-                            [sg.Text('Y:', size=(2, 1), background_color='black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTY-'), sg.Text('Pitch: ', size=(4, 1), background_color='black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_PITCH-')],
-                            [sg.Text('Z:', size=(2, 1), background_color='black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTZ-'), sg.Text('Yaw: ', size=(4, 1), background_color='black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_YAW-')]
+                            [sg.Text('X:',    size=(2, 1), background_color= 'black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTX-'), sg.Text('Roll: ', size=(4, 1), background_color= 'black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_ROLL-')],
+                            [sg.Text('Y:',    size=(2, 1), background_color= 'black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTY-'), sg.Text('Pitch: ',size=(4, 1), background_color= 'black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_PITCH-')],
+                            [sg.Text('Z:',    size=(2, 1), background_color= 'black', pad= (1,11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTZ-'), sg.Text('Yaw: ',  size=(4, 1), background_color= 'black',pad=(5,1)), sg.Input(default_text='0', size=(5, 1), key='-A_YAW-')]   
                         ], element_justification= 'center', background_color= 'black', font=('Cooper Black', 15), title_location= sg.TITLE_LOCATION_TOP, vertical_alignment= 'top')
                     ]
                 ], background_color= 'black')
             ],
-
-            [sg.Frame('Message',
+            
+            [sg.Frame('Message', 
                 [
                 [sg.Multiline(size=(70, 5), key='-A_MSG-', background_color='black', text_color='white')]
-                ], background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                ], background_color= 'black', font=('Cooper Black', 15), title_location= sg.TITLE_LOCATION_TOP)
             ]
         ]
 
         type_of_control = [
-            [sg.Radio('Joint Space Control', 'RADIO2', default=True, key='-A_JOINT-', size=(18, 1))],
-            [sg.Radio('End Effector Control', 'RADIO2', key='-A_END-EFFECTOR-', size=(18, 1), pad=(5, 10))]
+            [sg.Radio('Real-time Jogging','RADIO2', key= '-A_RJOINT-', size=(20,1), pad= (5,3), default= True)],
+            [sg.Radio('Input End-effector', 'RADIO2', key='-A_END-EFFECTOR-', size=(20,1), pad= (5,3))]
         ]
 
         # Define the layout for the second tab
@@ -400,11 +416,11 @@ class RobotGUI:
             ],
 
             [
-            sg.Frame('Control Options', layout=type_of_control, font=('Cooper Black', 15), background_color='black', title_location=sg.TITLE_LOCATION_TOP, pad=(55, 10))
+            sg.Frame('Control Options', layout=type_of_control, font=('Cooper Black', 15), background_color='black', title_location=sg.TITLE_LOCATION_TOP, pad=(55, 5))
             ],
 
             [
-            sg.Button('Confirm', key='-A_CONFIRM-', size=(16, 3), pad=(8, 10)), sg.Button('Home', key='-A_HOME-', size=(16, 3))
+            sg.Button('Confirm', key='-A_CONFIRM-', size=(16,3)), sg.Button('Home', key='-A_HOME-', size=(16,3))
             ],
         ]
 
@@ -446,18 +462,16 @@ class RobotGUI:
 
     def astorino_teach_pendant (self, event, values, flag_print_once_astorino, flag_print_running_astorino):
         #-------------------------------------------------------------------- astorino
-        # constantly update the joint values associated with sliders' values
-        # for i in range(6):
-        #     self.astorino_controller.set_joint_value(i, values[f'-A_SLIDER{i}-'])      
-        
-        
-        # constantly update the joint values associated with sliders' values
-        for i in range(6):
-            # self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
-            if event == f'-A_SLIDER{i}-':
-                    self.astorino_controller.set_joint_value(i, values[f'-A_SLIDER{i}-'])
-                    self.astorino_controller.update_js() 
-                    self.env.step(0)
+
+        if values['-A_RJOINT-']:
+            for i in range(6):
+                if event == f'-A_SLIDER{i}-':
+                        self.astorino_controller.set_joint_value(i, values[f'-A_SLIDER{i}-'])
+                        self.astorino_controller.update_js()
+                        self.env.step(0)
+        else: 
+            for i in range(6):
+                self.astorino_controller.set_joint_value(i, values[f'-A_SLIDER{i}-'])
             
         # Loop through the input keys and convert values to float
         input_values = []
@@ -513,8 +527,10 @@ class RobotGUI:
                 if self.astorino_controller.get_busy_status() == False:
                     flag_print_running_astorino[0] = True
                     for key in self.button_and_slider_keys_astorino:
-                        if key == '-A_ENABLE-': self.window[key].update(disabled = True)
-                        else : self.window[key].update(disabled = False)
+                        if key == '-A_ENABLE-': 
+                            self.window[key].update(disabled = True)
+                        else : 
+                            self.window[key].update(disabled = False)
                 else: 
                     if flag_print_running_astorino[0]:
                         self.window['-A_MSG-'].print("System is running...")
@@ -534,10 +550,13 @@ class RobotGUI:
                     if key != '-A_ESTOP-':
                         self.window[key].update(disabled = True)
                 
-            if not values['-A_JOINT-'] and not values['-A_END-EFFECTOR-']:
+            if not values['-A_END-EFFECTOR-'] and not values['-A_RJOINT-']:
                 self.window['-A_CONFIRM-'].update('Choose\n Control Options',disabled = True)
-            elif values['-A_JOINT-'] or values['-A_END-EFFECTOR-']:
-                self.window['-A_CONFIRM-'].update('Confirm')
+            elif values['-A_END-EFFECTOR-']:
+                if not flag_print_running_astorino[0]: self.window['-A_CONFIRM-'].update('Confirm', disabled = True)
+                else: self.window['-A_CONFIRM-'].update('Confirm', disabled = False)
+            elif values['-A_RJOINT-']:
+                self.window['-A_CONFIRM-'].update('Sliders\n Control Mode', disabled = True)
             
             
         # event activated with HOME button
@@ -574,11 +593,7 @@ class RobotGUI:
             
         # event activated with CONFIRM button
         elif event == '-A_CONFIRM-':
-            if values['-A_JOINT-']:
-                self.astorino_controller.send_command('JOINT_ANGLES')
-                
-                            
-            elif values['-A_END-EFFECTOR-']:
+            if values['-A_END-EFFECTOR-']:
                 self.astorino_controller.send_command('CARTESIAN_POSE')
                 
             
@@ -648,7 +663,6 @@ class RobotGUI:
 
     def sawyer_teach_pendant (self, event, values, flag_print_once_sawyer, flag_print_running_sawyer):
         #------------------------------------------------------------------- sawyer
-        # constantly update the joint values associated with sliders' values
         
         if values['-RJOINT-']:
             for i in range(7):
@@ -715,8 +729,10 @@ class RobotGUI:
                 if self.sawyer_controller.get_busy_status() == False:
                     flag_print_running_sawyer[0] = True
                     for key in self.button_and_slider_keys_sawyer:
-                        if key == '-ENABLE-': self.window[key].update(disabled = True)
-                        else : self.window[key].update(disabled = False)
+                        if key == '-ENABLE-': 
+                            self.window[key].update(disabled = True)
+                        else: 
+                            self.window[key].update(disabled = False)
                 else: 
                     if flag_print_running_sawyer[0]:
                         self.window['-MSG-'].print("System is running...")
@@ -725,7 +741,6 @@ class RobotGUI:
                         if key == '-ESTOP-': self.window[key].update(disabled = False)
                         else : self.window[key].update(disabled = True)
                         
-                
             elif state == 'STOPPED': 
                 self.window['-STATE-'].update(text_color= 'white' ,background_color='red')
                 self.window['-ESTOP-'].update('Release EMERGENCY STOP')
@@ -739,13 +754,11 @@ class RobotGUI:
             if not values['-END-EFFECTOR-'] and not values['-RJOINT-']:
                 self.window['-CONFIRM-'].update('Choose\n Control Options',disabled = True)
             elif values['-END-EFFECTOR-']:
-                self.window['-CONFIRM-'].update('Confirm', disabled = False)
-
-                self.choose_confirm = True
+                if not flag_print_running_sawyer[0]: self.window['-CONFIRM-'].update('Confirm', disabled = True)
+                else: self.window['-CONFIRM-'].update('Confirm', disabled = False)
             elif values['-RJOINT-']:
                 self.window['-CONFIRM-'].update('Sliders\n Control Mode', disabled = True)
 
-                self.choose_confirm = False
             
             
         # event activated with HOME button
@@ -753,7 +766,7 @@ class RobotGUI:
             if self.sawyer_controller.disable_gamepad is False:
                 self.sawyer_controller.disable_gamepad()
             self.sawyer_controller.send_command('HOME')
-            self.home_pressed = True
+
             
 
 

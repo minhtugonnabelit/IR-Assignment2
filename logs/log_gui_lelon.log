@@ -79,3 +79,314 @@ websockets.exceptions.ConnectionClosedError: no close frame received or sent
 2023-10-20 20:11:34,711,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
 2023-10-20 20:11:34,713,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
 2023-10-20 20:11:34,713,INFO,server.py,handler,268,connection closed
+2023-10-21 20:21:50,194,INFO,Thinh_test_gui.py,_init_log,897,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 20:21:55,540,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:21:58,576,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:22:02,261,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:22:11,862,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:22:13,965,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:22:14,046,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:22:27,939,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:22:35,701,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:22:35,781,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:23:07,722,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:23:07,798,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:23:11,446,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 20:23:27,826,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:23:27,903,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:23:29,186,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 20:23:38,881,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 20:23:47,935,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:23:48,013,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:23:50,222,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 20:24:17,752,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:24:17,753,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:24:25,667,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:24:31,373,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 20:24:37,762,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:24:37,843,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:24:41,352,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:35:12,842,INFO,Thinh_test_gui.py,_init_log,906,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 20:35:15,154,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:35:18,581,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:36:26,283,INFO,Thinh_test_gui.py,_init_log,898,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 20:36:28,540,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:36:31,477,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:36:54,126,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:36:54,209,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 20:57:58,990,INFO,Thinh_test_gui.py,_init_log,903,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 20:58:01,318,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 20:58:05,840,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 20:59:07,602,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 20:59:07,602,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:01:29,408,INFO,Thinh_test_gui.py,_init_log,904,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:01:31,761,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:01:36,280,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:01:59,276,INFO,Thinh_test_gui.py,_init_log,904,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:02:01,588,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:02:03,984,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:04:07,295,INFO,Thinh_test_gui.py,_init_log,905,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:04:09,630,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:04:13,071,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:05:27,680,INFO,Thinh_test_gui.py,_init_log,905,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:05:29,915,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:05:32,815,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:05:47,721,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:05:48,106,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:05:53,526,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:07:11,231,INFO,Thinh_test_gui.py,_init_log,908,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:07:13,452,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:07:16,907,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:07:29,316,WARNING,Thinh_test_gui.py,sawyer_teach_pendant,672,Invalid input: sd
+2023-10-21 21:07:41,350,INFO,Thinh_test_gui.py,_init_log,908,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:07:43,610,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:10:57,672,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:11:00,020,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:11:02,423,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:11:19,922,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:11:20,055,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:12:15,894,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:12:18,254,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:12:21,153,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:13:05,414,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:13:07,754,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:13:11,720,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:13:19,975,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:13:24,584,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:14:26,491,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:14:28,702,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:14:31,606,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:14:48,101,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:14:48,195,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:14:52,258,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:15:04,810,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:17:03,206,INFO,Thinh_test_gui.py,_init_log,916,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:17:05,475,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:17:09,473,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:17:22,501,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:18:07,410,INFO,Thinh_test_gui.py,_init_log,916,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:18:09,688,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:18:12,047,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:19:16,168,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:19:16,168,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:19:24,308,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:20:05,339,INFO,Thinh_test_gui.py,_init_log,898,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:20:07,682,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:20:10,594,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:20:19,989,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:20:25,327,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:20:25,416,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:20:31,465,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:20:45,444,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:20:45,525,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:20:47,300,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:21:01,060,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:21:06,830,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:21:06,831,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-21 21:21:06,832,INFO,server.py,handler,268,connection closed
+2023-10-21 21:24:15,579,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:24:18,125,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:24:20,860,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:24:34,805,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:24:39,250,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:24:39,361,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:24:45,369,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:24:53,308,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:24:57,651,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:24:59,373,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:24:59,374,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:25:11,828,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:25:19,361,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:25:19,362,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:25:23,673,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:25:38,831,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:26:13,740,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:26:13,822,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:26:20,937,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:28:28,362,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:28:30,601,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:28:32,991,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:28:44,162,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:29:22,810,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:29:22,810,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:29:26,529,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:29:33,044,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:30:30,257,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:30:32,602,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:30:35,473,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:30:44,553,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:30:50,230,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:30:50,306,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:30:52,519,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:31:05,123,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:31:38,337,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:31:40,683,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:31:43,556,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:32:11,594,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:32:11,671,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:32:19,412,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:32:30,941,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:32:33,210,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:32:37,165,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:32:51,418,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:33:06,605,INFO,Thinh_test_gui.py,_init_log,912,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:33:09,095,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:33:12,542,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:33:23,988,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:33:27,863,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:33:27,944,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:33:48,111,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:33:49,224,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:33:49,302,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:33:55,537,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:33:59,737,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:51:19,602,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:51:22,025,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:52:50,619,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:52:52,928,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:53:22,244,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:53:24,453,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:53:46,311,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:53:49,297,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:53:50,331,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:53:50,331,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:53:59,924,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:54:08,848,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:57:25,239,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:57:27,521,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:57:31,733,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:57:41,571,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:57:45,853,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:57:45,854,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:57:49,842,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:57:54,881,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,890,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,899,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,908,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,916,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,934,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:54,986,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:55,007,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:55,016,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:55,026,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:57:57,272,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:58:01,717,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:58:04,874,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:58:05,954,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:58:05,954,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:58:06,474,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:58:08,570,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:58:09,388,WARNING,safety.py,is_self_collided,244,link 3 is collided with link 0
+2023-10-21 21:58:19,881,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-21 21:58:22,198,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:58:25,889,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-21 21:58:39,855,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:58:39,896,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:58:41,238,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:58:58,077,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:58:59,924,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:58:59,925,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-21 21:59:03,896,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-21 21:59:07,517,INFO,controller.py,_go_to_CartesianPose,409,Pose is unreachable!
+2023-10-21 21:59:41,807,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-21 21:59:41,808,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-21 21:59:41,808,INFO,server.py,handler,268,connection closed
+2023-10-22 04:19:41,232,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 04:19:45,247,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 04:21:04,715,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 04:21:08,537,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 04:23:08,883,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 04:23:12,724,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 04:38:07,552,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 04:38:11,516,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 05:28:19,258,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-22 05:28:19,274,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 05:28:19,274,INFO,server.py,handler,268,connection closed
+2023-10-22 05:53:49,666,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 05:53:54,093,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 05:55:21,604,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 05:55:25,472,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 05:56:17,897,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 05:56:22,486,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 05:57:59,379,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 05:58:04,713,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:01:36,651,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:01:54,851,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:03:13,767,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:03:19,215,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:03:59,218,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:04:04,695,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:04:48,551,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:04:53,677,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:07:42,912,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:07:47,994,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:09:06,540,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:09:11,712,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:10:10,583,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:10:14,909,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:10:37,997,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:10:43,118,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:11:13,688,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:11:17,994,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:12:43,713,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:12:49,143,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:30:30,650,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:30:37,851,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:31:04,949,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:31:11,227,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:31:48,769,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:31:55,131,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:44:07,323,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:44:14,518,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:45:11,603,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:45:17,734,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:45:37,696,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:45:43,873,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:46:14,493,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:46:20,440,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:47:21,009,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:47:27,138,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:49:03,699,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:49:10,082,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:49:46,704,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:49:52,881,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:50:25,340,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:50:31,343,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:51:46,124,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:51:52,519,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:52:39,604,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:52:45,696,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:53:10,988,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:53:16,672,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:53:47,146,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:53:53,550,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:53:58,847,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-22 06:54:07,514,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:54:07,515,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:54:29,591,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:54:29,731,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:54:52,102,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:54:52,196,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:55:12,346,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:55:12,434,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:55:57,691,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-22 06:56:04,417,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:56:08,777,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-22 06:56:18,051,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:56:18,052,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:56:22,831,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-10-22 06:56:25,203,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-22 06:56:36,021,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-22 06:56:38,049,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:56:38,049,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:57:00,659,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:57:00,708,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:57:24,683,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:57:24,774,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:58:00,227,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:58:00,311,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-22 06:58:08,935,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:58:14,172,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-22 06:59:00,519,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-22 06:59:00,519,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-22 06:59:00,519,INFO,server.py,handler,268,connection closed
