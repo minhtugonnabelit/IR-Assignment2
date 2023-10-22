@@ -76,7 +76,7 @@ class RobotGUI:
         self.astorino_controller.go_to_home()
         
         ## initialize mission manager
-        self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller,)
+        self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller)
         self.collision_setup()
         self.window = self.create_window()
         self.update_gui_thread()
@@ -873,7 +873,7 @@ class RobotGUI:
     def collision_setup(self):
 
         side = [0.2, 0.2, 0.2]
-        center= self.cell_center @ sm.SE3(0.7,0.2,0.2)
+        center= self.cell_center @ sm.SE3(0.,0.,1)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          

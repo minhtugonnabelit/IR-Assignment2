@@ -34,20 +34,21 @@ class Mission():
         [int(printer_index), string(current_mission)]
 
     """
-    def __init__(self, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
+    def __init__(self, env: Swift, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
 
         # -----------------
         # Use getter function (TODO) of these controllers to keep track of their current position /
         self._picker_robot = picker_robot
         self._bender_robot = bender_robot
-        
+        self._env = env
         # The plate instance should return the pose of both end effectors
-        self._plate = Plate()
+        self._plate = Plate(sm.SE3(0,0,0), self._env)
+
 
         #----------------
-        self._plate_position 
-        self._step
+        self._plate_position = sm.SE3(0.87,0.87,0.87)
+        self._step = 10
 
 
     def _home_system(self):

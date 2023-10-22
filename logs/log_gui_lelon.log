@@ -390,3 +390,96 @@ websockets.exceptions.ConnectionClosedError: no close frame received or sent
 2023-10-22 06:59:00,519,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
 2023-10-22 06:59:00,519,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
 2023-10-22 06:59:00,519,INFO,server.py,handler,268,connection closed
+2023-10-23 01:01:41,379,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 01:01:52,549,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 01:14:44,534,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 01:14:50,632,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 02:55:41,622,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-23 02:55:41,625,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-23 02:55:41,626,INFO,server.py,handler,268,connection closed
+2023-10-23 03:08:52,103,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:08:59,466,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:13:03,672,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:13:09,864,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:14:36,821,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:14:42,772,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:15:58,756,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:16:05,052,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:18:27,292,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:18:34,033,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:20:29,493,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:20:36,071,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:21:03,584,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:21:09,175,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:26:04,735,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:26:11,205,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:27:17,665,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:27:23,283,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:27:41,353,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:27:47,018,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:28:18,072,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:28:23,768,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:29:56,585,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:30:02,500,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:30:59,266,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:31:05,446,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:31:47,551,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:31:53,243,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:32:02,944,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 03:32:07,549,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-23 03:32:07,550,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-23 03:38:23,113,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-23 03:38:23,113,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-23 03:38:23,114,INFO,server.py,handler,268,connection closed
+2023-10-23 03:48:28,758,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:48:35,154,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:49:02,006,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:49:08,428,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:49:24,274,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:49:30,765,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:49:40,226,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:49:46,521,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:49:57,913,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:50:04,109,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:50:25,890,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:50:32,301,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:51:29,784,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:51:36,240,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 03:52:14,184,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 03:52:20,437,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:42:24,002,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:42:31,000,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:52:17,733,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:52:24,654,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:53:38,445,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:53:45,186,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:54:07,152,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:54:13,971,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:54:52,173,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:54:59,137,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:56:15,825,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:56:22,763,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:56:45,250,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:56:51,680,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 04:57:01,624,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 04:57:08,685,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:08:03,716,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:08:10,839,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:08:56,283,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:09:03,250,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:09:37,164,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:09:43,773,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:23:46,889,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:23:57,991,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:48:10,923,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:48:19,077,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 05:48:56,577,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 05:49:03,688,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 06:04:42,248,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 06:04:49,507,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 06:05:26,334,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 06:05:33,445,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 06:09:27,349,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 06:09:34,156,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 06:12:50,496,INFO,Thinh_test_gui.py,_init_log,910,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\log_gui_lelon.log
+2023-10-23 06:12:58,311,INFO,controller.py,is_arrived,438,Provided joint states is Done
