@@ -1,5 +1,10 @@
+# use for testing only, should separate into different files-----
 from robot import Astorino
 from robot import Sawyer
+from swift import Swift 
+#----------------------------------------------------------------
+
+from plate import Plate
 
 import os
 import copy
@@ -10,48 +15,132 @@ import numpy as np
 import spatialmath as sm
 import spatialmath.base as smb
 import spatialgeometry as geometry
-from swift import Swift
 from controller_interface import ControllerInterface
 
 
 
 class Mission():
-    def __init__(self, env : Swift, controller1: ControllerInterface, controller2: ControllerInterface):
-        
+    """
+    TODO: Add a getter for current position of the controller in controller interface
 
-        self._env = env
+    NOTE: 
+        The Mission class is designed for general use of various robot controllers that adhere to 
+        ControllerInterface module. Two robot platforms will be use: one robot is the picker and the 
+        other is the bender. Implement with this sense of abstraction in mind and avoid specific naming
+
+        The environment should be abstracted from this class, i.e don't mention Swift
+
+    Future improvement: Operate on several printing machines, have a queue to store missions, each element is
+        [int(printer_index), string(current_mission)]
+
+    """
+    def __init__(self, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
+        
 
         # -----------------
-        self.sawyer_controller = controller1
-        self.astorino_controller = controller2
-        #----------------
+        # Use getter function (TODO) of these controllers to keep track of their current position /
+        self._picker_robot = picker_robot
+        self._bender_robot = bender_robot
         
-    def home_system(self):
+        # The plate instance should return the pose of both end effectors
+        self._plate = Plate()
+
+        #----------------
+        self._plate_position 
+        self._step
+
+
+    def _home_system(self):
         """
-        Homing both robot arms"""
+        STEP 1: Homing both robot arms, ready to pick
+        """
 
         self.astorino_controller.send_command('HOME')
-        self.sawyer_controller.send_command('HOME')
+        self._picker_robot.send_command('HOME')
         print(self.astorino_controller._impl._robot.q)
+    
+    def _looking_for_plate(self):
+        """
+        Set the end effector pose looking 45 degrees downward
+        Turns around until the finds the plate
+        """
         
+        # After found, set this variable
+        self._plate_position = sm.SE3()
+        pass
+
+    def _grip_plate_edge(self):
+        """
+        STEP 2 : Grip the edge of the plate
+        After this step, use the _plate_position to coordinate the arm(s)
+        """
+        pass
+
+    def _move_plate(self, postion : sm.SE3):
+        """
+        STEP 3: Move the print plate to the specified position
+        """
+        pass
+
+    def _astor_grip(self):
+        """
+        STEP 4: Astor joins by gripping the other side of the plate
+        """
+        pass
+
+    def _drop_obejct(self):
+        """
+        STEP 5: Drop the object
+        After this step, consider mission done, can send completion signal, move back home 
+        or move on to another mission
+        """
+        self._tilt_plate()
+        self._bend_plate()
+
+
+    def _tilt_plate(self, forth = True):
+        """
+        Coordinate 2 arms to tilt the plate to a specified orientation to drop the object
+        - @param forth: True for tilting forth, False for back
+        """
+        pass
+
+    def _bend_plate(self):
+        """
+        Coordinate 2 arms to bend the plate and return to unbend position
+        """
+        pass
+
+    
+
+
+
+
+
+
+
+    # TAM ----------------------------------------------------------------------------
     def launch_system(self):
         """
         Launching both robot arms"""
 
-        self.astorino_controller.launch()
-        self.sawyer_controller.launch()
+        self._bender_robot.launch()
+        self._picker_robot.launch()
 
     def enable_system(self):
         """
-        Enable both robot arms"""
+        Enable both robot arms
+        """
 
-        self.astorino_controller.send_command('ENABLE')
-        self.sawyer_controller.send_command('ENABLE')
+        self._bender_robot.send_command('ENABLE')
+        self._picker_robot.send_command('ENABLE')
+
+        self._step ='SOMETHING'
 
     def run(self):
         print('bruh')
         qgoal_a = [0, 0, 0, 0, 0, 0]
-        self.astorino_controller.go_to_joint_angles(qgoal_a)
+        self._bender_robot.go_to_joint_angles(qgoal_a)
         
         # qtraj_a = rtb.jtraj(self.astorino_robot._robot.q, qgoal_a, 50).q
 
@@ -62,8 +151,8 @@ class Mission():
         
     def update_collision_object(self, side, center):
 
-        viz_object = self.sawyer_controller.update_collision_object(side, center)
-        self.astorino_controller.update_collision_object(side, center)
+        viz_object = self._picker_robot.update_collision_object(side, center)
+        self._bender_robot.update_collision_object(side, center)
 
         return viz_object
 
