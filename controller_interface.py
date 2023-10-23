@@ -7,8 +7,8 @@ import copy
 
 class ControllerInterface():
 
-    def __init__(self, robot : M_DHRobot3D, env : Swift, log : logging, is_sim=True):
-        self._impl = Controller(robot, env, log, is_sim)
+    def __init__(self, robot : M_DHRobot3D, log : logging, is_sim=True):
+        self._impl = Controller(robot, log, is_sim)
 
     
     def launch(self):
@@ -72,7 +72,6 @@ class ControllerInterface():
         """
         ### Move robot to home position
         Function to move robot to home position
-        - @param time: time to complete the motion
         """
         self._impl.go_to_home()
 
@@ -116,18 +115,18 @@ class ControllerInterface():
         self._impl.move_cartesian()
 
 
-    def follow_cartesian_path(self, path, time=1, tolerance=0.001):
+    def follow_cartesian_path(self, path, duration=1, tolerance=0.001):
         """
         Follow a cartesian path
         """
-        self._impl.follow_cartesian_path(path, time, tolerance)
+        self._impl.follow_cartesian_path(path, duration, tolerance)
 
 
-    def go_to_cartesian_pose(self, pose, time=1, tolerance=0.001):
+    def go_to_cartesian_pose(self, pose, duration=1, tolerance=0.001):
         """
         Go to cartesian pose
         """
-        self._impl.go_to_cartesian_pose(pose, time, tolerance)
+        self._impl.go_to_cartesian_pose(pose, duration, tolerance)
         
 
     def get_busy_status(self):
@@ -141,12 +140,6 @@ class ControllerInterface():
         Getter for robot object """
 
         return self._impl._robot
-    
-    def get_env(self):
-        """
-        Getter for environment object """
-
-        return self._impl._env
     
     def get_collision_object(self):
         """

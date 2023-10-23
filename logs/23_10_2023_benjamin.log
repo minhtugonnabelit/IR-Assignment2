@@ -422,3 +422,28 @@
 2023-10-23 17:20:26,515,INFO,controller.py,is_arrived,295,Provided goal is Done
 2023-10-23 17:20:29,732,INFO,controller.py,is_arrived,295,Provided goal is Done
 2023-10-23 17:20:40,359,INFO,controller.py,is_arrived,295,Provided goal is Done
+2023-10-23 22:06:09,260,INFO,Thinh_test_gui.py,_init_log,915,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 22:06:16,263,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-23 23:02:55,458,INFO,Thinh_test_gui.py,_init_log,924,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:04:56,767,INFO,Thinh_test_gui.py,_init_log,924,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:05:03,858,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:05:39,217,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:05:46,008,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:05:48,887,INFO,controller.py,enable_system,607,System is enabled. Ready for operation.
+2023-10-23 23:06:41,953,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:06:48,210,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:06:50,825,INFO,controller.py,enable_system,607,System is enabled. Ready for operation.
+2023-10-23 23:07:27,414,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:07:33,672,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:07:43,536,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:07:49,812,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:08:24,904,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:08:31,736,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:08:34,150,INFO,controller.py,enable_system,607,System is enabled. Ready for operation.
+2023-10-23 23:08:40,280,INFO,controller.py,is_arrived,530,Provided joint states is Done
+2023-10-23 23:12:50,110,INFO,Thinh_test_gui.py,_init_log,923,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:15:43,156,INFO,Thinh_test_gui.py,_init_log,936,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/23_10_2023_benjamin.log
+2023-10-23 23:15:49,369,INFO,controller.py,is_arrived,518,Provided joint states is Done
+2023-10-23 23:15:51,919,INFO,controller.py,enable_system,594,System is enabled. Ready for operation.
+2023-10-23 23:15:58,249,INFO,controller.py,is_arrived,518,Provided joint states is Done
+2023-10-23 23:16:06,222,INFO,controller.py,is_arrived,296,Provided goal is Done

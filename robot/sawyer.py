@@ -82,6 +82,10 @@ class Sawyer(M_DHRobot3D):
         self._head = self._add_model(
             "Sawyer_model/head.dae", smb.transl(0, 0, 0.3811))
         self.set_neutral_js(self._NEUTRAL)
+
+        # Add gripper
+        self.gripper = None
+
         self.update_sim()
 
     def _create_DH(self):
@@ -140,6 +144,9 @@ class Sawyer(M_DHRobot3D):
 
         """
         self.add_to_env(self._env)
+        if self._gripper_ready:
+            self.gripper.base = self.get_jointstates()
+            self.gripper.add_to_env(self._env)
 
 
     def get_workspace(self):
@@ -190,6 +197,15 @@ class Sawyer(M_DHRobot3D):
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
     
+    def send_joint_command(self, q):
+        """
+        Send joint command to robot. Current mode available is joint position mode
+        """
+        self.q = q
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+        self._env.step(0)
+
 
     def rotate_head(self, angle):
         """

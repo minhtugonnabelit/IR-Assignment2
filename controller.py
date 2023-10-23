@@ -11,17 +11,18 @@ from rectangularprism import RectangularPrism
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 from safety import Safety
+
 import threading
 import logging
+import time
 
 
 
 class Controller():
     
-    def __init__(self, robot : M_DHRobot3D, env : Swift, log: logging, is_sim=True):
+    def __init__(self, robot : M_DHRobot3D, log: logging, is_sim=True):
 
         self._robot = robot
-        self._env   = env
         self._is_sim = is_sim
         self._state = 'IDLE'
         self._ui_js = self._robot.q
@@ -134,7 +135,6 @@ class Controller():
         Clean up the controller
         """
         self.shutdown()
-        self._env.close()
         self.thread.join()
 
     def go_to_home(self):
@@ -143,7 +143,7 @@ class Controller():
         Function to move robot to home position
         - @param time: time to complete the motion
         """
-        self.go_to_joint_angles(self._robot.neutral, time=2)
+        self.go_to_joint_angles(self._robot.neutral, duration=2)
 
 
     # joint space interaction
@@ -182,7 +182,7 @@ class Controller():
         if self._safety.grounded_check(self._ui_js) or self._safety.is_self_collided(self._ui_js):
             self._state = 'STOPPED'
         else:
-            self._robot.q = self._ui_js
+            self._robot.send_joint_command(self._ui_js)
 
 
     def _update_robot_js(self):
@@ -237,16 +237,18 @@ class Controller():
                     if self._joystick.get_button(1):
                         vz = 0.5
                     elif self._joystick.get_button(2):
-                        vz = -0.5
+                       vz = -0.5
                     
+
                     # get linear and angular velocity
+
                     linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
                     angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
-
-                    # combine velocities
                     ee_vel = np.hstack((linear_vel, angular_vel))
 
+
                     # collision avoidance damping
+
                     d_thresh = 0.05
                     time_step = 0.01
                     gamepad_max_gain = 1
@@ -266,25 +268,32 @@ class Controller():
 
 
                     # calculate joint velocities
+
                     j = self._robot.jacob0(self._robot.q)
                     mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
                     joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
 
+
                     # update joint states as a command to robot
+
                     current_js = copy.deepcopy(self._robot.q)
                     q = current_js + joint_vel * time_step
 
+
                     # check if ee is too close to the ground
+
                     if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                         self._state = 'STOPPED'
                         continue
 
-                    self._robot.q = q
-                    self._env.step(time_step)
+
+                    # send joint command to robot to execute desired motion. Currently available mode is position mode
+                    self._robot.send_joint_command(self._robot.q)
+                    time.sleep(time_step)
         else:
             self._log.error('No joystick found!')
-            # print('No joystick found!')
+
 
     ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
@@ -293,7 +302,6 @@ class Controller():
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
             self._log.info('Provided goal is Done')
-            # print('Provided goal is Done')
             return True
         return False
     
@@ -303,7 +311,7 @@ class Controller():
     def robot_is_collided(self):
         return self.is_collided
     
-    def follow_cartesian_path(self, path, time=1, tolerance=0.001):
+    def follow_cartesian_path(self, path, duration=1, tolerance=0.001):
         """
         ### Move robot to follow desired Cartesian path
         """
@@ -317,16 +325,22 @@ class Controller():
             desired_ee_pos = path[index+1].A[0:3, 3]
 
             # get linear velocity between interpolated point and current pose of ee
+
             lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
+
             # get angular velocity between interpolated ...
+
             s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
                 self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
             ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
+
             # combine velocities
+
             ee_vel = np.hstack((lin_vel, ang_vel))
-            
+
+
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             self.is_collided = False
             if self.object is not None:
@@ -366,17 +380,19 @@ class Controller():
                 self._state = 'STOPPED'
                 break
 
-            self._robot.q = q
             index += 1
             if index == len(path)-1 and not self.is_arrived(pose,tolerance):
                 self._log.info('Pose is unreachable!')
                 break
 
-            self._env.step(time_step)
-            
+            # send joint command to robot to execute desired motion. Currently available mode is position mode
+            self._robot.send_joint_command(q)
+            time.sleep(time_step)
+
         self._robot_busy = False
+
     
-    def go_to_cartesian_pose(self, pose : sm.SE3, time=1, tolerance=0.001):
+    def go_to_cartesian_pose(self, pose : sm.SE3, duration=1, tolerance=0.001):
         
         """
         ### Move robot to desired Cartesian pose
@@ -389,7 +405,7 @@ class Controller():
         """
 
         step = 50
-        time_step = time/step
+        time_step = duration/step
         path = rtb.ctraj(self._robot.fkine(self._robot.q), pose, t=step)
 
         vel_scale = {'linear': 0.6, 'angular': 0.8}
@@ -427,20 +443,28 @@ class Controller():
 
             ## Linear interpolation methods
             # get linear velocity between interpolated point and current pose of ee
+            
             prev_ee_pos = path[index].A[0:3, 3]
             desired_ee_pos = path[index+1].A[0:3, 3]
 
+
             # get linear velocity between interpolated point and current pose of ee
+            
             lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
+
             # get angular velocity between interpolated ...
+            
             s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
                 self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
             ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
+            
             # combine velocities
+            
             ee_vel = np.hstack((lin_vel, ang_vel))
             
+
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             self.is_collided = False
             if self.object is not None:
@@ -466,31 +490,39 @@ class Controller():
             ## END -----------------------------------------------------------------------------#
             
             # calculate joint velocities, singularity check is already included in the function
+
             j = self._robot.jacob0(self._robot.q)
             mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
-
             joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
+
             # update joint states as a command to robot
+
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
+
             # check safety functionality before sending to execute
+
             if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                 self._state = 'STOPPED'
                 break
 
-            self._robot.q = q
             index += 1
             if index == len(path)-1 and not self.is_arrived(pose,tolerance):
                 self._log.info('Pose is unreachable!')
                 break
 
-            self._env.step(time_step)
-            
+
+            # send joint command to robot to execute desired motion. Currently available mode is position mode
+
+            self._robot.send_joint_command(q)
+            time.sleep(time_step)
+
+
         self._robot_busy = False
 
-    def go_to_joint_angles(self, q : np.ndarray, time=1, tolerance=0.0001):
+    def go_to_joint_angles(self, q : np.ndarray, duration=1, tolerance=0.0001):
             
         """
         ### Move robot to desired joint angles
@@ -502,12 +534,15 @@ class Controller():
         """
 
         step = 100
-        time_step = time/step
+        time_step = duration/step
 
         # Defined polynomial trajectory
+
         path = rtb.jtraj(self._robot.q, q, t=step)
 
+
         # Get ee carterian pose difference wih desired pose
+
         def is_arrived():
             js = copy.deepcopy(self._robot.q)
             poss_diff = np.diff(js - q)
@@ -515,6 +550,7 @@ class Controller():
                 self._log.info('Provided joint states is Done')
                 return True
             return False
+
         
         index = 0
         while not is_arrived() and self.system_activated():
@@ -526,13 +562,20 @@ class Controller():
                     break
 
             # check if robot body is too close to the ground
+
             if self._safety.grounded_check(path.q[index]) or self._safety.is_self_collided(path.q[index]):
                 self._state = 'STOPPED'
                 break
 
-            self._robot.q = path.q[index]
+
             index += 1
-            self._env.step(time_step)
+
+            # send joint command to robot to execute desired motion. Currently available mode is position mode
+
+            self._robot.send_joint_command(path.q[index])
+            time.sleep(time_step)
+
+
         self._robot_busy = False
 
     @staticmethod
@@ -541,23 +584,33 @@ class Controller():
         ### Solve RMRC
         """
         # calculate manipulability
+
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))
 
+
         # set threshold and damping
+
         w_thresh = mu_threshold
         max_damp = 0.5
 
+
         # if manipulability is less than threshold, add damping
+
         if w < w_thresh:
             damp = (1-np.power(w/w_thresh, 2)) * max_damp 
         else: 
             damp = 0
 
+
         # calculate damped least square
+
         j_dls = j @ np.transpose(j) @ np.linalg.inv( j @ np.transpose(j) + damp * np.eye(6) )
 
+
         # get joint velocities, if robot is in singularity, use damped least square
+
         joint_vel = np.linalg.pinv(j) @ j_dls @ np.transpose(ee_vel)
+
 
         return joint_vel
     
@@ -568,7 +621,6 @@ class Controller():
     def engage_estop(self):
         self._state = "STOPPED"
         self._log.info("E-stop engaged. System is halted.")
-        # print("E-stop engaged. System is halted.")
 
     def update_estop_state(self):
         if self._state == 'ENABLED' or self._state == 'IDLE':
@@ -580,18 +632,15 @@ class Controller():
         if self._state == "STOPPED":
             self._state = "IDLE"
             self._log.info("E-stop disengaged. System is now idle and awaiting enable.")
-            # print("E-stop disengaged. System is now idle and awaiting enable.")
 
     def enable_system(self):
         if self._state == "IDLE":
             self._state = "ENABLED"
             self._log.info("System is enabled. Ready for operation.")
-            # print("System is enabled. Ready for operation.")
 
-    def disable_system(self):
-        if self._state == "ENABLED":
-            self._state = "IDLE"
-            self._log.info("System is disabled. Back to idle state.")
-            # print("System is disabled. Back to idle state.")
+    # def disable_system(self):
+    #     if self._state == "ENABLED":
+    #         self._state = "IDLE"
+    #         self._log.info("System is disabled. Back to idle state.")
 
    

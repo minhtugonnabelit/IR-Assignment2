@@ -13,6 +13,7 @@ from robot.astorino import Astorino
 from controller_interface import ControllerInterface
 from mission import Mission
 from work_cell import WorkCell
+from plate import Plate
 from rectangularprism import RectangularPrism
 
 import queue
@@ -49,39 +50,58 @@ class RobotGUI:
         sg.theme('DarkAmber')
 
         ## Initialize environment and logging system
+
         self.env = Swift()
         self.env.set_camera_pose([0, 0, 5], self._cell_center.A[0:3,3])
         self.env.launch(realtime=True)
         
+
+        ## Verbose setup for logging level
+
         if args.verbose:
             log_level=logging.DEBUG
         else:
             log_level=logging.INFO
         self.log = RobotGUI._init_log(log_level)
         
+
         # Init environment object:
+
         self.work_cell = WorkCell(self.env, self._cell_center)
+        self.plate = Plate(self._cell_center @ sm.SE3(0.87,0.87,0.87), self.env)
 
 
-        ## Initialize robot and controller
+        ## Initialize robot 
+
         base_original_robot = self._cell_center @ sm.SE3(0.55,0.8,0.65) @ sm.SE3.Rz(-np.pi)
         transl2robot = sm.SE3(0,1.4,0.163)
-        
-        self.sawyer = Sawyer(self.env, base= base_original_robot)
+
+        self.sawyer = Sawyer(env = self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
-        self.sawyer_controller = ControllerInterface(self.sawyer, self.env, self.log)
+
+        self.astorino = Astorino(env = self.env, base= base_original_robot @ transl2robot)
+        self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
+
+
+        ## Initialize controller
+
+        self.sawyer_controller = ControllerInterface(self.sawyer, self.log)
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
-        self.astorino = Astorino(self.env, base= base_original_robot @ transl2robot)
-        self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
-        self.astorino_controller = ControllerInterface(self.astorino, self.env, self.log)
+        self.astorino_controller = ControllerInterface(self.astorino, self.log)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
         
-        ## initialize mission manager
-        self.mission = Mission(self.env, self.sawyer_controller, self.astorino_controller)
-        self.collision_setup()
+
+        ## Initialize mission manager
+
+        self.mission = Mission(self.plate, self.sawyer_controller, self.astorino_controller)
+        self.collision_setup() # set up collision 
+
+
+        ## Initialize GUI
+
         self.window = self.create_window()
         self.update_gui_thread()
 
@@ -97,6 +117,8 @@ class RobotGUI:
                                        '-A_MINUSPITCH-', '-A_MINUSROLL-', '-A_MINUSYAW-', '-A_MINUSX-', '-A_MINUSY-', '-A_MINUSZ-', '-A_PLUSPITCH-', '-A_PLUSROLL-', '-A_PLUSX-', '-A_PLUSY-', '-A_PLUSYAW-', '-A_PLUSZ-',     
                                        '-A_END-EFFECTOR-', '-A_RJOINT-', '-A_CARTX-', '-A_CARTY-', '-A_CARTZ-', '-A_ROLL-', '-A_PITCH-', '-A_YAW-',
                                        '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_DISABLE-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
+
+
 
     def create_window(self):
         tab_group_layout = [
@@ -460,6 +482,7 @@ class RobotGUI:
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
+        self.env.close()
         self.window.close()
 
 

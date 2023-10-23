@@ -35,17 +35,14 @@ class Mission():
         [int(printer_index), string(current_mission)]
 
     """
-    def __init__(self, env: Swift, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
+    def __init__(self, plate : Plate, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
 
         # -----------------
         # Use getter function (TODO) of these controllers to keep track of their current position /
+        self._plate = plate
         self._picker_robot = picker_robot
         self._bender_robot = bender_robot
-        self._env = env
-        # The plate instance should return the pose of both end effectors
-        self._plate = Plate(sm.SE3(0,0,0), self._env)
-
 
         #----------------
         self._plate_position = sm.SE3(0.87,0.87,0.87)
@@ -164,12 +161,14 @@ if __name__ == "__main__":
     env.launch(realtime= True)
     
     sawyer_robot = Sawyer(env= env)
-    sawyer_controller = ControllerInterface(sawyer_robot, env= env)
+    sawyer_controller = ControllerInterface(sawyer_robot)
     
     astorino_robot = Astorino(env= env, base= sm.SE3(0,1,0))
-    astorino_controller = ControllerInterface(astorino_robot, env= env)
+    astorino_controller = ControllerInterface(astorino_robot)
     
-    mission = Mission(env, sawyer_controller, astorino_controller)
+    plate = Plate(sm.SE3(0,0,0), env)
+    
+    mission = Mission(plate, sawyer_controller, astorino_controller)
     mission.launch_system() # only called once when both controller havent been launched, otherwise, dont do this
     mission.enable_system() # only called when controllers need to be enabled
     mission._home_system()

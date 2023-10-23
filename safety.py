@@ -263,16 +263,12 @@ class Safety:
         for j, link in enumerate(link_transforms):
             if j <= 1:
                 continue
-            if self.robot.name == 'Sawyer':
-                print(link_transforms[3][2,3])
             if link[2, 3] < ground_height +  0.05:
                 if self.robot.name == 'Astorino':
                     if link[1, 3] < self.robot.base.A[1, 3] + 0.25:
-                        print('Astorino grounded')
                         return True
                     else:
                         return False
-                # print(f'Sawyer grounded at link {j} with height of {link[2, 3]}')
                 return True
             
         return False 
