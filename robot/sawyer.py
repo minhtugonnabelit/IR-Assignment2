@@ -9,7 +9,8 @@ import spatialmath.base as smb
 import spatialgeometry as geometry
 
 from swift import Swift
-from robot.m_DHRobot3D import M_DHRobot3D
+# from robot.m_DHRobot3D import M_DHRobot3D
+from m_DHRobot3D import M_DHRobot3D
 import ir_support
 
 class Sawyer(M_DHRobot3D):
@@ -84,9 +85,9 @@ class Sawyer(M_DHRobot3D):
         self.set_neutral_js(self._NEUTRAL)
 
         # Add gripper
-        self.gripper = None
-
+        self.gripper = Gripper_Sawyer(env, sawyer_ee= self.fkine(self.q))
         self.update_sim()
+
 
     def _create_DH(self):
         """
@@ -136,7 +137,6 @@ class Sawyer(M_DHRobot3D):
 
         self._env.add(model, collision_alpha=1)
         return model
-
 
     def update_sim(self):
         """
@@ -220,6 +220,11 @@ class Sawyer(M_DHRobot3D):
         for i in np.arange(head_ori[2], angle, step):
             self._head.T = smb.trotz(i) @ head_from_base
             self._env.step(0.02)
+            
+    def move_gripper(self, sawyer_ee):
+        self.gripper.move_gripper(sawyer_ee= sawyer_ee)
+        self.gripper.Gripper_Left._update_3dmodel()
+        self.gripper.Gripper_Right._update_3dmodel()
 
     # -----------------------------------------------------------------------------------#
     # ENV TESTING
@@ -246,6 +251,239 @@ class Sawyer(M_DHRobot3D):
 
 
 # ---------------------------------------------------------------------------------------#
+class Gripper_Sawyer_left(M_DHRobot3D):
+    _script_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    def __init__(
+        self,
+        env: Swift,
+        sawyer_ee
+    ):
+        links = self._create_DH()
+        self._env = env
+
+        
+        link3D_names = dict(
+            link0 = "sawyer_gripper_base",
+            link1 = "sawyer_gripper_left"
+        )
+        
+        qtest = [0]
+        qtest_transforms = [
+            smb.transl(0,0,0) @ smb.troty(-np.pi/2),
+            smb.transl(-0.0715,0.0042,-0.0029)
+        ]
+        
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        current_path = os.path.join(current_path, "Sawyer_model")
+        super().__init__(
+            links,
+            link3D_names,
+            name= "Gripper_Sawyer_left",
+            link3d_dir= current_path,
+            qtest= qtest,
+            qtest_transforms= qtest_transforms,
+        )
+
+        self.q = qtest
+        self._base_origin_left = self.base * sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self.set_position(sawyer_ee= sawyer_ee)
+        self.update_sim()
+        
+    def update_sim(self):
+        self.add_to_env(self._env)
+
+    def _create_DH(self):
+        links = []
+        
+        link = rtb.PrismaticDH(alpha= 0, offset= 0, qlim= [-24.19, 24.19])
+        links.append(link)
+        return links
+    
+    def set_position(self, sawyer_ee):
+        self.base = sawyer_ee * self._base_origin_left
+
+    def _add_model(self, file_path, placement, color=None):
+        """
+        Add model to simulation environment
+        """
+        model_full_path = os.path.join(self._script_directory, file_path)
+        model_placement = self.base.A @ placement
+        if color is None:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement,collision=True)
+        else:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement,collision=True, color=color)
+
+        self._env.add(model, collision_alpha=1)
+        return model
+
+    # -----------------------------------------------------------------------------------#
+    # ENV TESTING
+    def test(self):
+        """
+        Test the class by adding 3d objects into a new Swift window and do a simple movement
+        """
+
+        self.q = self._qtest
+
+        while True:
+            q_goal = [-0.024]
+            qtraj = rtb.jtraj(self.q, q_goal, 10).q
+            for q in qtraj:
+                self.q = q  # Robot jointstate
+                self._env.step(0.02)
+                # fig.step(0.01)
+                
+            q_goal = [0.024]
+            qtraj = rtb.jtraj(self.q, q_goal, 10).q
+            for q in qtraj:
+                self.q = q  # Robot jointstate
+                self._env.step(0.02)
+                # fig.step(0.01)
+                
+            time.sleep(0.2)
+
+    
+class Gripper_Sawyer_right(M_DHRobot3D):
+    _script_directory = os.path.dirname(os.path.abspath(__file__))
+
+    def __init__(
+        self,
+        env: Swift,
+        sawyer_ee
+    ):
+        links = self._create_DH()
+        self._env = env
+        
+        link3D_names = dict(
+            link0 = "sawyer_gripper_base",
+            link1 = "sawyer_gripper_right"
+        )
+        
+        qtest = [0]
+        qtest_transforms = [
+            smb.transl(0,0,0) @ smb.troty(-np.pi/2),
+            smb.transl(-0.0715,0.0038,-0.0029)
+        ]
+        
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        current_path = os.path.join(current_path, "Sawyer_model")
+        super().__init__(
+            links,
+            link3D_names,
+            name= "Gripper_Sawyer_left",
+            link3d_dir= current_path,
+            qtest= qtest,
+            qtest_transforms= qtest_transforms,
+        )
+
+        self.q = qtest
+        
+        self._base_origin_right = self.base * sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self.set_position(sawyer_ee= sawyer_ee)
+        self.update_sim()
+
+    def update_sim(self):
+        self.add_to_env(self._env)
+        
+    def _create_DH(self):
+        links = []
+        link = rtb.PrismaticDH(alpha= 0, offset= 0, qlim= [-24.19, 24.19])
+        links.append(link)
+        return links
+    
+    def set_position(self, sawyer_ee):
+        self.base = sawyer_ee * self._base_origin_right
+        
+    def _add_model(self, file_path, placement, color=None):
+        """
+        Add model to simulation environment
+        """
+        model_full_path = os.path.join(self._script_directory, file_path)
+        model_placement = self.base.A @ placement
+        if color is None:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement,collision=True)
+        else:
+            model = geometry.Mesh(
+                model_full_path, pose=model_placement,collision=True, color=color)
+
+        self._env.add(model, collision_alpha=1)
+        return model
+    
+    # -----------------------------------------------------------------------------------#
+    # ENV TESTING
+    def test(self):
+        """
+        Test the class by adding 3d objects into a new Swift window and do a simple movement
+        """
+
+        self.q = self._qtest
+
+        while True:
+            q_goal = [-0.024]
+            qtraj = rtb.jtraj(self.q, q_goal, 10).q
+            for q in qtraj:
+                self.q = q  # Robot jointstate
+                self._env.step(0.02)
+                # fig.step(0.01)
+                
+            q_goal = [0.024]
+            qtraj = rtb.jtraj(self.q, q_goal, 10).q
+            for q in qtraj:
+                self.q = q  # Robot jointstate
+                self._env.step(0.02)
+                # fig.step(0.01)
+                
+            time.sleep(0.2)
+            
+
+class Gripper_Sawyer():
+    def __init__(
+        self,
+        env: Swift,
+        sawyer_ee
+    ):
+        self._env = env
+        self.Gripper_Right = Gripper_Sawyer_right(self._env, sawyer_ee)
+        self.Gripper_Left = Gripper_Sawyer_left(self._env, sawyer_ee)
+        
+        self.Gripper_Right.q = [0]
+        self.Gripper_Left.q = [0]
+
+    def update_sim(self):
+        self.Gripper_Right.add_to_env(self._env)
+        self.Gripper_Left.add_to_env(self._env)
+            
+    def close_gripper(self):
+        q_goal = np.array([0.03])
+        steps = 20
+        qtraj_left = rtb.jtraj(self.Gripper_Left.q, -1*q_goal,steps).q
+        qtraj_right = rtb.jtraj(self.Gripper_Right.q, q_goal,steps).q
+        
+        for i in range (steps):
+            self.Gripper_Left.q = qtraj_left[i]
+            self.Gripper_Right.q = qtraj_right[i]
+            self._env.step(0.02)
+    
+    def open_gripper(self):
+        q_goal = np.array([0])
+        steps = 20
+        qtraj_left = rtb.jtraj(self.Gripper_Left.q, q_goal,steps).q
+        qtraj_right = rtb.jtraj(self.Gripper_Right.q, q_goal,steps).q
+        
+        for i in range (steps):
+            self.Gripper_Left.q = qtraj_left[i]
+            self.Gripper_Right.q = qtraj_right[i]
+            self._env.step(0.02) 
+        
+    def move_gripper(self, sawyer_ee):
+        self.Gripper_Left.set_position(sawyer_ee= sawyer_ee)
+        self.Gripper_Right.set_position(sawyer_ee= sawyer_ee)
+        
+        
 if __name__ == "__main__":
 
     # generate environment
@@ -254,4 +492,22 @@ if __name__ == "__main__":
 
     # generate robot
     r = Sawyer(env)
-    r.test()
+    # r.test()
+
+    
+    time.sleep(2)
+    q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
+    qtraj = rtb.jtraj(r.q, q_goal, 200).q
+    for q in qtraj:
+        r.q = q
+        r.move_gripper(r.fkine(r.q))
+        env.step(0.02)
+    
+    while True:
+        time.sleep(0.2)
+        r.gripper.close_gripper()
+        time.sleep(0.2)
+        r.gripper.open_gripper()
+        
+    env.hold()
+
