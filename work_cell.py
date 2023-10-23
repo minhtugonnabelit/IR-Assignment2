@@ -23,7 +23,7 @@ class WorkCell():
         self._human = self._add_model('worker.stl', sm.SE3(2.5, 1.5, 0), color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
         self._cart = self._add_model('cart.dae', sm.SE3(0.5, 0, 0) @ sm.SE3.Rz(-90,'deg'))
         self._desk = self._add_model('desk.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.5, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
+        self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.55, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
         self._3dprinter_bed_0 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.9, 0.87))
         self._3dprinter_body_0 = self._add_model('3dprinter_body.dae', sm.SE3(-0.4, 0.9, 0.81))
         self._3dprinter_bed_1 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.4, 0.87))
@@ -38,20 +38,6 @@ class WorkCell():
         self._light_curtain_laser = self._add_model('light_curtain_laser.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-
-    def workcell_setup(self):
-
-        self.desk = self._add_model('desk.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.container = self._add_model('container.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.printer = self._add_model('printer.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.printer2 = None
-
-        self.estop1 = self._add_model('estop.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.estop2 = self._add_model('estop.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.estop3 = self._add_model('estop.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.power_supply = self._add_model('power_supply.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-        self.fire_extinguisher = self._add_model('fire_extinguisher.stl', sm.SE3(0, 0, 0), color = (0.0, 0.0, 1.0, 1.0))
-
 
     def move_human(self, pose):
         """

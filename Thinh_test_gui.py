@@ -64,7 +64,7 @@ class RobotGUI:
 
 
         ## Initialize robot and controller
-        base_original_robot = self._cell_center @ sm.SE3(0.5,0.8,0.65) @ sm.SE3.Rz(-np.pi)
+        base_original_robot = self._cell_center @ sm.SE3(0.55,0.8,0.65) @ sm.SE3.Rz(-np.pi)
         transl2robot = sm.SE3(0,1.4,0.163)
         
         self.sawyer = Sawyer(self.env, base= base_original_robot)
@@ -429,7 +429,6 @@ class RobotGUI:
         ]
 
         return tab2_layout
-
 
     def tab3_setup(self):
         #... [omitting for brevity]
@@ -881,7 +880,7 @@ class RobotGUI:
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          
-    def blank(self, size):
+    def blank(size):
         return sg.Text('', size=size, background_color='brown')
     
     def _init_log(log_level):

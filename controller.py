@@ -38,12 +38,12 @@ class Controller():
         self._dispatch = {
             "ENABLE": self.enable_system,
             "HOME": self.go_to_home,
-            "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0),),
-            "-X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0),),
-            "+Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0),),
-            "-Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0),),
-            "+Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05),),
-            "-Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05),),
+            "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.1, 0, 0),),
+            "-X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.1, 0, 0),),
+            "+Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.1, 0),),
+            "-Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.1, 0),),
+            "+Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.1),),
+            "-Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.1),),
             "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
             "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
             "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
@@ -353,7 +353,7 @@ class Controller():
             
             # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
-            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.02
+            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
             joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
@@ -467,7 +467,7 @@ class Controller():
             
             # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
-            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.02
+            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
             joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
@@ -544,7 +544,7 @@ class Controller():
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))
 
         # set threshold and damping
-        w_thresh = 0.04
+        w_thresh = mu_threshold
         max_damp = 0.5
 
         # if manipulability is less than threshold, add damping

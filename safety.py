@@ -45,7 +45,7 @@ class Safety:
         """ Get ellipsoid of the robot """
 
         ellipsoids = []
-        thickness = 0.08
+        thickness = 0.06
         for i in range(len(self.robot.links)):
             
             # special define for major and minor axis for ellipsoid
@@ -188,7 +188,7 @@ class Safety:
         ee_pose = self.robot.fkine(q)
 
         # map a virtual cylinder to the end-effector 
-        ee_sphere = geometry.Cylinder(0.1, self.robot.d[self.robot.n-1],  pose = ee_pose)
+        ee_sphere = geometry.Cylinder(0.05, self.robot.d[self.robot.n-1],  pose = ee_pose)
     
         # check if the closest point between the end-effector and the object is within the virtual sphere
         return ee_sphere.closest_point(object, 5)
@@ -263,8 +263,18 @@ class Safety:
         for j, link in enumerate(link_transforms):
             if j <= 1:
                 continue
-            elif link[2, 3] < ground_height +  0.05:
+            if self.robot.name == 'Sawyer':
+                print(link_transforms[3][2,3])
+            if link[2, 3] < ground_height +  0.05:
+                if self.robot.name == 'Astorino':
+                    if link[1, 3] < self.robot.base.A[1, 3] + 0.25:
+                        print('Astorino grounded')
+                        return True
+                    else:
+                        return False
+                # print(f'Sawyer grounded at link {j} with height of {link[2, 3]}')
                 return True
+            
         return False 
     
 
