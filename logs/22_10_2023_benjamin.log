@@ -1,0 +1,42 @@
+2023-10-23 10:55:52,446,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/22_10_2023_benjamin.log
+2023-10-23 10:55:59,039,INFO,controller.py,is_arrived,443,Provided joint states is Done
+2023-10-23 10:56:18,981,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/22_10_2023_benjamin.log
+2023-10-23 10:56:25,142,INFO,controller.py,is_arrived,443,Provided joint states is Done
+2023-10-23 10:59:10,933,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/22_10_2023_benjamin.log
+2023-10-23 10:59:16,818,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 10:59:20,010,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 10:59:23,484,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 10:59:27,494,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:29,964,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:32,475,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:35,444,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:37,932,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:39,825,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:42,293,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:45,682,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:50,208,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:52,589,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:57,188,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 10:59:59,606,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:00:03,629,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:00:08,188,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:00:10,061,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:08,280,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:10,832,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:13,271,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:15,653,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:20,671,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:25,014,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:28,979,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:31,415,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:34,278,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:36,735,INFO,controller.py,is_arrived,293,Provided goal is Done
+2023-10-23 11:01:41,465,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:01:42,988,INFO,controller.py,is_arrived,438,Provided joint states is Done
+2023-10-23 11:02:10,066,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:14,142,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:17,195,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:21,271,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:24,837,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:29,422,INFO,controller.py,enable_system,511,System is enabled. Ready for operation.
+2023-10-23 11:02:32,443,INFO,controller.py,is_arrived,438,Provided joint states is Done

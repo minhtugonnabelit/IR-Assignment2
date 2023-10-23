@@ -23,7 +23,7 @@ class Sawyer(M_DHRobot3D):
 
 
     """
-    _NEUTRAL = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57, 3.3161]
+    _NEUTRAL = [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.3161]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
 
     # -----------------------------------------------------------------------------------#
@@ -33,7 +33,7 @@ class Sawyer(M_DHRobot3D):
         self,
         env: Swift,
         base=sm.SE3(0, 0, 0),
-        gripper_ready=True,
+        gripper_ready=False,
         gui=None,
     ):
         # DH links
@@ -133,12 +133,14 @@ class Sawyer(M_DHRobot3D):
         self._env.add(model, collision_alpha=1)
         return model
 
+
     def update_sim(self):
         """
         Reconfigure robot to home position set by user
 
         """
         self.add_to_env(self._env)
+
 
     def get_workspace(self):
         """
@@ -225,22 +227,6 @@ class Sawyer(M_DHRobot3D):
         # fig.hold()
 
         # self._env.hold()
-
-    def plot_elipsoids(self):
-        """
-        Test ellipsoid function
-        """
-        tr = self.get_link_poses()
-        for i in range(len(tr)):
-
-            if i == 0:
-                continue
-
-            center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-            elip = np.round(
-                (tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
-            ob = smb.plot_ellipsoid(
-                elip, center, resolution=10, color='r', alpha=0.5)
 
 
 # ---------------------------------------------------------------------------------------#

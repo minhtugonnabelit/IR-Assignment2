@@ -22,7 +22,8 @@ import os
 import argparse
 
 # The default log filename
-LOG_FILE_NAME = f"log_gui_{os.getlogin()}.log"
+DAY = time.gmtime()
+LOG_FILE_NAME = f"{DAY.tm_mday}_{DAY.tm_mon}_{DAY.tm_year}_{os.getlogin()}.log"
 LOG_FORMAT_FILE = "%(asctime)s,%(levelname)s,%(filename)s,%(funcName)s,%(lineno)d,%(message)s"  # Here is how a log will format to a file
 LOG_FORMAT_CONSOLE = "%(asctime)s\t%(levelname)s: %(message)s"                                  # Here is how a log will format to the console
 
@@ -41,6 +42,7 @@ class RobotGUI:
     _input_size = (10, 1)
     _slider_size = (21, 13)
     _window_size = (900,700) # Width x Height
+    _cell_center = sm.SE3(0,0,0)
 
     def __init__(self, args=None):
 
@@ -48,7 +50,9 @@ class RobotGUI:
 
         ## Initialize environment and logging system
         self.env = Swift()
+        self.env.set_camera_pose([0, 0, 5], self._cell_center.A[0:3,3])
         self.env.launch(realtime=True)
+        
         if args.verbose:
             log_level=logging.DEBUG
         else:
@@ -56,12 +60,12 @@ class RobotGUI:
         self.log = RobotGUI._init_log(log_level)
         
         # Init environment object:
-        self.cell_center = sm.SE3(0,0,0)
-        self.work_cell = WorkCell(self.env, self.cell_center)
+        self.work_cell = WorkCell(self.env, self._cell_center)
+
 
         ## Initialize robot and controller
-        base_original_robot = self.cell_center @ sm.SE3(0.4,0.8,0.65)
-        transl2robot = sm.SE3(0,-1.4,0.163)
+        base_original_robot = self._cell_center @ sm.SE3(0.5,0.8,0.65) @ sm.SE3.Rz(-np.pi)
+        transl2robot = sm.SE3(0,1.4,0.163)
         
         self.sawyer = Sawyer(self.env, base= base_original_robot)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
@@ -484,7 +488,7 @@ class RobotGUI:
                 print(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
-        pose = sm.SE3(input_values[0], input_values[1], input_values[2]
+        pose = self.astorino.base @ sm.SE3(input_values[0], input_values[1], input_values[2]
                         ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
         
         self.astorino_controller.set_cartesian_value(pose)
@@ -686,7 +690,7 @@ class RobotGUI:
                 self.log.warning(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
-        pose = sm.SE3(input_values[0], input_values[1], input_values[2]
+        pose = self.sawyer.base @ sm.SE3(input_values[0], input_values[1], input_values[2]
                         ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
         
         self.sawyer_controller.set_cartesian_value(pose)
@@ -873,7 +877,7 @@ class RobotGUI:
     def collision_setup(self):
 
         side = [0.2, 0.2, 0.2]
-        center= self.cell_center @ sm.SE3(0.,0.,1)
+        center= self._cell_center @ sm.SE3(0.,0.,1)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
          

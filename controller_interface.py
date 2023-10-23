@@ -3,10 +3,11 @@ from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 from controller import Controller
 import logging
+import copy 
 
 class ControllerInterface():
 
-    def __init__(self, robot : M_DHRobot3D, env : Swift, log : logging,is_sim=True):
+    def __init__(self, robot : M_DHRobot3D, env : Swift, log : logging, is_sim=True):
         self._impl = Controller(robot, env, log, is_sim)
 
 
@@ -23,17 +24,12 @@ class ControllerInterface():
         """
         return self._impl.system_activated()
 
+
     def update_collision_object(self, side, center):
         """
         Update collision object
         """
         return self._impl.update_collision_object(side, center)
-
-    # def update_collision_object(self, obj):
-    #     """
-    #     Update collision object
-    #     """
-    #     self._impl.update_collision_object(obj)
 
 
     def gamepad_control(self):
@@ -87,14 +83,17 @@ class ControllerInterface():
         """
         self._impl.set_joint_value(j, value)
 
+
     def update_js(self):
         """
         Update joint states
         """
         self._impl._update_js()
     
+
     def update_robot_js(self):
         self._impl._update_robot_js()
+
 
     def move(self):
         """
@@ -119,6 +118,40 @@ class ControllerInterface():
     def get_busy_status(self):
         return self._impl._get_busy_status()
         
+
+    # Getters
+    # -----------------------------------------------------------------------------------#
+    def get_robot(self):
+        """
+        Getter for robot object """
+
+        return self._impl._robot
+    
+    def get_env(self):
+        """
+        Getter for environment object """
+
+        return self._impl._env
+    
+    def get_collision_object(self):
+        """
+        Getter for collision object """
+
+        return self._impl.object
+    
+    def get_joint_angles(self):
+        """
+        Getter for joint angles """
+
+        return copy.deepcopy(self._impl._robot.q)
+    
+    def get_ee_pose(self):
+        """
+        Getter for end-effector pose """
+        
+        return self._impl._robot.fkine(self._impl._robot.q)
+    
+
 
     # STATE FUNCTION
     def system_state(self):

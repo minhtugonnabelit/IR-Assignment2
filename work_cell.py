@@ -23,7 +23,7 @@ class WorkCell():
         self._human = self._add_model('worker.stl', sm.SE3(2.5, 1.5, 0), color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
         self._cart = self._add_model('cart.dae', sm.SE3(0.5, 0, 0) @ sm.SE3.Rz(-90,'deg'))
         self._desk = self._add_model('desk.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.4, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
+        self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.5, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
         self._3dprinter_bed_0 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.9, 0.87))
         self._3dprinter_body_0 = self._add_model('3dprinter_body.dae', sm.SE3(-0.4, 0.9, 0.81))
         self._3dprinter_bed_1 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.4, 0.87))
@@ -55,6 +55,7 @@ class WorkCell():
 
     def move_human(self, pose):
         """
+        Function to move human model in simulation
 
         Args:
             pose (_type_): _description_
@@ -75,6 +76,11 @@ class WorkCell():
         """
         Add model to simulation environment
         Placement is relative pose of the object to cell center
+
+        Args:
+            file_path (string): relative path to model file
+            placement (spatialmath.SE3): relative pose of the object to the cell center
+            color (list): list of RGBA values for the model
         """
         model_full_path = os.path.join(self._script_directory, 'mesh', file_path)
         model_placement = self._center @ placement

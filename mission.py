@@ -5,6 +5,7 @@ from swift import Swift
 #----------------------------------------------------------------
 
 from plate import Plate
+from work_cell import WorkCell
 
 import os
 import copy
@@ -50,15 +51,13 @@ class Mission():
         self._plate_position = sm.SE3(0.87,0.87,0.87)
         self._step = 10
 
-
     def _home_system(self):
         """
         STEP 1: Homing both robot arms, ready to pick
         """
 
-        self.astorino_controller.send_command('HOME')
+        self._bender_robot.send_command('HOME')
         self._picker_robot.send_command('HOME')
-        print(self.astorino_controller._impl._robot.q)
     
     def _looking_for_plate(self):
         """
@@ -112,13 +111,6 @@ class Mission():
         """
         pass
 
-    
-
-
-
-
-
-
 
     # TAM ----------------------------------------------------------------------------
     def launch_system(self):
@@ -127,6 +119,7 @@ class Mission():
 
         self._bender_robot.launch()
         self._picker_robot.launch()
+
 
     def enable_system(self):
         """
@@ -137,19 +130,16 @@ class Mission():
         self._picker_robot.send_command('ENABLE')
 
         self._step ='SOMETHING'
+    
 
-    def run(self):
-        print('bruh')
-        qgoal_a = [0, 0, 0, 0, 0, 0]
-        self._bender_robot.go_to_joint_angles(qgoal_a)
+    def stop_system(self):
+        """
+        Stop both robot arms
+        """
+        self._bender_robot.engage_estop()
+        self._picker_robot.engage_estop()
         
-        # qtraj_a = rtb.jtraj(self.astorino_robot._robot.q, qgoal_a, 50).q
 
-
-        # for q in qtraj_a:
-        #     self.astorino_robot._robot.q = q
-        #     self.env.step(0.02)
-        
     def update_collision_object(self, side, center):
 
         viz_object = self._picker_robot.update_collision_object(side, center)
@@ -157,7 +147,13 @@ class Mission():
 
         return viz_object
 
-    
+
+    def run(self):
+        print('bruh')
+        qgoal_a = [0, 0, 0, 0, 0, 0]
+        self._bender_robot.go_to_joint_angles(qgoal_a)
+
+
     def test(self):
         pass
 
@@ -176,4 +172,4 @@ if __name__ == "__main__":
     mission = Mission(env, sawyer_controller, astorino_controller)
     mission.launch_system() # only called once when both controller havent been launched, otherwise, dont do this
     mission.enable_system() # only called when controllers need to be enabled
-    mission.home_system()
+    mission._home_system()
