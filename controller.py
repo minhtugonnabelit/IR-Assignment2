@@ -38,18 +38,18 @@ class Controller():
         self._dispatch = {
             "ENABLE": self.enable_system,
             "HOME": self.go_to_home,
-            "+X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0),),
-            "-X": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0),),
-            "+Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0),),
-            "-Y": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0),),
-            "+Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05),),
-            "-Z": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05),),
-            "+Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
-            "-Rx": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
-            "+Ry": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
-            "-Ry": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), time=0.1),
-            "+Rz": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), time=0.1),
-            "-Rz": lambda: self._go_to_CartesianPose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), time=0.1),
+            "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.05, 0, 0),),
+            "-X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.05, 0, 0),),
+            "+Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.05, 0),),
+            "-Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.05, 0),),
+            "+Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.05),),
+            "-Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.05),),
+            "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
+            "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
+            "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
+            "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), time=0.1),
+            "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), time=0.1),
+            "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), time=0.1),
             "JOINT_ANGLES": self.move,
             "CARTESIAN_POSE": self.move_cartesian,
             "GAMEPAD_ENABLE": self.gamepad_control,
@@ -175,7 +175,7 @@ class Controller():
         Execute a cartesian space trajectory
 
         """
-        self._go_to_CartesianPose(self._ui_pose, time=3)
+        self.go_to_cartesian_pose(self._ui_pose, time=3)
 
     def _update_js(self):
         # check safety functionality before sending to execute
@@ -209,7 +209,7 @@ class Controller():
 
             # Print joystick information
             self._joystick.init()
-            vel_scale = {'linear': 0.3, 'angular': 0.8}
+            vel_scale = {'linear': 0.7, 'angular': 0.8}
 
             # Main loop to check joystick functionality
             while not self._disable_gamepad:
@@ -247,27 +247,29 @@ class Controller():
                     ee_vel = np.hstack((linear_vel, angular_vel))
 
                     # collision avoidance damping
-                    d_thresh = 0.01
+                    d_thresh = 0.05
                     time_step = 0.01
-                    gamepad_gain = 0.8
+                    gamepad_max_gain = 1
 
                     self.is_collided = False
                     if self.object is not None:
-                        if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                        if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
                             self.is_collided = True
-                            self._log.warning('line_plane ee is nearly collided with object')
+                            # self._log.warning('line_plane ee is nearly collided with object')
                             
                         if self.is_collided is True:
                             # get distance between ee and object,  also extracting the closest points to use as damping velocity
                             d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
                             if d <= d_thresh:
                                 vel = ( p1 - p2 ) / time_step
-                                ee_vel[0:3] += gamepad_gain*vel
+                                ee_vel[0:3] += gamepad_max_gain * vel
 
 
                     # calculate joint velocities
                     j = self._robot.jacob0(self._robot.q)
-                    joint_vel = Controller.solve_RMRC(j, ee_vel)
+                    mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
+
+                    joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
 
                     # update joint states as a command to robot
                     current_js = copy.deepcopy(self._robot.q)
@@ -301,7 +303,80 @@ class Controller():
     def robot_is_collided(self):
         return self.is_collided
     
-    def _go_to_CartesianPose(self, pose : sm.SE3, time=1, tolerance=0.001):
+    def follow_cartesian_path(self, path, time=1, tolerance=0.001):
+        """
+        ### Move robot to follow desired Cartesian path
+        """
+        time_step = 1/50
+        index = 0
+        pose = path[-1]
+        while index < len(path) and self.system_activated():
+
+            self._robot_busy = True
+            prev_ee_pos = path[index].A[0:3, 3]
+            desired_ee_pos = path[index+1].A[0:3, 3]
+
+            # get linear velocity between interpolated point and current pose of ee
+            lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+
+            # get angular velocity between interpolated ...
+            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
+                self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+            ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+
+            # combine velocities
+            ee_vel = np.hstack((lin_vel, ang_vel))
+            
+            ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
+            self.is_collided = False
+            if self.object is not None:
+                if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                    self.is_collided = True
+                    self._log.warning('line_plane ee is nearly collided with object')
+                    # break
+
+                if self.is_collided is True:
+
+                    # set threshold and damping
+                    d_thresh = 0.01
+
+                    # weight of the damping vel for collision avoidance
+                    weight = 0.5
+
+                    # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                    d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                    if d <= d_thresh:
+                        vel = ( p1 - p2 ) / time_step
+                        ee_vel[0:3] += weight*vel
+
+            ## END -----------------------------------------------------------------------------#
+            
+            # calculate joint velocities, singularity check is already included in the function
+            j = self._robot.jacob0(self._robot.q)
+            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.02
+
+            joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
+            
+            # update joint states as a command to robot
+            current_js = copy.deepcopy(self._robot.q)
+            q = current_js + joint_vel * time_step
+
+            # check safety functionality before sending to execute
+            if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+                self._state = 'STOPPED'
+                break
+
+            self._robot.q = q
+            index += 1
+            if index == len(path)-1 and not self.is_arrived(pose,tolerance):
+                self._log.info('Pose is unreachable!')
+                break
+
+            self._env.step(time_step)
+            
+        self._robot_busy = False
+    
+    def go_to_cartesian_pose(self, pose : sm.SE3, time=1, tolerance=0.001):
         
         """
         ### Move robot to desired Cartesian pose
@@ -392,7 +467,9 @@ class Controller():
             
             # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
-            joint_vel = Controller.solve_RMRC(j,ee_vel)
+            mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.02
+
+            joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
             # update joint states as a command to robot
             current_js = copy.deepcopy(self._robot.q)
@@ -459,7 +536,7 @@ class Controller():
         self._robot_busy = False
 
     @staticmethod
-    def solve_RMRC(j, ee_vel):
+    def solve_RMRC(j, ee_vel, mu_threshold=0.04):
         """
         ### Solve RMRC
         """

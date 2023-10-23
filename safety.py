@@ -148,13 +148,13 @@ class Safety:
 
         return lines
     
-    def collision_check_ee(self, q, vertecies, faces, face_normals, return_once_found = True):
+    def collision_check_ee(self, q, vertecies, faces, face_normals, return_once_found = True, threshold = 0):
         """
         Collision check using the closest point between the end-effector and the object,
         with offset line for additional 4 sides of the end-effector to ensure the boundary of near collision
         """
         result = False
-        offset = 0.05
+        offset = 0.05+threshold
 
         tr = self.get_link_poses(q)
 
@@ -187,8 +187,8 @@ class Safety:
         # get the transforms of all links
         ee_pose = self.robot.fkine(q)
 
-        # map a virtual sphere to the end-effector 
-        ee_sphere = geometry.Cylinder(0.05, self.robot.d[self.robot.n-1],  pose = ee_pose)
+        # map a virtual cylinder to the end-effector 
+        ee_sphere = geometry.Cylinder(0.1, self.robot.d[self.robot.n-1],  pose = ee_pose)
     
         # check if the closest point between the end-effector and the object is within the virtual sphere
         return ee_sphere.closest_point(object, 5)

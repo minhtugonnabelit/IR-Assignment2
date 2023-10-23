@@ -115,6 +115,21 @@ class ControllerInterface():
         """
         self._impl.move_cartesian()
 
+
+    def follow_cartesian_path(self, path, time=1, tolerance=0.001):
+        """
+        Follow a cartesian path
+        """
+        self._impl.follow_cartesian_path(path, time, tolerance)
+
+
+    def go_to_cartesian_pose(self, pose, time=1, tolerance=0.001):
+        """
+        Go to cartesian pose
+        """
+        self._impl.go_to_cartesian_pose(pose, time, tolerance)
+        
+
     def get_busy_status(self):
         return self._impl._get_busy_status()
         
