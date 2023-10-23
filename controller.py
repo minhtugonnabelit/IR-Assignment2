@@ -146,7 +146,9 @@ class Controller():
         self.go_to_joint_angles(self._robot.neutral, duration=2)
 
 
-    # joint space interaction
+    # -----------------------------------------------------------------------------------#
+    # Joint space interaction
+
     def set_joint_value(self, j, value):
         """
         Set joint value
@@ -161,8 +163,22 @@ class Controller():
         """
         self.go_to_joint_angles(self._ui_js, time=3)
 
+    def _update_js(self):
+        """
+        """
 
-    # cartesian space interaction
+        if self._safety.grounded_check(self._ui_js) or self._safety.is_self_collided(self._ui_js):
+            self._state = 'STOPPED'
+        else:
+            self._robot.send_joint_command(self._ui_js)
+
+    def _update_robot_js(self):
+        self._ui_js = self._robot.q
+
+
+    # -----------------------------------------------------------------------------------#
+    # Cartesian space interaction
+
     def set_cartesian_value(self, pose):
         """
         Set cartesian value
@@ -177,17 +193,8 @@ class Controller():
         """
         self.go_to_cartesian_pose(self._ui_pose, time=3)
 
-    def _update_js(self):
-        # check safety functionality before sending to execute
-        if self._safety.grounded_check(self._ui_js) or self._safety.is_self_collided(self._ui_js):
-            self._state = 'STOPPED'
-        else:
-            self._robot.send_joint_command(self._ui_js)
-
-
-    def _update_robot_js(self):
-        self._ui_js = self._robot.q
-    # --------------------------------------------------#
+        
+    # -----------------------------------------------------------------------------------#
     # gamepad control
     def disable_gamepad(self):
         """
@@ -200,6 +207,8 @@ class Controller():
         """
         ### Gamepad control
         Function to control robot using gamepad
+        This function extract value of each axis and button from gamepad and 
+        convert it to robot end effector velocity to solve for joint velocity
         """
 
         self._joystick = self._joystick_init()
@@ -294,10 +303,16 @@ class Controller():
         else:
             self._log.error('No joystick found!')
 
-
-    ### GENERAL MOTION FUNCTION
     # -----------------------------------------------------------------------------------#
+    ### GENERAL MOTION FUNCTION
+
     def is_arrived(self, pose : sm.SE3, tolerance=0.001):
+        """
+        Function to check if robot is arrived at desired pose
+        - @param pose: desired pose
+        - @param tolerance: tolerance to consider the robot has reached the desired pose
+        """
+
         ee_pose = self._robot.fkine(self._robot.q)
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
@@ -305,16 +320,30 @@ class Controller():
             return True
         return False
     
+    
     def _get_busy_status(self):
         return self._robot_busy
 
+
     def robot_is_collided(self):
+        """
+        Function to return if robot is collided. 
+        Possible to be used to trigger avoidance motion
+        """
+
         return self.is_collided
-    
+
+
     def follow_cartesian_path(self, path, duration=1, tolerance=0.001):
         """
         ### Move robot to follow desired Cartesian path
+        Function to move robot end-effector to follow desired Cartesian path.
+        This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
+        - @param path: desired Cartesian path (a list or numpy array of SE3 pose)
+        - @param duration: time to complete the motion (default 1 second)
+        - @param tolerance: tolerance to consider the robot has reached the desired pose (default 0.001)
         """
+
         time_step = 1/50
         index = 0
         pose = path[-1]
@@ -342,6 +371,7 @@ class Controller():
 
 
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
+            
             self.is_collided = False
             if self.object is not None:
                 if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
@@ -352,30 +382,41 @@ class Controller():
                 if self.is_collided is True:
 
                     # set threshold and damping
+                    
                     d_thresh = 0.01
 
+
                     # weight of the damping vel for collision avoidance
+                    
                     weight = 0.5
 
+
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                    
                     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
                     if d <= d_thresh:
                         vel = ( p1 - p2 ) / time_step
                         ee_vel[0:3] += weight*vel
 
+
             ## END -----------------------------------------------------------------------------#
             
             # calculate joint velocities, singularity check is already included in the function
+            
             j = self._robot.jacob0(self._robot.q)
             mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
             joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
+
             # update joint states as a command to robot
+           
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
+
             # check safety functionality before sending to execute
+            
             if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                 self._state = 'STOPPED'
                 break
@@ -385,9 +426,12 @@ class Controller():
                 self._log.info('Pose is unreachable!')
                 break
 
+
             # send joint command to robot to execute desired motion. Currently available mode is position mode
+            
             self._robot.send_joint_command(q)
             time.sleep(time_step)
+
 
         self._robot_busy = False
 
@@ -401,7 +445,6 @@ class Controller():
         - @param pose: desired Cartesian pose           
         - @param duration: time to complete the motion
         - @param tolerance: tolerance to consider the robot has reached the desired pose
-
         """
 
         step = 50
@@ -414,7 +457,7 @@ class Controller():
         while not self.is_arrived(pose,tolerance) and self.system_activated():
 
             self._robot_busy = True
-            
+
             # # Direction methods
             # # extracting linear vel direction
             # ee_cur_pose = self._robot.fkine(self._robot.q)
@@ -523,27 +566,25 @@ class Controller():
 
 
         self._robot_busy = False
+        
 
     def go_to_joint_angles(self, q : np.ndarray, duration=1, tolerance=0.0001):
             
         """
         ### Move robot to desired joint angles
         Function to move robot to desired joint angles. 
-        - @param q: desired joint angles           
-        - @param time: time to complete the motion
-        - @param tolerance: tolerance to consider the robot has reached the desired pose
-
+        - @param q: desired joint angles (1xn numpy array)          
+        - @param duration: time to complete the motion (default 1 second)
+        - @param tolerance: tolerance to consider the robot has reached the desired pose (default 0.001)
         """
 
         step = 100
         time_step = duration/step
 
-        # Defined polynomial trajectory
+        # Defined quintic polynomial trajectory
 
         path = rtb.jtraj(self._robot.q, q, t=step)
 
-
-        # Get ee carterian pose difference wih desired pose
 
         def is_arrived():
             js = copy.deepcopy(self._robot.q)
@@ -569,7 +610,6 @@ class Controller():
                 self._state = 'STOPPED'
                 break
 
-
             index += 1
 
             # send joint command to robot to execute desired motion. Currently available mode is position mode
@@ -584,10 +624,11 @@ class Controller():
     def solve_RMRC(j, ee_vel, mu_threshold=0.04):
         """
         ### Solve RMRC with given jacobian and desired ee velocity 
-        - @param j: jacobian matrix 
-        - @param ee_vel: desired ee velocity (6x1 vector) [x,y,z,wx,wy,wz]
+        - @param j: jacobian matrix (6xn numpy array)
+        - @param ee_vel: desired ee velocity (6x1 vector) in format of [x,y,z,wx,wy,wz]
         - @param mu_threshold: manipulability threshold to determine if robot is in singularity. This threshhold varies for each type of robot.
         """
+
         # calculate manipulability
 
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))

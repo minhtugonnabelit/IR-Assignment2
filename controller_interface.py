@@ -132,9 +132,8 @@ class ControllerInterface():
     def get_busy_status(self):
         return self._impl._get_busy_status()
         
-
-    # Getters
     # -----------------------------------------------------------------------------------#
+    # Getters
     def get_robot(self):
         """
         Getter for robot object """
@@ -160,7 +159,7 @@ class ControllerInterface():
         return self._impl._robot.fkine(self._impl._robot.q)
     
 
-
+    # -----------------------------------------------------------------------------------#
     # STATE FUNCTION
     def system_state(self):
         """
@@ -182,6 +181,4 @@ class ControllerInterface():
     def enable_system(self):
         self._impl.enable_system()
 
-    def disable_system(self):
-        self._impl.disable_system()
 

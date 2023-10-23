@@ -76,10 +76,13 @@ class Astorino(M_DHRobot3D):
         self.base = base * self.base
         self.q = qtest
         self.set_neutral_js(self._NEUTRAL)
+
+        # Add gripper
+        self.gripper = None
+
         self.update_sim()
 
-        
-        
+
     def _create_DH(self):
         """
         Creat Astorino's DH parameter
@@ -129,6 +132,9 @@ class Astorino(M_DHRobot3D):
         Update simulation
         """
         self.add_to_env(self._env)
+        if self._gripper_ready:
+            self.gripper.base = self.get_jointstates()
+            self.gripper.add_to_env(self._env)
         
     def get_workspace(self):
         """ 
@@ -176,6 +182,16 @@ class Astorino(M_DHRobot3D):
         print('max y: ', np.max(pc_y), 'min y: ', np.min(pc_y))
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
+    
+    
+    def send_joint_command(self, q):
+        """
+        Send joint command to robot. Current mode available is joint position mode
+        """
+        self.q = q
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+        self._env.step(0)  
     
     
     def test(self):

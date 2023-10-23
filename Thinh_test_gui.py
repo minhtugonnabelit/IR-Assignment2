@@ -76,18 +76,20 @@ class RobotGUI:
 
         # Initialize robot
 
-        base_original_robot = self._cell_center @ sm.SE3(
-            0.55, 0.8, 0.65) @ sm.SE3.Rz(-np.pi)
+        base_original_robot = self._cell_center @ sm.SE3(0.55, 0.8, 0.65) @ sm.SE3.Rz(-np.pi)
         transl2robot = sm.SE3(0, 1.4, 0.163)
 
-        self.sawyer = Sawyer(env=self.env, base=base_original_robot)
-        self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
+        self.sawyer = Sawyer(
+            env=self.env, 
+            base=base_original_robot)
+        self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))   
 
+        
         self.astorino = Astorino( 
             env=self.env, 
             base=base_original_robot @ transl2robot)
-        
         self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
+
 
         # Initialize controller
 
