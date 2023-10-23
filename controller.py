@@ -399,7 +399,7 @@ class Controller():
         Function to move robot end-effector to desired Cartesian pose. 
         This function is performing tehcnique called RMRC (Resolved Motion Rate Control) to move robot to desired pose.
         - @param pose: desired Cartesian pose           
-        - @param time: time to complete the motion
+        - @param duration: time to complete the motion
         - @param tolerance: tolerance to consider the robot has reached the desired pose
 
         """
@@ -412,7 +412,9 @@ class Controller():
 
         index = 0
         while not self.is_arrived(pose,tolerance) and self.system_activated():
+
             self._robot_busy = True
+            
             # # Direction methods
             # # extracting linear vel direction
             # ee_cur_pose = self._robot.fkine(self._robot.q)
@@ -581,7 +583,10 @@ class Controller():
     @staticmethod
     def solve_RMRC(j, ee_vel, mu_threshold=0.04):
         """
-        ### Solve RMRC
+        ### Solve RMRC with given jacobian and desired ee velocity 
+        - @param j: jacobian matrix 
+        - @param ee_vel: desired ee velocity (6x1 vector) [x,y,z,wx,wy,wz]
+        - @param mu_threshold: manipulability threshold to determine if robot is in singularity. This threshhold varies for each type of robot.
         """
         # calculate manipulability
 

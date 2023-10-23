@@ -35,7 +35,7 @@ class Mission():
         [int(printer_index), string(current_mission)]
 
     """
-    def __init__(self, plate : Plate, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
+    def __init__(self, plate : Plate, workcell : WorkCell, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
 
         # -----------------
