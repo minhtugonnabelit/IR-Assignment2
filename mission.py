@@ -35,6 +35,8 @@ class Mission():
         [int(printer_index), string(current_mission)]
 
     """
+
+
     def __init__(self, plate : Plate, workcell : WorkCell, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
 
@@ -47,6 +49,7 @@ class Mission():
 
         #----------------
         self._cell_center = self._workcell.get_cell_center()
+        self._cart_location = self._workcell.get_cart_location()
         # self._plate_position = self._plate.get_pose()
         self._step = 10
 
@@ -106,7 +109,7 @@ class Mission():
 
         ## Go backward to avoid collision with printer frame
 
-        hang_pose = sm.SE3(0.05,0,0) @ self._picker_robot.get_ee_pose()
+        hang_pose = sm.SE3(0.1,0,0) @ self._picker_robot.get_ee_pose()
         self._picker_robot.go_to_cartesian_pose(hang_pose)
         print('plate hanged')
 
@@ -132,7 +135,7 @@ class Mission():
         ready_js[0] = -np.pi/2
         self._bender_robot.go_to_joint_angles(ready_js)
 
-        plate_pose = sm.SE3(0,-0.11,0)  @ position @ sm.SE3.Rz(180, unit='deg')
+        plate_pose = sm.SE3.Rz(180, unit='deg') @ sm.SE3(0,-0.11,0) @ position 
         self._bender_robot.go_to_cartesian_pose(plate_pose)
         # pass
         print('astor gripped')
@@ -201,7 +204,7 @@ class Mission():
     def run(self):
 
         self._grip_plate_edge()
-        plate_desired_pose = sm.SE3(0.51, 0.14, 0.86) @ sm.SE3.RPY(-90.0,0.6,90.0, unit = 'deg', order='xyz')
+        plate_desired_pose = sm.SE3(0.51, 0.15, 0.87) @ sm.SE3.RPY(-90.0,0.6,90.0, unit = 'deg', order='xyz')
         self._move_plate(plate_desired_pose)
         self._astor_grip(plate_desired_pose)
 

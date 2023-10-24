@@ -34,6 +34,11 @@ class Controller():
         self.object = None
         self._log = log
 
+        if self._robot.name == 'Sawyer':
+            self._ee_offset = sm.SE3(0, 0, 0.138)
+        elif self._robot.name == 'Astorino':
+            self._ee_offset = sm.SE3(0, 0, 0.1)
+
         # Dispatch table
         self._dispatch = {
             "ENABLE": self.enable_system,
