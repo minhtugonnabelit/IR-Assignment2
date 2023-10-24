@@ -12,59 +12,90 @@ class Plate():
 
     FULL_DIST = 0.22
     SEGMENT_NUM = 11 # odd num
+
     SEGMENT_LENGTH = FULL_DIST / SEGMENT_NUM
+    MID_TO_EDGE = SEGMENT_LENGTH * int((SEGMENT_NUM-1)/2)
 
     def __init__(self, pose : SE3, env : Swift):
         """
-        pose: the first segment's pose represents the whole plate's pose
+        _pose: the middle segment's pose represents the whole plate's pose
         """
         self._env = env
         file_name = os.path.join(os.path.abspath(os.path.dirname(__file__)),'mesh','plate.dae')
         
         self._segments = [geometry.Mesh(file_name, color = (1,95/255,31/255,1)) for i in range(Plate.SEGMENT_NUM)]
-        
-        self.flat_plate_update(pose)
+
+        self.move_flat_plate(pose)
         self.add_to_env()
 
 
-    def set_pose(self, pose):
-        self._mesh.T = pose
+    # def set_pose(self, pose):
+    #     self._mesh.T = pose
 
-    def get_pose(self):
-        return copy.deepcopy(self._mesh.T)
+    # def get_pose(self):
+    #     return self._pose
 
-    def flat_plate_update(self, pose : SE3):
-        seg_pose = pose
+    def move_flat_plate(self, pose : SE3):
+        """
+        Update new position, update as internal state  
+        pose : middle segment
+        first_seg_pose : position to grip
+        """
+        self._pose = pose
+        
+        first_seg_pose = pose * SE3.Trans(-Plate.MID_TO_EDGE,0,0) 
+        seg_pose = first_seg_pose
         for seg in self._segments:
             seg.T = seg_pose
             seg_pose *= SE3.Trans(Plate.SEGMENT_LENGTH,0,0)
+
+        return first_seg_pose
+
 
     def add_to_env(self):
         for seg in self._segments:
             self._env.add(seg)
 
-    def bend(self, i):
+
+    def bend(self, i, seg_array):
+        """
+        Bend the plate
+        Return gripper pose from 2 edges
+        """
 
         # The anchor point stays staionary during bending
         anchor_segment_number = int((Plate.SEGMENT_NUM-1)/2) #5
-        anchor_point = self._segments[anchor_segment_number].T 
 
-        # Theta is the orientation of each segment
-        step = 10
+        # Pose of 2 gripper
+        picker_pose = None
+        bender_pose = None
 
-        # Increment is the increment of theta after each step
-        INCREMENT = pi/30 * i
-
-        theta = anchor_point
-        for seg in self._segments[(anchor_segment_number+1):]:
-            theta = theta * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(-INCREMENT) * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0)
-            seg.T = theta         
-
-        theta = anchor_point
+        # Bending parameters        
+        # Increment is the increment of seg_pose after each step
+        INCREMENT = pi/300 * i
+        
+        seg_pose = self._pose
         for seg in self._segments[:anchor_segment_number]:
+            seg_pose = seg_pose * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(INCREMENT) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
+            seg.T = seg_pose     
+            seg_array.append(seg_pose)
+        picker_pose = seg_pose
 
-            theta = theta * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(INCREMENT) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
-            seg.T = theta      
+        seg_array.append(self._pose)
+
+        seg_pose = self._pose
+        for seg in self._segments[(anchor_segment_number+1):]:
+            seg_pose = seg_pose * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(-INCREMENT) * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0)
+            seg.T = seg_pose   
+            seg_array.append(seg_pose)      
+        bender_pose = seg_pose
+
+        return [picker_pose, bender_pose]
+
+
+    def unbend(self, seg_array):
+        for index_seg, seg in enumerate(self._segments):
+            seg.T = seg_array[index_seg]
 
 
 if __name__ == "__main__":
