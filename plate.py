@@ -7,7 +7,14 @@ from swift import Swift
 
 class Plate():
     """
+    Class for simulating the printer's plate
     The frame of each segment is at its center
+    
+    The Plate should be moved in flat state
+    After moved to dropping location, perform tilting also with move_flat_plate 
+    Then conduct bending, unbend and tilt back 
+
+    Check out plat_test.py
     """
 
     FULL_DIST = 0.22
@@ -60,11 +67,12 @@ class Plate():
     def bend(self, i, seg_array):
         """
         Bend the plate
-        Return gripper pose from 2 edges
+        Return the pose of 2 outer segments
+        Shoule be further converted to gripper poses 
         """
 
         # The anchor point stays staionary during bending
-        anchor_segment_number = int((Plate.SEGMENT_NUM-1)/2) #5
+        middle_segment_number = int((Plate.SEGMENT_NUM-1)/2) #5
 
         # Pose of 2 gripper
         picker_pose = None
@@ -75,16 +83,17 @@ class Plate():
         INCREMENT = pi/300 * i
         
         seg_pose = self._pose
-        for seg in self._segments[:anchor_segment_number]:
+        for seg in self._segments[:middle_segment_number]:
             seg_pose = seg_pose * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(INCREMENT) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
             seg.T = seg_pose     
             seg_array.append(seg_pose)
         picker_pose = seg_pose
 
+        # Middle segment
         seg_array.append(self._pose)
 
         seg_pose = self._pose
-        for seg in self._segments[(anchor_segment_number+1):]:
+        for seg in self._segments[(middle_segment_number+1):]:
             seg_pose = seg_pose * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(-INCREMENT) * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0)
             seg.T = seg_pose   
             seg_array.append(seg_pose)      
