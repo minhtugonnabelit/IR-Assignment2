@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 3.5.1 commit date:2023-04-24, commit time:18:11, hash:e1ccd9d4a1d3</authoring_tool>
+    </contributor>
+    <created>2023-10-25T07:19:19</created>
+    <modified>2023-10-25T07:19:19</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="Material_040-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0.8000001 0.009291013 0.01872951 1</color>
+            </diffuse>
+            <index_of_refraction>
+              <float sid="ior">1.45</float>
+            </index_of_refraction>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="Material_042-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0 0 0 1</color>
+            </diffuse>
+            <index_of_refraction>
+              <float sid="ior">1.45</float>
+            </index_of_refraction>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_images/>
+  <library_materials>
+    <material id="Material_040-material" name="Material.040">
+      <instance_effect url="#Material_040-effect"/>
+    </material>
+    <material id="Material_042-material" name="Material.042">
+      <instance_effect url="#Material_042-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Astorino_Robot_Gripper_Left-mesh" name="Astorino Robot Gripper Left">
+      <mesh>
+        <source id="Astorino_Robot_Gripper_Left-mesh-positions">
+          <float_array id="Astorino_Robot_Gripper_Left-mesh-positions-array" count="234">40.01996 15 10.10273 7.019997 15 10.10273 40.01996 2.5 10.10273 7.019997 2.5 10.10273 7.019997 -10.86824 55.02677 7.019997 -11.7101 54.80119 7.019997 -2.5 45.10273 7.019997 -12.5 54.43285 7.019997 -15 10.10273 7.019997 -2.5 10.10273 7.019997 -15 50.10272 7.019997 11.7101 54.80119 7.019997 10.86824 55.02677 7.019997 2.5 45.10273 7.019997 10 55.10272 7.019997 -10 55.10272 7.019997 -13.21394 53.93295 7.019997 -13.83022 53.31666 7.019997 -14.33013 52.60272 7.019997 15 50.10272 7.019997 14.92404 50.97097 7.019997 -14.69846 51.81282 7.019997 -14.92404 50.97097 7.019997 14.69846 51.81282 7.019997 14.33013 52.60272 7.019997 13.83022 53.31666 7.019997 13.21394 53.93295 7.019997 12.5 54.43285 0.01999664 15 10.10273 0.01999664 -15 10.10273 2.019997 15 10.10273 2.019997 -15 10.10273 0.01999664 5.200001 0.1027259 40.01996 5.200001 0.1027259 0.01999664 -5.2 0.1027259 40.01996 -5.2 0.1027259 40.01996 9.8 0.1027259 0.01999664 9.8 0.1027259 40.01996 15 0.1027259 0.01999664 15 0.1027259 2.019997 15 50.10272 40.01996 2.5 20.10273 40.01996 -2.5 20.10273 40.01996 -2.5 10.10273 40.01996 9.8 -2.697271 40.01996 -15 10.10273 40.01996 -15 0.1027259 40.01996 -9.800002 0.1027259 40.01996 5.200001 -2.697271 40.01996 -5.2 -2.697271 40.01996 -9.800002 -2.697271 0.01999664 -15 0.1027259 2.019997 -15 50.10272 0.01999664 -9.800002 0.1027259 0.01999664 -5.2 -2.697271 0.01999664 -9.800002 -2.697271 0.01999664 5.200001 -2.697271 0.01999664 9.8 -2.697271 2.019997 -10.86824 55.02677 2.019997 -10 55.10272 2.019997 10 55.10272 2.019997 10.86824 55.02677 2.019997 11.7101 54.80119 2.019997 12.5 54.43285 2.019997 14.92404 50.97097 2.019997 13.83022 53.31666 2.019997 14.33013 52.60272 2.019997 14.69846 51.81282 2.019997 -14.33013 52.60272 2.019997 -13.83022 53.31666 2.019997 -14.69846 51.81282 2.019997 -14.92404 50.97097 2.019997 -13.21394 53.93295 2.019997 -12.5 54.43285 2.019997 -11.7101 54.80119 2.019997 13.21394 53.93295 12.01997 2.5 45.10273 12.01997 -2.5 45.10273</float_array>
+          <technique_common>
+            <accessor source="#Astorino_Robot_Gripper_Left-mesh-positions-array" count="78" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Astorino_Robot_Gripper_Left-mesh-normals">
+          <float_array id="Astorino_Robot_Gripper_Left-mesh-normals-array" count="192">0 0 1 1 0 0 1 5.60825e-7 0 1 -1.41731e-7 0 1 1.41729e-7 0 1 -6.54306e-7 0 1 -2.37533e-7 0 1 3.12803e-7 0 1 -2.54702e-7 0 1 2.54701e-7 0 1 2.3631e-7 0 1 -3.12803e-7 0 1 3.27156e-7 0 1 -5.60823e-7 0 0 0 -1 0 1 0 0 1 -1.52588e-7 1 -8.86109e-7 0 0 -1 0 -1 0 0 -1 -1.50463e-7 0 -1 2.38464e-7 0 -1 -1.80751e-6 0 -1 1.89251e-7 0 -1 -2.38467e-7 0 -1 0 0 -1 -7.57016e-7 0 -1 9.2708e-7 0 -1 -1.2173e-6 0 0.6660158 0 0.7459377 0 -0.9961947 0.08715581 0 -0.9961951 0.08715236 0 -0.9659253 0.2588208 0 -0.9659262 0.2588175 0 -0.9063075 0.4226191 0 -0.9063075 0.422619 0 -0.8191526 0.5735757 0 -0.819151 0.5735781 0 -0.7071086 0.707105 0 -0.7071103 0.7071033 0 -0.5735721 0.8191552 0 -0.5735722 0.8191552 0 -0.4226217 0.9063062 0 -0.4226225 0.9063059 0 -0.258822 0.965925 0 -0.2588216 0.9659252 0 -0.08715224 0.9961951 0 0.9961948 0.08715587 0 0.9961947 0.08715581 0 0.9659253 0.2588208 0 0.9659262 0.2588175 0 0.9063089 0.4226161 0 0.9063075 0.4226191 0 0.8191526 0.5735757 0 0.8191511 0.5735781 0 0.7071068 0.7071068 0 0.7071069 0.7071068 0 0.5735738 0.819154 0 0.5735754 0.8191528 0 0.4226205 0.9063068 0 0.4226204 0.9063068 0 0.2588224 0.965925 0 0.2588225 0.965925 0 0.08715236 0.9961951</float_array>
+          <technique_common>
+            <accessor source="#Astorino_Robot_Gripper_Left-mesh-normals-array" count="64" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Astorino_Robot_Gripper_Left-mesh-vertices">
+          <input semantic="POSITION" source="#Astorino_Robot_Gripper_Left-mesh-positions"/>
+        </vertices>
+        <triangles material="Material_040-material" count="151">
+          <input semantic="VERTEX" source="#Astorino_Robot_Gripper_Left-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Astorino_Robot_Gripper_Left-mesh-normals" offset="1"/>
+          <p>0 0 1 0 2 0 2 0 1 0 3 0 4 1 5 1 6 1 6 2 5 2 7 2 8 1 9 1 10 1 11 1 12 1 13 1 13 3 12 3 14 3 13 1 14 1 6 1 6 1 14 1 15 1 6 4 15 4 4 4 7 5 16 5 6 5 6 6 16 6 17 6 6 7 17 7 18 7 3 1 1 1 13 1 13 1 1 1 19 1 13 8 19 8 20 8 18 1 21 1 6 1 6 1 21 1 22 1 6 9 22 9 10 9 20 1 23 1 13 1 13 10 23 10 24 10 13 11 24 11 25 11 25 1 26 1 13 1 13 12 26 12 27 12 13 13 27 13 11 13 28 0 29 0 30 0 30 0 29 0 31 0 32 14 33 14 34 14 34 14 33 14 35 14 36 14 37 14 38 14 38 14 37 14 39 14 1 15 0 15 38 15 39 15 28 15 30 15 40 15 19 15 30 15 30 15 19 15 1 15 30 15 1 15 39 15 39 16 1 16 38 16 2 1 41 1 42 1 43 17 44 17 36 17 45 1 46 1 43 1 43 1 46 1 47 1 38 1 0 1 36 1 36 1 0 1 2 1 36 1 2 1 43 1 43 1 2 1 42 1 48 1 44 1 33 1 33 1 44 1 43 1 33 1 43 1 35 1 35 1 43 1 47 1 35 1 47 1 49 1 49 1 47 1 50 1 31 18 29 18 51 18 46 18 45 18 8 18 10 18 52 18 8 18 8 18 52 18 31 18 8 18 31 18 46 18 46 18 31 18 51 18 53 19 51 19 29 19 28 19 39 19 29 19 29 19 39 19 37 19 34 19 54 19 55 19 55 19 53 19 34 19 34 19 53 19 29 19 34 19 29 19 32 19 32 19 29 19 37 19 32 19 37 19 56 19 56 19 37 19 57 19 45 0 43 0 8 0 8 0 43 0 9 0 51 14 53 14 46 14 46 14 53 14 47 14 49 15 54 15 35 15 35 15 54 15 34 15 50 14 55 14 49 14 49 14 55 14 54 14 47 18 53 18 50 18 50 18 53 18 55 18 48 14 56 14 44 14 44 14 56 14 57 14 33 18 32 18 48 18 48 18 32 18 56 18 44 15 57 15 36 15 36 15 57 15 37 15 58 19 59 19 52 19 30 19 31 19 40 19 40 19 31 19 52 19 52 19 59 19 40 19 40 19 59 19 60 19 40 20 60 20 61 20 61 19 62 19 40 19 40 21 62 21 63 21 40 19 63 19 64 19 65 22 66 22 67 22 68 19 69 19 70 19 70 19 69 19 71 19 69 19 72 19 71 19 71 23 72 23 73 23 71 19 73 19 52 19 52 24 73 24 74 24 52 25 74 25 58 25 64 26 63 26 67 26 67 27 63 27 75 27 67 28 75 28 65 28 60 0 59 0 14 0 14 0 59 0 15 0 41 15 2 15 76 15 76 15 2 15 3 15 76 15 3 15 13 15 43 18 42 18 9 18 9 18 42 18 77 18 9 18 77 18 6 18 13 0 6 0 76 0 76 0 6 0 77 0 76 29 77 29 41 29 41 29 77 29 42 29 52 30 10 30 22 30 52 31 22 31 71 31 71 32 22 32 21 32 71 33 21 33 70 33 70 34 21 34 18 34 70 35 18 35 68 35 68 36 18 36 17 36 68 37 17 37 69 37 69 38 17 38 16 38 69 39 16 39 72 39 72 40 16 40 7 40 72 41 7 41 73 41 73 42 7 42 5 42 73 43 5 43 74 43 74 44 5 44 4 44 74 45 4 45 58 45 58 46 4 46 15 46 58 46 15 46 59 46 19 47 40 47 64 47 19 48 64 48 20 48 20 49 64 49 67 49 20 50 67 50 23 50 23 51 67 51 66 51 23 52 66 52 24 52 24 53 66 53 65 53 24 54 65 54 25 54 25 55 65 55 75 55 25 56 75 56 26 56 26 57 75 57 63 57 26 58 63 58 27 58 27 59 63 59 62 59 27 60 62 60 11 60 11 61 62 61 61 61 11 62 61 62 12 62 12 63 61 63 60 63 12 63 60 63 14 63</p>
+        </triangles>
+        <triangles material="Material_042-material" count="1">
+          <input semantic="VERTEX" source="#Astorino_Robot_Gripper_Left-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Astorino_Robot_Gripper_Left-mesh-normals" offset="1"/>
+          <p>10 1 9 1 6 1</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Astorino_Robot_Gripper_Left" name="Astorino Robot Gripper Left" type="NODE">
+        <matrix sid="transform">-4.37114e-11 0 -0.001 0 0 0.001 0 0 0.001 0 -4.37114e-11 0 0 0 0 1</matrix>
+        <instance_geometry url="#Astorino_Robot_Gripper_Left-mesh" name="Astorino Robot Gripper Left">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Material_040-material" target="#Material_040-material"/>
+              <instance_material symbol="Material_042-material" target="#Material_042-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
