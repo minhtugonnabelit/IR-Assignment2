@@ -1,0 +1,18 @@
+2023-10-24 15:24:33,095,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:24:53,120,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:24:53,121,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:24:57,481,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:26:39,483,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:26:59,501,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:26:59,502,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:27:03,756,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:27:23,912,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:27:43,903,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:27:43,903,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:27:47,560,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:29:10,812,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:29:30,801,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:29:30,802,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:29:34,733,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:29:42,772,INFO,controller.py,enable_system,588,System is enabled. Ready for operation.
+2023-10-24 15:29:48,331,INFO,controller.py,is_arrived,515,Provided joint states is Done
