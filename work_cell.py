@@ -38,7 +38,7 @@ class WorkCell():
         self._light_curtain_laser = self._add_model('light_curtain_laser.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-
+        
     def get_cell_center(self):
         """
         Getter for cell center
@@ -47,6 +47,15 @@ class WorkCell():
             _type_: _description_
         """
         return copy.deepcopy(self._center)
+    
+    def get_cart_location(self):
+        """
+        Getter for cart location
+
+        Returns:
+            _type_: _description_
+        """
+        return copy.deepcopy(self._cart.T)
 
     def move_human(self, pose):
         """
