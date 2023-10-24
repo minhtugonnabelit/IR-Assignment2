@@ -8,7 +8,6 @@ import numpy as np
 import spatialmath as sm
 import spatialgeometry as geometry
 from rectangularprism import RectangularPrism
-from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
 from safety import Safety
 
@@ -45,12 +44,12 @@ class Controller():
             "-Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.1, 0),),
             "+Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.1),),
             "-Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.1),),
-            "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), time=0.1),
-            "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), time=0.1),
-            "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), time=0.1),
-            "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), time=0.1),
-            "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), time=0.1),
-            "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), time=0.1),
+            "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), duration=0.1),
+            "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), duration=0.1),
+            "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), duration=0.1),
+            "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), duration=0.1),
+            "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), duration=0.1),
+            "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), duration=0.1),
             "JOINT_ANGLES": self.move,
             "CARTESIAN_POSE": self.move_cartesian,
             "GAMEPAD_ENABLE": self.gamepad_control,
@@ -88,7 +87,8 @@ class Controller():
 
         return self.avoidance_object
 
-    def _joystick_init(self):
+    @staticmethod
+    def _joystick_init():
 
         # Setup joystick
         pygame.init()
@@ -191,7 +191,23 @@ class Controller():
         Execute a cartesian space trajectory
 
         """
-        self.go_to_cartesian_pose(self._ui_pose, time=3)
+        self.go_to_cartesian_pose(self._ui_pose, duration=2)
+
+    # -----------------------------------------------------------------------------------#
+    # Gripper function:
+
+    def open_gripper(self):
+        """
+        Open gripper
+        """
+        self._robot.open_gripper()
+
+
+    def close_gripper(self):
+        """
+        Close gripper
+        """
+        self._robot.close_gripper()
 
         
     # -----------------------------------------------------------------------------------#
@@ -211,16 +227,19 @@ class Controller():
         convert it to robot end effector velocity to solve for joint velocity
         """
 
-        self._joystick = self._joystick_init()
+        joystick = Controller._joystick_init()
         self._disable_gamepad = False
 
-        if self._joystick is not None:
+        if joystick is not None:
 
             # Print joystick information
-            self._joystick.init()
+
+            joystick.init()
             vel_scale = {'linear': 0.7, 'angular': 0.8}
 
+
             # Main loop to check joystick functionality
+
             while not self._disable_gamepad:
 
                 for event in pygame.event.get():
@@ -228,38 +247,44 @@ class Controller():
                         pygame.quit()
                         sys.exit()
 
-                if self._joystick.get_button(3):
+                if joystick.get_button(3):
                     if self._state == 'STOPPED':
                         self.disengage_estop()
                     else:
                         self.engage_estop()
 
-                if self._joystick.get_button(5):
+                if joystick.get_button(5):
                     self.enable_system()
 
                 if self.system_activated():
 
-                    if self._joystick.get_button(4):
+                    if joystick.get_button(4):
                         self.go_to_home()
 
+                    if joystick.get_button(6):
+                        self._robot.open_gripper()
+
+                    if joystick.get_button(7):
+                        self._robot.close_gripper()
+
                     vz = 0
-                    if self._joystick.get_button(1):
+                    if joystick.get_button(1):
                         vz = 0.5
-                    elif self._joystick.get_button(2):
+                    elif joystick.get_button(2):
                        vz = -0.5
                     
 
                     # get linear and angular velocity
 
-                    linear_vel = np.asarray([self._joystick.get_axis(1), -self._joystick.get_axis(0), vz]) * vel_scale['linear'] 
-                    angular_vel = np.asarray([self._joystick.get_axis(3), self._joystick.get_axis(4), 0]) * vel_scale['angular']
+                    linear_vel = np.asarray([joystick.get_axis(1), -joystick.get_axis(0), vz]) * vel_scale['linear'] 
+                    angular_vel = np.asarray([0, joystick.get_axis(4), joystick.get_axis(3)]) * vel_scale['angular']
                     ee_vel = np.hstack((linear_vel, angular_vel))
 
 
                     # collision avoidance damping
 
                     d_thresh = 0.05
-                    time_step = 0.01
+                    time_step = 0.05
                     gamepad_max_gain = 1
 
                     self.is_collided = False
@@ -298,7 +323,7 @@ class Controller():
 
 
                     # send joint command to robot to execute desired motion. Currently available mode is position mode
-                    self._robot.send_joint_command(self._robot.q)
+                    self._robot.send_joint_command(q)
                     time.sleep(time_step)
         else:
             self._log.error('No joystick found!')

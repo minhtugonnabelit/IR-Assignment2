@@ -1,6 +1,7 @@
 from spatialmath import SE3
 import spatialgeometry as geometry
 import os
+import copy
 from math import pi
 from swift import Swift
 
@@ -24,10 +25,13 @@ class Plate():
         
         self.flat_plate_update(pose)
         self.add_to_env()
-        
+
 
     def set_pose(self, pose):
-            self._mesh.T = pose
+        self._mesh.T = pose
+
+    def get_pose(self):
+        return copy.deepcopy(self._mesh.T)
 
     def flat_plate_update(self, pose : SE3):
         seg_pose = pose

@@ -72,7 +72,7 @@ class RobotGUI:
 
         self.work_cell = WorkCell(self.env, self._cell_center)
         self.plate = Plate(self._cell_center @
-                           sm.SE3(0.87, 0.87, 0.87), self.env)
+                           sm.SE3(-0.45, 0.9, 0.905), self.env)
 
         # Initialize robot
 
@@ -81,10 +81,10 @@ class RobotGUI:
 
         self.sawyer = Sawyer(
             env=self.env, 
-            base=base_original_robot)
+            base=base_original_robot,
+            gripper_ready=True)
         self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))   
 
-        
         self.astorino = Astorino( 
             env=self.env, 
             base=base_original_robot @ transl2robot)
@@ -97,9 +97,11 @@ class RobotGUI:
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
+
         self.astorino_controller = ControllerInterface(self.astorino, self.log)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
+
 
         # Initialize mission manager
 
@@ -107,7 +109,11 @@ class RobotGUI:
                                self.work_cell,
                                self.sawyer_controller, 
                                self.astorino_controller)
-        self.collision_setup()  # set up collision
+        
+         # set up collision
+
+        self.collision_setup() 
+
 
         # Initialize GUI
 
@@ -818,7 +824,7 @@ class RobotGUI:
                 self.log.warning(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
-        pose = self.sawyer.base @ sm.SE3(input_values[0], input_values[1], input_values[2]
+        pose = sm.SE3(input_values[0], input_values[1], input_values[2]
                                          ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
 
         self.sawyer_controller.set_cartesian_value(pose)
@@ -1005,13 +1011,13 @@ class RobotGUI:
             self.mission.run()
 
     def getori(self, robot):
-        ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3])
+        ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
         return ori
 
     def collision_setup(self):
 
         side = [0.2, 0.2, 0.2]
-        center = self._cell_center @ sm.SE3(0., 0., 1)
+        center = self._cell_center @ sm.SE3(-0.2, 0., 0.87)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
 

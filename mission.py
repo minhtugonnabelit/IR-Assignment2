@@ -41,11 +41,13 @@ class Mission():
         # -----------------
         # Use getter function (TODO) of these controllers to keep track of their current position /
         self._plate = plate
+        self._workcell = workcell
         self._picker_robot = picker_robot
         self._bender_robot = bender_robot
 
         #----------------
-        self._plate_position = sm.SE3(0.87,0.87,0.87)
+        self._cell_center = self._workcell.get_cell_center()
+        # self._plate_position = self._plate.get_pose()
         self._step = 10
 
     def _home_system(self):
@@ -71,19 +73,70 @@ class Mission():
         STEP 2 : Grip the edge of the plate
         After this step, use the _plate_position to coordinate the arm(s)
         """
-        pass
+
+        ## Approach the plate and grip 
+        """
+        Supposed to get plate location and orientation from vision system
+        OR directly get plate pose from object and use it to define grasp pose
+        
+        Both method currently not available, so use a fixed pose for now"""
+                                    
+        # plate_pose = self._plate.get_pose().A
+        # grip_pose = plate_pose @ sm.SE3(0.11,0,0)
+        
+        
+        grip_pose = sm.SE3(-0.09,0.91,0.91) @ sm.SE3.RPY(32.43,-87.63,-157.74, unit = 'deg', order='xyz') 
+        self._picker_robot.go_to_cartesian_pose(grip_pose)
+        self._picker_robot.close_gripper()
+        print('plate gripped')
+
+        # pass
 
     def _move_plate(self, postion : sm.SE3):
         """
         STEP 3: Move the print plate to the specified position
         """
-        pass
 
-    def _astor_grip(self):
+        ## Lift the plate
+
+        lift_pose = sm.SE3(0,0,0.1) @ self._picker_robot.get_ee_pose()
+        self._picker_robot.go_to_cartesian_pose(lift_pose)
+        print('plate lifted')
+
+
+        ## Go backward to avoid collision with printer frame
+
+        hang_pose = sm.SE3(0.05,0,0) @ self._picker_robot.get_ee_pose()
+        self._picker_robot.go_to_cartesian_pose(hang_pose)
+        print('plate hanged')
+
+        ## Move to the specified position
+
+        """
+        manually generate a path other than a straight line to avoid singularity 
+        OR use the feedback control to auto complete the path"""
+
+        plate_pose = sm.SE3(0,0.11,0) @ postion 
+        desired_js = self._picker_robot.get_robot().ikine_LM(plate_pose, q0 = self._picker_robot.get_joint_angles()).q
+        self._picker_robot.go_to_joint_angles(desired_js)
+        # self._picker_robot.go_to_cartesian_pose(plate_pose)
+        print('plate moved')
+
+
+
+    def _astor_grip(self, position : sm.SE3):
         """
         STEP 4: Astor joins by gripping the other side of the plate
         """
-        pass
+        ready_js = self._bender_robot.get_joint_angles()
+        ready_js[0] = -np.pi/2
+        self._bender_robot.go_to_joint_angles(ready_js)
+
+        plate_pose = sm.SE3(0,-0.11,0)  @ position @ sm.SE3.Rz(180, unit='deg')
+        self._bender_robot.go_to_cartesian_pose(plate_pose)
+        # pass
+        print('astor gripped')
+
 
     def _drop_obejct(self):
         """
@@ -146,9 +199,14 @@ class Mission():
 
 
     def run(self):
-        print('bruh')
-        qgoal_a = [0, 0, 0, 0, 0, 0]
-        self._bender_robot.go_to_joint_angles(qgoal_a)
+
+        self._grip_plate_edge()
+        plate_desired_pose = sm.SE3(0.51, 0.14, 0.86) @ sm.SE3.RPY(-90.0,0.6,90.0, unit = 'deg', order='xyz')
+        self._move_plate(plate_desired_pose)
+        self._astor_grip(plate_desired_pose)
+
+
+
 
 
     def test(self):

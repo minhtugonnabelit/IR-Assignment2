@@ -9,8 +9,8 @@ import spatialmath.base as smb
 import spatialgeometry as geometry
 
 from swift import Swift
-# from robot.m_DHRobot3D import M_DHRobot3D
-from m_DHRobot3D import M_DHRobot3D
+from robot.m_DHRobot3D import M_DHRobot3D
+# from m_DHRobot3D import M_DHRobot3D
 import ir_support
 
 class Sawyer(M_DHRobot3D):
@@ -85,7 +85,8 @@ class Sawyer(M_DHRobot3D):
         self.set_neutral_js(self._NEUTRAL)
 
         # Add gripper
-        self.gripper = Gripper_Sawyer(env, sawyer_ee= self.fkine(self.q))
+        # self.gripper = Gripper_Sawyer(env, sawyer_ee= self.fkine(self.q))
+        self.gripper = SawyerGripper(base= self.fkine(self.q))
         self.update_sim()
 
 
@@ -122,6 +123,7 @@ class Sawyer(M_DHRobot3D):
 
         return links
 
+
     def _add_model(self, file_path, placement, color=None):
         """
         Add model to simulation environment
@@ -138,6 +140,7 @@ class Sawyer(M_DHRobot3D):
         self._env.add(model, collision_alpha=1)
         return model
 
+
     def update_sim(self):
         """
         Reconfigure robot to home position set by user
@@ -145,7 +148,7 @@ class Sawyer(M_DHRobot3D):
         """
         self.add_to_env(self._env)
         if self._gripper_ready:
-            self.gripper.base = self.get_jointstates()
+            self.gripper.base = self.fkine(self.get_jointstates())
             self.gripper.add_to_env(self._env)
 
 
@@ -206,6 +209,19 @@ class Sawyer(M_DHRobot3D):
             self.gripper.base = self.fkine(self.get_jointstates())
         self._env.step(0)
 
+    def open_gripper(self):
+        """
+        Function to open gripper
+        """
+        self.gripper.open()
+
+
+    def close_gripper(self):
+        """
+        Function to close gripper
+        """
+        self.gripper.close()
+
 
     def rotate_head(self, angle):
         """
@@ -221,10 +237,10 @@ class Sawyer(M_DHRobot3D):
             self._head.T = smb.trotz(i) @ head_from_base
             self._env.step(0.02)
             
-    def move_gripper(self, sawyer_ee):
-        self.gripper.move_gripper(sawyer_ee= sawyer_ee)
-        self.gripper.Gripper_Left._update_3dmodel()
-        self.gripper.Gripper_Right._update_3dmodel()
+    # def move_gripper(self, sawyer_ee):
+    #     self.gripper.move_gripper(sawyer_ee= sawyer_ee)
+    #     self.gripper.Gripper_Left._update_3dmodel()
+    #     self.gripper.Gripper_Right._update_3dmodel()
 
     # -----------------------------------------------------------------------------------#
     # ENV TESTING
@@ -248,6 +264,189 @@ class Sawyer(M_DHRobot3D):
         # fig.hold()
 
         # self._env.hold()
+
+
+class Finger(M_DHRobot3D):
+    """
+    Finger class is a subclass of DHRobot3D class
+    """
+
+    def __init__(self, base, links, link3D_names, name=None, qtest=None):
+
+        qtest = [0]
+        finger_transform = [
+            smb.transl(0,0,0) @ smb.troty(-np.pi/2),
+            smb.transl(-0.0715,0.0042,-0.0029)
+        ]
+
+
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        gripper_path = os.path.join(current_path, "Sawyer_model")
+
+
+        super().__init__(
+            links,
+            link3D_names,
+            gripper_path,
+            name,
+            qtest,
+            qtest_transforms=finger_transform,
+        )
+        self.base = base
+
+
+class SawyerGripper:
+    """
+    Sawyer gripper class is a subclass of DHRobot3D class
+
+    """
+
+    _qtest = [0]
+
+    @property
+    def base(self):
+        return self._base
+
+    def __init__(self, base=sm.SE3(0, 0, 0)):
+
+        links = self._create_DH()
+        base_init = sm.SE3(0, 0, 0)  # This base is created just to initial the gripper model, then the main 'base' as a class property is used for asssiging the primary base
+        self._base = base
+
+
+        ## Right finger properties
+
+        right_link3D_names = dict(
+            link0 = "sawyer_gripper_base",
+            link1 = "sawyer_gripper_right"
+        )
+
+        self._right_finger = Finger(
+            base_init,
+            links,
+            right_link3D_names,
+            name="right_f",
+            qtest=self._qtest,
+        )
+
+        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self._right_finger.base = (
+            self._base.A @ self.base_tf_right.A
+        )  
+
+
+        # Left finger properties
+
+        left_link3D_names = dict(
+            link0 = "sawyer_gripper_base",
+            link1 = "sawyer_gripper_left"
+        )
+
+        self._left_finger = Finger(
+            base_init, links, 
+            left_link3D_names, 
+            name="left_f", 
+            qtest=self._qtest
+        )
+
+        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self._left_finger.base = (
+            self._base.A @ self.base_tf_left.A
+        )
+
+
+    # -----------------------------------------------------------------------------------#
+    def close(self):
+        """
+        Function to close gripper model
+        """
+        q_goal = np.array([0.03])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, -1*q_goal,steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, q_goal,steps).q
+        
+        for i in range (steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.02)
+
+    def open(self):
+        """
+        Function to open gripper model
+        """
+        q_goal = np.array([0])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, q_goal,steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, q_goal,steps).q
+        
+        for i in range (steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.02) 
+
+
+    # -----------------------------------------------------------------------------------#
+    def _create_DH(self):
+        """
+        The gripper chosen to use for this mission is Onrobot gripper RG6
+
+            Gripper model is constructed by one base with two fingers
+            Base is considered as a statis object attached to robot end-effectorand transform along with ee pose .
+            Two fingers are models as two 2-links plannar robots with a constraint for the ee of those plannar always align local z axis of the gripper base
+        """
+        links = []
+        
+        link = rtb.PrismaticDH(alpha= 0, offset= 0, qlim= [-24.19, 24.19])
+        links.append(link)
+        
+        return links
+    
+
+    # -----------------------------------------------------------------------------------#
+    def add_to_env(self, env):
+        """
+        Function to add 2 fingers model to environment
+        """
+
+        # add 2 fingers to the environment
+
+        self._env = env
+        self._right_finger.add_to_env(env)
+        self._left_finger.add_to_env(env)
+
+
+    # -----------------------------------------------------------------------------------#
+    def set_base(self, newbase):
+        """
+        Function to update gripper base
+        """
+
+        # assign new base for the gripper to be attached with robot ee given
+
+        self._right_finger.base = newbase.A @ self.base_tf_right.A
+        self._left_finger.base = newbase.A @ self.base_tf_left.A
+
+
+        # give empty q so that gripper model is updated on swift
+
+        self._right_finger.q = self._right_finger.q
+        self._left_finger.q = self._left_finger.q
+
+
+    # -----------------------------------------------------------------------------------#
+    def __setattr__(self, name, value):
+        """
+        Overload `=` operator so the object can update its 3D model whenever a new base is assigned
+        """
+
+        if name == "base" and hasattr(self, "base"):
+            self.set_base(value)  # Update the 3D model before setting the attribute
+        else:
+            super().__setattr__(
+                name, value
+            )  # Call the base class method to set the attribute
+
+
 
 
 # ---------------------------------------------------------------------------------------#
@@ -491,23 +690,31 @@ if __name__ == "__main__":
     env.launch(realtime=True)
 
     # generate robot
-    r = Sawyer(env)
-    # r.test()
-
+    r = Sawyer(env, gripper_ready=True)
     
     time.sleep(2)
     q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
     qtraj = rtb.jtraj(r.q, q_goal, 200).q
     for q in qtraj:
-        r.q = q
-        r.move_gripper(r.fkine(r.q))
-        env.step(0.02)
+
+        r.send_joint_command(q)
+        time.sleep(0.02)
     
-    while True:
-        time.sleep(0.2)
-        r.gripper.close_gripper()
-        time.sleep(0.2)
-        r.gripper.open_gripper()
-        
+    #     r.q = q
+    #     r.move_gripper(r.fkine(r.q))
+    #     env.step(0.02)
+    
+    # while True:
+    #     time.sleep(0.2)
+    #     r.gripper.close_gripper()
+    #     time.sleep(0.2)
+    #     r.gripper.open_gripper()
+
+    r.close_gripper()
+    time.sleep(1)
+    r.open_gripper()
     env.hold()
+
+        
+
 

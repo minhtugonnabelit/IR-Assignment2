@@ -39,6 +39,15 @@ class WorkCell():
         self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
 
+    def get_cell_center(self):
+        """
+        Getter for cell center
+
+        Returns:
+            _type_: _description_
+        """
+        return copy.deepcopy(self._center)
+
     def move_human(self, pose):
         """
         Function to move human model in simulation

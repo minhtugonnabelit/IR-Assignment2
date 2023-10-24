@@ -127,7 +127,27 @@ class ControllerInterface():
         Go to cartesian pose
         """
         self._impl.go_to_cartesian_pose(pose, duration, tolerance)
+
+    def go_to_joint_angles(self, q, duration=1, tolerance=0.001):
+        """
+        Go to joint pose
+        """
+        self._impl.go_to_joint_angles(q, duration, tolerance)
         
+
+    def open_gripper(self):
+        """
+        Open gripper
+        """
+        self._impl.open_gripper()
+
+
+    def close_gripper(self):
+        """
+        Close gripper
+        """
+        self._impl.close_gripper()
+
 
     def get_busy_status(self):
         return self._impl._get_busy_status()
