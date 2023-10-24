@@ -530,8 +530,7 @@ class Controller():
 
             # get angular velocity between interpolated ...
             
-            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(
-                self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
             ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
             

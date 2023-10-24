@@ -53,6 +53,26 @@ class Mission():
         # self._plate_position = self._plate.get_pose()
         self._step = 10
 
+        self._action = {
+            'HOME': self._home_system,
+
+            'LOOKING_FOR_PLATE': self._looking_for_plate,
+            'GRIP_PLATE_EDGE': self._grip_plate_edge,
+
+            'LIFT_PLATE': self._lift_plate,
+            'HANG_PLATE': self._hang_plate,
+
+            'MOVE_PLATE': self._move_plate,
+            'ASTOR_GRIP': self._astor_grip,
+            
+            'TILT_PLATE': self._tilt_plate,
+            'BEND_PLATE': self._bend_plate,
+            
+            'RETURN_PLATE': self._return_plate,
+            'HOLD_PLATE': self._hold_plate,
+            'DROP_PLATE': self._drop_obejct
+        }
+
     def _home_system(self):
         """
         STEP 1: Homing both robot arms, ready to pick
@@ -88,34 +108,36 @@ class Mission():
         # grip_pose = plate_pose @ sm.SE3(0.11,0,0)
         
         
-        grip_pose = sm.SE3(-0.09,0.91,0.91) @ sm.SE3.RPY(32.43,-87.63,-157.74, unit = 'deg', order='xyz') 
+        grip_pose = sm.SE3(-0.09,0.91,0.91) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz') 
         self._picker_robot.go_to_cartesian_pose(grip_pose)
         self._picker_robot.close_gripper()
         print('plate gripped')
 
         # pass
 
-    def _move_plate(self, postion : sm.SE3):
+    def _lift_plate(self):
         """
-        STEP 3: Move the print plate to the specified position
+        Lift the plate to a safe height
         """
-
-        ## Lift the plate
-
         lift_pose = sm.SE3(0,0,0.1) @ self._picker_robot.get_ee_pose()
         self._picker_robot.go_to_cartesian_pose(lift_pose)
         print('plate lifted')
 
 
-        ## Go backward to avoid collision with printer frame
-
+    def _hang_plate(self):
+        """
+        Hang the plate to the printer
+        """
         hang_pose = sm.SE3(0.1,0,0) @ self._picker_robot.get_ee_pose()
         self._picker_robot.go_to_cartesian_pose(hang_pose)
         print('plate hanged')
 
-        ## Move to the specified position
 
+    def _move_plate(self, postion : sm.SE3):
         """
+        ### STEP 3: 
+        Move the print plate to the specified position
+       
         manually generate a path other than a straight line to avoid singularity 
         OR use the feedback control to auto complete the path"""
 
@@ -125,17 +147,28 @@ class Mission():
         # self._picker_robot.go_to_cartesian_pose(plate_pose)
         print('plate moved')
 
+    def _return_plate(self):
+        """
+        Return the plate to the picker
+        """
+        pass
+
+    def _hold_plate(self):
+        """
+        Hold the plate in place
+        """
+        pass
 
 
     def _astor_grip(self, position : sm.SE3):
         """
         STEP 4: Astor joins by gripping the other side of the plate
         """
-        ready_js = self._bender_robot.get_joint_angles()
-        ready_js[0] = -np.pi/2
-        self._bender_robot.go_to_joint_angles(ready_js)
+        # ready_js = self._bender_robot.get_joint_angles()
+        # ready_js[0] = -np.pi/2
+        # self._bender_robot.go_to_joint_angles(ready_js)
 
-        plate_pose = sm.SE3.Rz(180, unit='deg') @ sm.SE3(0,-0.11,0) @ position 
+        plate_pose = sm.SE3(0,-0.11 - 0.2,0) @ position @ sm.SE3.Ry(180, unit='deg')
         self._bender_robot.go_to_cartesian_pose(plate_pose)
         # pass
         print('astor gripped')
@@ -181,16 +214,26 @@ class Mission():
 
         self._bender_robot.send_command('ENABLE')
         self._picker_robot.send_command('ENABLE')
+        self.mission_state = 'ENABLED'
 
-        self._step ='SOMETHING'
-    
+    def disable_system(self):
+        """
+        Disable both robot arms
+        """
+        self._bender_robot.send_command('DISABLE')
+        self._picker_robot.send_command('DISABLE')
+        self.mission_state = 'IDLE'
+        
 
     def stop_system(self):
         """
         Stop both robot arms
         """
+        self._bender_robot.update_estop_state()
         self._bender_robot.engage_estop()
+        self._picker_robot.update_estop_state()
         self._picker_robot.engage_estop()
+        self.mission_state = self._picker_robot.system_state()
         
 
     def update_collision_object(self, side, center):
@@ -204,6 +247,8 @@ class Mission():
     def run(self):
 
         self._grip_plate_edge()
+        self._lift_plate()
+        self._hang_plate()
         plate_desired_pose = sm.SE3(0.51, 0.15, 0.87) @ sm.SE3.RPY(-90.0,0.6,90.0, unit = 'deg', order='xyz')
         self._move_plate(plate_desired_pose)
         self._astor_grip(plate_desired_pose)

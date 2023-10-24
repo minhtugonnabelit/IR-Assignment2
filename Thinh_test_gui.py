@@ -795,6 +795,8 @@ class RobotGUI:
 
         elif event == '-A_RUN_MISSION-':
             print('bruh')
+            arrow = geometry.Arrow(0.5, 0.02, 0.1, 0.1, pose=self.sawyer.fkine(self.sawyer.q))
+            self.env.add(arrow)
             self.mission.run()
 
     def sawyer_teach_pendant(self, event, values, flag_print_once_sawyer, flag_print_running_sawyer):
