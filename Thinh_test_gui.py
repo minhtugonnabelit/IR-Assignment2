@@ -78,7 +78,7 @@ class RobotGUI:
 
         base_original_robot = self._cell_center @ sm.SE3(
             0.55, 0.8, 0.65) @ sm.SE3.Rz(-np.pi)
-        transl2robot = sm.SE3(0, 1.4, 0.163)
+        transl2robot = sm.SE3(0.1, 1.45, 0.163) # X,Y,Z
 
         self.sawyer = Sawyer(
             env=self.env,
@@ -137,7 +137,7 @@ class RobotGUI:
                 [[sg.Tab('Sawyer Controller', self.tab1_setup(), background_color='black', key='-TAB1-'),
                   sg.Tab('Astorino Controller', self.tab2_setup(),
                          background_color='black', key='-TAB2-'),
-                  sg.Tab('Mission Controller', self.tab3_setup(), background_color='blue')]],
+                  sg.Tab('Mission Controller', self.tab3_setup(), background_color='black')]],
                 tab_location='topleft',
                 selected_background_color='pink',
 
@@ -197,6 +197,10 @@ class RobotGUI:
                     self.astorino_controller.update_robot_js()
                     time.sleep(0.01)
                 self.flag_busy_astorino = False
+                
+            # ----------------------- MISSION
+            state_mission = self.mission.system_state()
+            self.window.write_event_value('-UPDATE-STATE-MISSION-', state_mission)
 
             time.sleep(0.5)
 
@@ -548,46 +552,52 @@ class RobotGUI:
         return tab2_layout
 
     def tab3_setup(self):
-        headers = [[
+        headers = [
+        [
+            sg.Text(' Sawyer', size=(
+                9, 1), justification='left', background_color='black', text_color= 'red', font=('Ubuntu Mono', 15)),
             sg.Text(f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]} m', size=(
-                15, 1), justification='right', key='-m_X-', background_color='black'),
+                12, 1), justification='left', key='-m_X-', background_color='black'),
             sg.Text(f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]} m', size=(
-                15, 1), justification='right', key='-m_Y-', background_color='black'),
+                12, 1), justification='left', key='-m_Y-', background_color='black'),
             sg.Text(f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]} m', size=(
-                15, 1), justification='right', key='-m_Z-', background_color='black'),
+                12, 1), justification='left', key='-m_Z-', background_color='black'),
             sg.Text(f'Rx: {np.rad2deg(self.getori(self.sawyer)[0])} deg', size=(
-                15, 1), justification='right', key='-m_RX-', background_color='black'),
+                18, 1), justification='left', key='-m_RX-', background_color='black'),
             sg.Text(f'Ry: {np.rad2deg(self.getori(self.sawyer)[1])} deg', size=(
-                15, 1), justification='right', key='-m_RY-', background_color='black'),
+                15, 1), justification='left', key='-m_RY-', background_color='black'),
             sg.Text(f'Rz: {np.rad2deg(self.getori(self.sawyer)[2])} deg', size=(
-                15, 1), justification='right', key='-m_RZ-', background_color='black'),
+                17, 1), justification='left', key='-m_RZ-', background_color='black'),
         ],
-            [sg.Text(f'X: {self.astorino.fkine(self.astorino.q).A[0,3]} m', size=(
-                15, 1), justification='right', key='-mA_X-', background_color='black'),
+        [
+             sg.Text(' Astorino', size=(
+                9, 1), justification='left', background_color='black', text_color= 'pink', font=('Ubuntu Mono', 15)),
+             sg.Text(f'X: {self.astorino.fkine(self.astorino.q).A[0,3]} m', size=(
+                12, 1), justification='left', key='-mA_X-', background_color='black'),
              sg.Text(f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]} m', size=(
-                 15, 1), justification='right', key='-mA_Y-', background_color='black'),
+                12, 1), justification='left', key='-mA_Y-', background_color='black'),
              sg.Text(f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]} m', size=(
-                 15, 1), justification='right', key='-mA_Z-', background_color='black'),
+                12, 1), justification='left', key='-mA_Z-', background_color='black'),
              sg.Text(f'Rx: {np.rad2deg(self.getori(self.astorino)[0])} deg', size=(
-                 15, 1), justification='right', key='-mA_RX-', background_color='black'),
+                18, 1), justification='left', key='-mA_RX-', background_color='black'),
              sg.Text(f'Ry: {np.rad2deg(self.getori(self.astorino)[1])} deg', size=(
-                 15, 1), justification='right', key='-mA_RY-', background_color='black'),
+                15, 1), justification='left', key='-mA_RY-', background_color='black'),
              sg.Text(f'Rz: {np.rad2deg(self.getori(self.astorino)[2])} deg', size=(
-                 15, 1), justification='right', key='-mA_RZ-', background_color='black'),]]
+                17, 1), justification='left', key='-mA_RZ-', background_color='black')]]
 
         # need a new mission state list
         mission_state = [[
             sg.Text('Status: ', size=(0, 1), justification='right', key='-MISSION_STATE_LABEL-',
                     background_color='black', font=('Ubuntu Mono', 12)),
-            # sg.Text(f'{self.mission.system_state()}', size=(
-            #     15, 1), justification='center', key='-A_STATE-', text_color='black', background_color=('yellow'))
+            sg.Text(f'{self.mission.system_state()}', size=(
+                15, 1), justification='center', key='-STATE-MISSION-', text_color='black', background_color=('yellow'))
         ]]
-
+        
 
         # Define the layout for the second tab
         tab3_layout = [
             [
-                sg.Frame('MISSION MANAGER', layout=headers, font=('Ubuntu Mono', 24), background_color='black')
+                sg.Frame('Mission Manager', layout=headers, font=('Ubuntu Mono', 30), background_color='black')
             ],
             
             [
@@ -603,7 +613,7 @@ class RobotGUI:
             ],
 
             [
-                sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3))
+                sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
             ],
 
             [
@@ -1060,7 +1070,7 @@ class RobotGUI:
         if self.mission.mission_completed():
             self.mission_thread.join()
             self.mission.reset_mission()
-        
+
         if event == '-A_UPDATE-JOINTS-':
 
             self.window['-mA_X-'].update(
@@ -1091,11 +1101,28 @@ class RobotGUI:
             self.window['-m_RZ-'].update(
                 f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
 
+        if event == '-UPDATE-STATE-MISSION-':
+            state_mission = self.mission.system_state()
+            self.window['-STATE-MISSION-'].update(f'{state_mission}')
+            
+            if state_mission == 'IDLE':
+                self.window['-STATE-MISSION-'].update(text_color='purple',
+                                                background_color='yellow')
+            
+            elif state_mission == 'ENABLED':
+                self.window['-STATE-MISSION-'].update(text_color='white',
+                                                background_color='green')
+            
         if event == '-MISSION_ENABLE-':
             self.mission.enable_system()
+        
+        elif event == '-MISSION_DISABLE-':
+            self.mission.disable_system()
 
         elif event == '-MISSION_HOME-':
-            self.mission._home_system()
+            # self.mission._home_system()
+            self.mission._bender_robot.send_command('HOME')
+            self.mission._picker_robot.send_command('HOME')
 
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()

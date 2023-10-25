@@ -47,6 +47,8 @@ class Mission():
         self._workcell = workcell
         self._picker_robot = picker_robot
         self._bender_robot = bender_robot
+        
+        self.mission_state = 'IDLE'
 
         # end effector pose relative to plate base
         self._picker_grip_pose = sm.SE3(0.25,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
@@ -59,10 +61,10 @@ class Mission():
 
         # defined poses for the plate
         self.INITPOSE = copy.deepcopy(self._plate.get_pose())
-        self.LIFTEDPOSE = sm.SE3(0,0,0.1) @ self.INITPOSE
+        self.LIFTEDPOSE = sm.SE3(0,0,0.03) @ self.INITPOSE
         self.HANGEDPOSE = sm.SE3(0.1,0,0) @ self.LIFTEDPOSE
-        self.JOINEDPOSE = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
-        self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(-np.pi/3)
+        self.JOINEDPOSE = sm.SE3(0.5, 0, 0.9) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
+        self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(np.pi/3)
 
 
         # index to track current step
@@ -84,6 +86,7 @@ class Mission():
             self._return_plate,
             
         ]
+        
 
     def _home_system(self):
         """
@@ -91,6 +94,7 @@ class Mission():
         """
         # non-blocking method
         self._bender_robot.send_command('HOME')
+        # self._picker_robot.send_command('HOME')
         self._picker_robot.go_to_home()
         self._bender_robot.open_gripper()
         print('system homed')
@@ -426,6 +430,9 @@ class Mission():
 
         print('plate returned')
 
+    # LLT ==-----------------
+    def system_state(self):
+        return self.mission_state
 
     # TAM ----------------------------------------------------------------------------
     def launch_system(self):

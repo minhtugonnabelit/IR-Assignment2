@@ -21,7 +21,7 @@ class WorkCell():
 
         # add human model
         self._human = self._add_model('worker.stl', sm.SE3(2.5, 1.5, 0), color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
-        self._cart = self._add_model('cart.dae', sm.SE3(0.4, 0, 0) @ sm.SE3.Rz(-90,'deg'))
+        self._cart = self._add_model('cart.dae', sm.SE3(0.65, 0, 0) @ sm.SE3.Rz(-90,'deg'))
         self._desk = self._add_model('desk.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.55, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
         self._3dprinter_bed_0 = self._add_model('3dprinter_bed.dae',sm.SE3(-0.4, 0.9, 0.87))

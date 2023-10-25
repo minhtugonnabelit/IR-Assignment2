@@ -44,6 +44,7 @@ class Controller():
         self._dispatch = {
             
             "ENABLE": self.enable_system,
+            "DISABLE": self.disable_system,
             "HOME": self.go_to_home,
             
             "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.1, 0, 0),),
@@ -818,9 +819,9 @@ class Controller():
             self._state = "ENABLED"
             self._log.info("System is enabled. Ready for operation.")
 
-    # def disable_system(self):
-    #     if self._state == "ENABLED":
-    #         self._state = "IDLE"
-    #         self._log.info("System is disabled. Back to idle state.")
+    def disable_system(self):
+        if self._state == "ENABLED":
+            self._state = "IDLE"
+            self._log.info("System is disabled. Back to idle state.")
 
    
