@@ -20,6 +20,12 @@ plate = Plate(pose, env)
 
 # env.hold()
 
+ax1 = geometry.Axes(0.2,pose=pose@SE3(0.11,0,0))
+ax2 = geometry.Axes(0.2,pose=pose@SE3(-0.11,0,0))
+
+env.add(ax1)
+env.add(ax2)
+
 
 # TEST 2 : Bending plate
 steps = 30
@@ -27,12 +33,16 @@ all_seg = []
 
 for i in range(steps):
     seg_array = []
-    plate.bend(i, seg_array)
+    pick, bend = plate.bend(i, seg_array)
+    ax1.T = pick
+    ax2.T = bend
     all_seg.append(seg_array)
     env.step(0.1)
 
 for seg_array in reversed(all_seg):
-    plate.unbend(seg_array)
+    pick, bend = plate.unbend(seg_array)
+    ax1.T = pick
+    ax2.T = bend
     env.step(0.1)
 
 env.hold()

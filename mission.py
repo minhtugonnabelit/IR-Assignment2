@@ -36,6 +36,7 @@ class Mission():
 
     """
 
+    
 
     def __init__(self, plate : Plate, workcell : WorkCell, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
@@ -49,32 +50,39 @@ class Mission():
 
         # end effector pose relative to plate base
         self._picker_grip_pose = sm.SE3(0.25,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
-        self._bender_grip_pose = sm.SE3(-0.21,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
+        self._bender_grip_pose = sm.SE3(-0.23,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
 
         #----------------
         self._cell_center = self._workcell.get_cell_center()
         self._cart_location = self._workcell.get_cart_location()
-        # self._plate_position = self._plate.get_pose()
         self._step = 10
+
+        # defined poses for the plate
+        self.INITPOSE = copy.deepcopy(self._plate.get_pose())
+        self.LIFTEDPOSE = sm.SE3(0,0,0.1) @ self.INITPOSE
+        self.HANGEDPOSE = sm.SE3(0.1,0,0) @ self.LIFTEDPOSE
+        self.JOINEDPOSE = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
+        self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(-np.pi/3)
+
 
         # index to track current step
         self.index = 0
 
         self._action_list = [
             self._home_system,
-            self._looking_for_plate,
             self._grip_plate_edge,
             self._lift_plate,
             self._hang_plate,
             self._move_plate,
             self._astor_grip,
-            # self._tilt_plate,
-            # self._bend_plate,
+            self._tilt_plate,
+            self._bend_plate,
             # self._drop_obejct,
-            # self._unbend_plate,
-            # self._return_plate,
-            # self._hold_plate,
-
+            self._unbend_plate,
+            self._astor_release,
+            self._hold_plate,
+            self._return_plate,
+            
         ]
 
     def _home_system(self):
@@ -83,19 +91,10 @@ class Mission():
         """
         # non-blocking method
         self._bender_robot.send_command('HOME')
-        # self._picker_robot.send_command('HOME')
         self._picker_robot.go_to_home()
+        self._bender_robot.open_gripper()
         print('system homed')
     
-    def _looking_for_plate(self):
-        """
-        Set the end effector pose looking 45 degrees downward
-        Turns around until the finds the plate
-        """
-        
-        # After found, set this variable
-        self._plate_position = sm.SE3()
-        pass
 
     def _grip_plate_edge(self):
         """
@@ -111,11 +110,11 @@ class Mission():
         Both method currently not available, so use a fixed pose for now"""
         plate_pose = self._plate.get_pose()
         grip_pose = plate_pose @ self._picker_grip_pose
-        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), grip_pose, 50)
+        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), grip_pose, 100)
         
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated() is True:
-            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.02)
+            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
             index += 1
             time.sleep(0.01)
 
@@ -140,17 +139,15 @@ class Mission():
 
         # close gripper
         self._picker_robot.close_gripper()
-        step = 50
-        lift_pose = sm.SE3(0,0,0.1) @ self._picker_robot.get_ee_pose()
-        
-        plate_pose = self._plate.get_pose()
-        print(plate_pose)
+        grip_pose = self.LIFTEDPOSE @ self._picker_grip_pose
 
-        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), lift_pose, step)
+        # lift the plate
+        step = 100        
+        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), grip_pose, step)
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated() is True:
-            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.02)
+            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
             self._plate.move_flat_plate(sm.SE3(plate_pose))
             index += 1
@@ -176,14 +173,14 @@ class Mission():
         """
         Hang the plate to the printer
         """
+        # hang_pose = self.HANGEDPOSE @ self._picker_grip_pose
         hang_pose = sm.SE3(0.1,0,0) @ self._picker_robot.get_ee_pose()
-        # plate_pose = self._plate.get_pose()
-
-        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), hang_pose, 50)
-
+        step = 100
+        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), hang_pose, step)
+        
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
-            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.02)
+            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
             self._plate.move_flat_plate(sm.SE3(plate_pose))
             index += 1
@@ -208,19 +205,20 @@ class Mission():
        
         manually generate a path other than a straight line to avoid singularity 
         OR use the feedback control to auto complete the path"""
-        
-        plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
-        sawyer_gripper_pose = plate_desired_pose @ self._picker_grip_pose
+
+        # plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
+        sawyer_gripper_pose = self.JOINEDPOSE @ self._picker_grip_pose
+        step = 100
         desired_js = self._picker_robot.get_robot().ikine_LM(sawyer_gripper_pose, q0 = self._picker_robot.get_joint_angles()).q
-        path_sawyer = rtb.jtraj(self._picker_robot.get_joint_angles(), desired_js, 50).q
+        path_sawyer = rtb.jtraj(self._picker_robot.get_joint_angles(), desired_js, step).q
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
-            self._picker_robot.single_step_joint(path_sawyer[index], 0.02)
+            self._picker_robot.single_step_joint(path_sawyer[index], 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
             self._plate.move_flat_plate(sm.SE3(plate_pose))
             index += 1
-            time.sleep(0.02)
+            time.sleep(0.01)
 
         # # non-blocking method
         # command = {
@@ -240,15 +238,18 @@ class Mission():
         STEP 4: Astor joins by gripping the other side of the plate
         """
 
-        plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0, 0.0, 0.0, unit = 'deg', order='xyz')
-        astorino_gripper_pose = plate_desired_pose @ self._bender_grip_pose
-        path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), astorino_gripper_pose, 50)
-
+        # plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0, 0.0, 0.0, unit = 'deg', order='xyz')
+        astorino_gripper_pose = self.JOINEDPOSE @ self._bender_grip_pose
+        step = 100
+        path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), astorino_gripper_pose, step)
+    
         index = 0
         while index < len(path_astor) and self._bender_robot.system_activated():
-            self._bender_robot.single_step_cartesian(path_astor[index], 0.02)
+            self._bender_robot.single_step_cartesian(path_astor[index], 0.01)
             index += 1
             time.sleep(0.01)
+
+        self._bender_robot.close_gripper()
 
         # non-blocking method
         # command = {
@@ -267,14 +268,55 @@ class Mission():
         Coordinate 2 arms to tilt the plate to a specified orientation to drop the object
         - @param forth: True for tilting forth, False for back
         """
-        
-        pass
+
+        path_plate = rtb.ctraj(self._plate.get_pose(), self.TILTEDPOSE, 50)
+
+        for pose in path_plate:
+
+            picker_grip_pose = pose @ self._picker_grip_pose
+            bend_grip_pose = pose @ self._bender_grip_pose
+            
+            self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
+            self._bender_robot.single_step_cartesian(bend_grip_pose, 0.01)
+
+            self._plate.move_flat_plate(pose)
+
+            time.sleep(0.01)
+
 
     def _bend_plate(self):
         """
         Coordinate 2 arms to bend the plate and return to unbend position
         """
-        pass
+        step = 20
+        self.all_seg = []
+
+        for i in range(step):
+
+            seg_array = []
+            _pick, _bend = self._plate.bend(i, seg_array)
+
+            # somehow this copy is real necessary, otherwise the pose will be updated
+            pick = copy.deepcopy(_pick)
+            bend = copy.deepcopy(_bend)
+
+            # assign relative orientation of the gripper in plate center frame to the extracted edges pose 
+            pick_ori = pick.A[0:3,0:3] @ self._picker_grip_pose.A[0:3,0:3]
+            pick.A[0:3,0:3] = pick_ori
+            bend_ori = bend.A[0:3,0:3] @ self._bender_grip_pose.A[0:3,0:3]
+            bend.A[0:3,0:3] = bend_ori
+
+            # position of the grasping pose is kept
+            picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
+            bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
+
+            # send motion command
+            self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
+            self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
+
+            self.all_seg.append(seg_array)
+            time.sleep(0.01)
+        
 
     def _drop_obejct(self):
         """
@@ -289,22 +331,100 @@ class Mission():
         """
         Coordinate 2 arms to unbend the plate
         """
-        pass
+        # step = 20
+        # sawyerunbend_traj = reversed(self.sawyer_bend_traj)
+        for i, seg_array in enumerate(reversed(self.all_seg)):
 
-    def _return_plate(self):
-        """
-        Return the plate to the picker
-        """
-        print('plate returned')
+            _pick, _bend = self._plate.unbend(seg_array)
+
+            # as noted above
+            pick = copy.deepcopy(_pick)
+            bend = copy.deepcopy(_bend)
+
+            # assign relative orientation of the gripper in plate center frame to the extracted edges pose 
+            pick_ori = pick.A[0:3,0:3] @ self._picker_grip_pose.A[0:3,0:3]
+            pick.A[0:3,0:3] = pick_ori
+            bend_ori = bend.A[0:3,0:3] @ self._bender_grip_pose.A[0:3,0:3]
+            bend.A[0:3,0:3] = bend_ori
+
+            # position of the grasping pose is kept
+            picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
+            bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
+
+            # send motion command
+            self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
+            self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
+
+            time.sleep(0.01)
+
+
         pass
+    
+    def _astor_release(self):
+        """
+        STEP 6: Astor release the plate
+        """
+        self._bender_robot.open_gripper()
+        step = 100
+        path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1), step)
+
+        self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1))
+    
 
     def _hold_plate(self):
         """
         Hold the plate in place
+        Need a way to combine traj
         """
+        hang_pose = self.HANGEDPOSE @ self._picker_grip_pose
+        step = 100
+        fix_pose = sm.SE3(-0.15,0,0.1) @ self._picker_robot.get_ee_pose() 
+        fix_path = rtb.ctraj(self._picker_robot.get_ee_pose(), fix_pose, step)
+
+        index = 0
+        while index < len(fix_path) and self._picker_robot.system_activated():
+            self._picker_robot.single_step_cartesian(fix_path[index], 0.01)
+            plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
+            self._plate.move_flat_plate(sm.SE3(plate_pose))
+            index += 1
+            time.sleep(0.01)
+
+        path_sawyer = rtb.ctraj(fix_pose, hang_pose, step)
+
+        index = 0
+        while index < len(path_sawyer) and self._picker_robot.system_activated():
+            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
+            plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
+            self._plate.move_flat_plate(sm.SE3(plate_pose))
+            index += 1
+            time.sleep(0.01)
+        
+
         print('plate held')
         pass
 
+    def _return_plate(self):
+        """
+        Return the plate to the printer
+        """
+        return_pose = self.INITPOSE @ self._picker_grip_pose
+        step = 100
+        path_sawyer = rtb.ctraj(self._picker_robot.get_ee_pose(), return_pose, step)
+
+        self._bender_robot.send_command('HOME')
+        index = 0
+        while index < len(path_sawyer) and self._picker_robot.system_activated():
+            self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
+            plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._picker_grip_pose)
+            self._plate.move_flat_plate(sm.SE3(plate_pose))
+
+            index += 1
+            time.sleep(0.01)
+
+        self._picker_robot.open_gripper()
+        self._picker_robot.go_to_home()
+
+        print('plate returned')
 
 
     # TAM ----------------------------------------------------------------------------
@@ -381,7 +501,10 @@ class Mission():
             # else:
                 # print('mission step in progress')
                 
-            time.sleep(1)
+            time.sleep(0.5)
+        
+        if self.index == len(self._action_list):
+            print('Mission completed!')
 
 
     def reset_mission(self):

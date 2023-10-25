@@ -103,8 +103,19 @@ class Plate():
 
 
     def unbend(self, seg_array):
+
+        middle_segment_number = int((Plate.SEGMENT_NUM-1)/2) #5
         for index_seg, seg in enumerate(self._segments):
             seg.T = seg_array[index_seg]
+
+        
+        #   Get the poses of the two outer segments
+        picker_pose = seg_array[middle_segment_number-1]
+        bender_pose = seg_array[-1]
+
+        return [picker_pose, bender_pose]
+
+            
 
 
 if __name__ == "__main__":

@@ -269,7 +269,14 @@ class Safety:
                         return True
                     else:
                         return False
-                return True
+                else:
+
+                    # if the contacted pose is inside a virtual cylinder of radius 0.1 with center axis is z axis from robot base
+                    checking_range = np.linalg.norm(link[0:2, 3] - self.robot.base.A[0:2, 3])
+                    if checking_range <= 0.1:
+                        return True
+                    else:
+                        return False
             
         return False 
     
