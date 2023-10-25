@@ -115,6 +115,13 @@ class ControllerInterface():
         self._impl.move_cartesian()
 
 
+    def single_step_cartesian(self, pose, time_step, tolerance=0.001):
+        """
+        Execute a cartesian space trajectory
+        """
+        self._impl.single_step_cartesian(pose, time_step, tolerance)
+
+
     def follow_cartesian_path(self, path, duration=1, tolerance=0.001):
         """
         Follow a cartesian path
@@ -133,7 +140,13 @@ class ControllerInterface():
         Go to joint pose
         """
         self._impl.go_to_joint_angles(q, duration, tolerance)
-        
+
+    def single_step_joint(self, q, time_step, tolerance=0.001):
+        """
+        Execute a joint space trajectory
+        """
+        self._impl.single_step_joint(q, time_step, tolerance)   
+             
 
     def open_gripper(self):
         """
@@ -151,6 +164,10 @@ class ControllerInterface():
 
     def get_busy_status(self):
         return self._impl._get_busy_status()
+    
+    
+    def action_is_done(self):
+        return self._impl.action_is_done()
         
     # -----------------------------------------------------------------------------------#
     # Getters

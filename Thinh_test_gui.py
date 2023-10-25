@@ -72,24 +72,25 @@ class RobotGUI:
 
         self.work_cell = WorkCell(self.env, self._cell_center)
         self.plate = Plate(self._cell_center @
-                           sm.SE3(-0.45, 0.9, 0.905), self.env)
+                           sm.SE3(-0.35, 0.9, 0.905), self.env)
 
         # Initialize robot
 
-        base_original_robot = self._cell_center @ sm.SE3(0.55, 0.8, 0.65) @ sm.SE3.Rz(-np.pi)
+        base_original_robot = self._cell_center @ sm.SE3(
+            0.55, 0.8, 0.65) @ sm.SE3.Rz(-np.pi)
         transl2robot = sm.SE3(0, 1.4, 0.163)
 
         self.sawyer = Sawyer(
-            env=self.env, 
+            env=self.env,
             base=base_original_robot,
             gripper_ready=True)
-        self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))   
+        self.sawyer_qlim = np.rad2deg(copy.deepcopy(self.sawyer.qlim))
 
-        self.astorino = Astorino( 
-            env=self.env, 
-            base=base_original_robot @ transl2robot)
+        self.astorino = Astorino(
+            env=self.env,
+            base=base_original_robot @ transl2robot,
+            gripper_ready=True)
         self.astorino_qlim = np.rad2deg(copy.deepcopy(self.astorino.qlim))
-
 
         # Initialize controller
 
@@ -97,23 +98,20 @@ class RobotGUI:
         self.sawyer_controller.launch()
         self.sawyer_controller.go_to_home()
 
-
         self.astorino_controller = ControllerInterface(self.astorino, self.log)
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
 
-
         # Initialize mission manager
 
-        self.mission = Mission(self.plate, 
+        self.mission = Mission(self.plate,
                                self.work_cell,
-                               self.sawyer_controller, 
+                               self.sawyer_controller,
                                self.astorino_controller)
-        
-         # set up collision
 
-        self.collision_setup() 
+        # set up collision
 
+        self.collision_setup()
 
         # Initialize GUI
 
@@ -220,7 +218,7 @@ class RobotGUI:
 
         controller_state = [[
             sg.Text('Status: ', size=(0, 1), justification='right', key='-STATE_LABEL-',
-                    background_color='black',  font=('Cooper Black', 12)),
+                    background_color='black',  font=('Ubuntu Mono', 12)),
             sg.Text(f'{self.sawyer_controller.system_state()}', size=(
                 15, 1), justification='center', key='-STATE-', text_color='black',  background_color=('yellow'))
         ]]
@@ -281,7 +279,7 @@ class RobotGUI:
                            sg.Text('L7:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[6])} deg', size=(6, 1), key='-J5-', justification='right')]
-                      ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                      ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP)
              ]
         ]
 
@@ -300,7 +298,7 @@ class RobotGUI:
                                                                                                                  size=self._input_size), sg.Button('+Yaw', key='-PLUSYAW-', size=self._input_size)],
                                          [sg.Button('-Roll', key='-MINUSROLL-', size=self._input_size), sg.Button(
                                              '-Pitch', key='-MINUSPITCH-', size=self._input_size), sg.Button('-Yaw', key='-MINUSYAW-', size=self._input_size)]
-                                     ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
+                                     ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
                         ]
                     ], background_color='black'),
 
@@ -315,7 +313,7 @@ class RobotGUI:
                                              'Pitch: ', size=(4, 1), background_color='black', pad=(5, 1)), sg.Input(default_text='0', size=(5, 1), key='-PITCH-')],
                                          [sg.Text('Z:',    size=(2, 1), background_color='black', pad=(1, 11)), sg.Input(default_text='0', size=(
                                              5, 1), key='-CARTZ-'), sg.Text('Yaw: ',  size=(4, 1), background_color='black', pad=(5, 1)), sg.Input(default_text='0', size=(5, 1), key='-YAW-')]
-                                     ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
+                                     ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
                         ]
                     ], background_color='black')
             ],
@@ -324,7 +322,7 @@ class RobotGUI:
                       [
                           [sg.Multiline(
                               size=(70, 5), key='-MSG-', background_color='black', text_color='white')]
-                      ], background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                      ], background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP)
              ]
         ]
 
@@ -340,12 +338,12 @@ class RobotGUI:
         tab1_layout = [
             [
                 sg.Frame('SAWYER CONTROLLER', layout=headers, font=(
-                    'Cooper Black', 24), background_color='black')
+                    'Ubuntu Mono', 24), background_color='black')
             ],
 
             [
                 sg.Frame('', layout=controller_state, font=(
-                    'Cooper Black', 24), background_color='black')
+                    'Ubuntu Mono', 24), background_color='black')
             ],
 
             [
@@ -367,7 +365,7 @@ class RobotGUI:
             ],
 
             [
-                sg.Frame('Control Options', layout=type_of_control, font=('Cooper Black', 15),
+                sg.Frame('Control Options', layout=type_of_control, font=('Ubuntu Mono', 15),
                          background_color='black', title_location=sg.TITLE_LOCATION_TOP, pad=(55, 5))
             ],
 
@@ -397,7 +395,7 @@ class RobotGUI:
 
         controller_state = [[
             sg.Text('Status: ', size=(0, 1), justification='right', key='-A_STATE_LABEL-',
-                    background_color='black', font=('Cooper Black', 12)),
+                    background_color='black', font=('Ubuntu Mono', 12)),
             sg.Text(f'{self.astorino_controller.system_state()}', size=(
                 15, 1), justification='center', key='-A_STATE-', text_color='black', background_color=('yellow'))
         ]]
@@ -452,7 +450,7 @@ class RobotGUI:
                            sg.Text(f'{np.rad2deg(self.astorino.q[5])} deg', size=(
                                6, 1), key='-A_J4-', justification='right')
                            ]
-                      ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                      ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP)
              ]
         ]
 
@@ -471,7 +469,7 @@ class RobotGUI:
                                                                                                                    size=self._input_size), sg.Button('+Yaw', key='-A_PLUSYAW-', size=self._input_size)],
                                          [sg.Button('-Roll', key='-A_MINUSROLL-', size=self._input_size), sg.Button(
                                              '-Pitch', key='-A_MINUSPITCH-', size=self._input_size), sg.Button('-Yaw', key='-A_MINUSYAW-', size=self._input_size)]
-                                     ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
+                                     ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
                         ]
                     ], background_color='black'),
 
@@ -486,7 +484,7 @@ class RobotGUI:
                                              'Pitch: ', size=(4, 1), background_color='black', pad=(5, 1)), sg.Input(default_text='0', size=(5, 1), key='-A_PITCH-')],
                                          [sg.Text('Z:',    size=(2, 1), background_color='black', pad=(1, 11)), sg.Input(default_text='0', size=(5, 1), key='-A_CARTZ-'), sg.Text(
                                              'Yaw: ',  size=(4, 1), background_color='black', pad=(5, 1)), sg.Input(default_text='0', size=(5, 1), key='-A_YAW-')]
-                                     ], element_justification='center', background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
+                                     ], element_justification='center', background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP, vertical_alignment='top')
                         ]
                     ], background_color='black')
             ],
@@ -495,7 +493,7 @@ class RobotGUI:
                       [
                           [sg.Multiline(
                               size=(70, 5), key='-A_MSG-', background_color='black', text_color='white')]
-                      ], background_color='black', font=('Cooper Black', 15), title_location=sg.TITLE_LOCATION_TOP)
+                      ], background_color='black', font=('Ubuntu Mono', 15), title_location=sg.TITLE_LOCATION_TOP)
              ]
         ]
 
@@ -510,12 +508,12 @@ class RobotGUI:
         tab2_layout = [
             [
                 sg.Frame('ASTORINO CONTROLLER', layout=headers, font=(
-                    'Cooper Black', 24), background_color='black')
+                    'Ubuntu Mono', 24), background_color='black')
             ],
 
             [
                 sg.Frame('', layout=controller_state, font=(
-                    'Cooper Black', 24), background_color='black')
+                    'Ubuntu Mono', 24), background_color='black')
             ],
 
             [
@@ -537,7 +535,7 @@ class RobotGUI:
             ],
 
             [
-                sg.Frame('Control Options', layout=type_of_control, font=('Cooper Black', 15),
+                sg.Frame('Control Options', layout=type_of_control, font=('Ubuntu Mono', 15),
                          background_color='black', title_location=sg.TITLE_LOCATION_TOP, pad=(55, 5))
             ],
 
@@ -550,12 +548,69 @@ class RobotGUI:
         return tab2_layout
 
     def tab3_setup(self):
-        # ... [omitting for brevity]
+        headers = [[
+            sg.Text(f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]} m', size=(
+                15, 1), justification='right', key='-m_X-', background_color='black'),
+            sg.Text(f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]} m', size=(
+                15, 1), justification='right', key='-m_Y-', background_color='black'),
+            sg.Text(f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]} m', size=(
+                15, 1), justification='right', key='-m_Z-', background_color='black'),
+            sg.Text(f'Rx: {np.rad2deg(self.getori(self.sawyer)[0])} deg', size=(
+                15, 1), justification='right', key='-m_RX-', background_color='black'),
+            sg.Text(f'Ry: {np.rad2deg(self.getori(self.sawyer)[1])} deg', size=(
+                15, 1), justification='right', key='-m_RY-', background_color='black'),
+            sg.Text(f'Rz: {np.rad2deg(self.getori(self.sawyer)[2])} deg', size=(
+                15, 1), justification='right', key='-m_RZ-', background_color='black'),
+        ],
+            [sg.Text(f'X: {self.astorino.fkine(self.astorino.q).A[0,3]} m', size=(
+                15, 1), justification='right', key='-mA_X-', background_color='black'),
+             sg.Text(f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]} m', size=(
+                 15, 1), justification='right', key='-mA_Y-', background_color='black'),
+             sg.Text(f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]} m', size=(
+                 15, 1), justification='right', key='-mA_Z-', background_color='black'),
+             sg.Text(f'Rx: {np.rad2deg(self.getori(self.astorino)[0])} deg', size=(
+                 15, 1), justification='right', key='-mA_RX-', background_color='black'),
+             sg.Text(f'Ry: {np.rad2deg(self.getori(self.astorino)[1])} deg', size=(
+                 15, 1), justification='right', key='-mA_RY-', background_color='black'),
+             sg.Text(f'Rz: {np.rad2deg(self.getori(self.astorino)[2])} deg', size=(
+                 15, 1), justification='right', key='-mA_RZ-', background_color='black'),]]
+
+        # need a new mission state list
+        mission_state = [[
+            sg.Text('Status: ', size=(0, 1), justification='right', key='-MISSION_STATE_LABEL-',
+                    background_color='black', font=('Ubuntu Mono', 12)),
+            # sg.Text(f'{self.mission.system_state()}', size=(
+            #     15, 1), justification='center', key='-A_STATE-', text_color='black', background_color=('yellow'))
+        ]]
+
+
+        # Define the layout for the second tab
         tab3_layout = [
-            [sg.Text('run mission')],
-            [sg.Button('run', key='-RUN_MISSION-')],
-            [sg.Button('ENable system', key='-ENABLE_ALL-')],
+            [
+                sg.Frame('MISSION MANAGER', layout=headers, font=('Ubuntu Mono', 24), background_color='black')
+            ],
+            
+            [
+                sg.Frame('Mission State', layout=mission_state, font=('Ubuntu Mono', 24), background_color='black'), 
+            ],
+
+            [
+                sg.Button('Home System', key='-MISSION_HOME-', size=(16, 3)), sg.Button('Run Mission', key='-MISSION_RUN-', size=(16, 3))
+            ],
+
+            [
+                sg.Button('Pause Mission', key='-MISSION_PAUSE-', size=(16, 3)), sg.Button('Resume Mission', key='-MISSION_RESUME-', size=(16, 3))
+            ],
+
+            [
+                sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3))
+            ],
+
+            [
+                sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(16, 3))
+            ],
         ]
+
         return tab3_layout
 
     def run(self):
@@ -570,6 +625,8 @@ class RobotGUI:
         flag_print_once_astorino = [True]
         flag_print_running_astorino = [True]
 
+        self.mission_thread = threading.Thread(target=self.mission.run)
+
         while True:
             event, values = self.window.read()
             if event == sg.WIN_CLOSED:
@@ -578,6 +635,8 @@ class RobotGUI:
                                       flag_print_running_sawyer=flag_print_running_sawyer)
             self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
                                         flag_print_running_astorino=flag_print_running_astorino)
+            self.mission_callback(event=event, values=values)
+            # self.env.step(0)
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
@@ -789,15 +848,6 @@ class RobotGUI:
         elif event == '-A_MINUSYAW-':
             self.astorino_controller.send_command('-Rz')
 
-        elif event == '-A_ENABLE_ALL-':
-            self.astorino_controller.send_command('ENABLE')
-            self.astorino_controller.send_command('ENABLE')
-
-        elif event == '-A_RUN_MISSION-':
-            print('bruh')
-            arrow = geometry.Arrow(0.5, 0.02, 0.1, 0.1, pose=self.sawyer.fkine(self.sawyer.q))
-            self.env.add(arrow)
-            self.mission.run()
 
     def sawyer_teach_pendant(self, event, values, flag_print_once_sawyer, flag_print_running_sawyer):
         # ------------------------------------------------------------------- sawyer
@@ -827,7 +877,7 @@ class RobotGUI:
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
         pose = sm.SE3(input_values[0], input_values[1], input_values[2]
-                                         ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
+                      ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
 
         self.sawyer_controller.set_cartesian_value(pose)
         # -------------------------------------------------------------------- sawyer
@@ -1004,13 +1054,57 @@ class RobotGUI:
         elif event == '-MINUSYAW-':
             self.sawyer_controller.send_command('-Rz')
 
-        elif event == '-ENABLE_ALL-':
-            self.sawyer_controller.send_command('ENABLE')
-            self.astorino_controller.send_command('ENABLE')
 
-        elif event == '-RUN_MISSION-':
-            print('bruh')
-            self.mission.run()
+    def mission_callback(self, event, values,):
+
+        if self.mission.mission_completed():
+            self.mission_thread.join()
+            self.mission.reset_mission()
+        
+        if event == '-A_UPDATE-JOINTS-':
+
+            self.window['-mA_X-'].update(
+                f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
+            self.window['-mA_Y-'].update(
+                f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]:.2f} m')
+            self.window['-mA_Z-'].update(
+                f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]:.2f} m')
+            self.window['-mA_RX-'].update(
+                f'Rx: {np.rad2deg(self.getori(self.astorino)[0]):.2f} deg')
+            self.window['-mA_RY-'].update(
+                f'Ry: {np.rad2deg(self.getori(self.astorino)[1]):.2f} deg')
+            self.window['-mA_RZ-'].update(
+                f'Rz: {np.rad2deg(self.getori(self.astorino)[2]):.2f} deg')
+            
+        if event == '-UPDATE-JOINTS-':
+
+            self.window['-m_X-'].update(
+                f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]:.2f} m')
+            self.window['-m_Y-'].update(
+                f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]:.2f} m')
+            self.window['-m_Z-'].update(
+                f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]:.2f} m')
+            self.window['-m_RX-'].update(
+                f'Rx: {np.rad2deg(self.getori(self.sawyer)[0]):.2f} deg')
+            self.window['-m_RY-'].update(
+                f'Ry: {np.rad2deg(self.getori(self.sawyer)[1]):.2f} deg')
+            self.window['-m_RZ-'].update(
+                f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
+
+        if event == '-MISSION_ENABLE-':
+            self.mission.enable_system()
+
+        elif event == '-MISSION_HOME-':
+            self.mission._home_system()
+
+        elif event == '-MISSION_STOP-':
+            self.mission.stop_system()
+            self.mission_thread.join()
+
+        elif event == '-MISSION_RUN-':
+            self.mission_thread = threading.Thread(target=self.mission.run)
+            self.mission_thread.start()
+            # self.mission.run()
 
     def getori(self, robot):
         ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
@@ -1019,7 +1113,7 @@ class RobotGUI:
     def collision_setup(self):
 
         side = [0.2, 0.2, 0.2]
-        center = self._cell_center @ sm.SE3(0.5, 0., 0.87)
+        center = self._cell_center @ sm.SE3(-0.2, 0., 0.87)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
 

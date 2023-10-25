@@ -15,8 +15,8 @@ from spatialmath import SE3
 import time
 
 from swift import Swift
-# from robot.m_DHRobot3D import M_DHRobot3D
-from m_DHRobot3D import M_DHRobot3D
+from robot.m_DHRobot3D import M_DHRobot3D
+# from m_DHRobot3D import M_DHRobot3D
 
 class Astorino(M_DHRobot3D):
     

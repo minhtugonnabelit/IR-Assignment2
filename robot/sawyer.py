@@ -9,8 +9,8 @@ import spatialmath.base as smb
 import spatialgeometry as geometry
 
 from swift import Swift
-# from robot.m_DHRobot3D import M_DHRobot3D
-from m_DHRobot3D import M_DHRobot3D
+from robot.m_DHRobot3D import M_DHRobot3D
+# from m_DHRobot3D import M_DHRobot3D
 import ir_support
 
 class Sawyer(M_DHRobot3D):
@@ -359,7 +359,7 @@ class SawyerGripper:
         """
         Function to close gripper model
         """
-        q_goal = np.array([0.03])
+        q_goal = np.array([0.02])
         steps = 20
         qtraj_left = rtb.jtraj(self._left_finger.q, -1*q_goal,steps).q
         qtraj_right = rtb.jtraj(self._right_finger.q, q_goal,steps).q

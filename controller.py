@@ -33,6 +33,7 @@ class Controller():
         self._robot_busy = False
         self.object = None
         self._log = log
+        self.action_done = True
 
         if self._robot.name == 'Sawyer':
             self._ee_offset = sm.SE3(0, 0, 0.138)
@@ -41,8 +42,10 @@ class Controller():
 
         # Dispatch table
         self._dispatch = {
+            
             "ENABLE": self.enable_system,
             "HOME": self.go_to_home,
+            
             "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.1, 0, 0),),
             "-X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.1, 0, 0),),
             "+Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.1, 0),),
@@ -55,10 +58,13 @@ class Controller():
             "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), duration=0.1),
             "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), duration=0.1),
             "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), duration=0.1),
-            "JOINT_ANGLES": self.move,
+
             "CARTESIAN_POSE": self.move_cartesian,
             "GAMEPAD_ENABLE": self.gamepad_control,
             "UPDATE_JOINT_STATE": self._update_js,
+
+            "GO_TO_CARTESIAN_POSE": self.go_to_cartesian_pose,
+            "GO_TO_JOINT_ANGLES": self.go_to_joint_angles,
         }  
 
     
@@ -114,10 +120,19 @@ class Controller():
         while not self._shutdown:
             try: 
                 command = self._command_queue.get(timeout=0.01)
-                if command in self._dispatch:
-                    self._dispatch[command]()
+
+                if isinstance(command, str):
+                    command_name = command
+                    command_args = []
                 else:
-                    print(f'Command {command} is not recognized!')
+                    command_name = command["name"]
+                    command_args = command.get("args", [])
+
+                if command_name in self._dispatch:
+                    self._dispatch[command_name](*command_args)
+                else:
+                    print(f'Command {command_name} is not recognized!')
+                    
             except queue.Empty:
                 pass
 
@@ -347,7 +362,9 @@ class Controller():
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
             self._log.info('Provided goal is Done')
+            self.action_done = True
             return True
+        self.action_done = False
         return False
     
     
@@ -595,7 +612,92 @@ class Controller():
 
 
         self._robot_busy = False
+    
+    def single_step_cartesian(self, pose : sm.SE3, time_step, tolerance=0.001):
         
+        # self._robot_busy = True
+        
+        prev_ee_pos = self._robot.fkine(self._robot.q).A[0:3, 3]
+        desired_ee_pos = pose.A[0:3, 3]
+
+
+        # get linear velocity between interpolated point and current pose of ee
+        
+        lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+
+
+        # get angular velocity between interpolated ...
+        
+        s_omega = (pose.A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+        ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+
+        
+        # combine velocities
+        
+        ee_vel = np.hstack((lin_vel, ang_vel))
+        
+
+        ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
+        self.is_collided = False
+        if self.object is not None:
+            if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
+                self.is_collided = True
+                self._log.warning('line_plane ee is nearly collided with object')
+                # break
+
+            if self.is_collided is True:
+
+                # set threshold and damping
+                d_thresh = 0.01
+
+                # weight of the damping vel for collision avoidance
+                weight = 0.5
+
+                # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                if d <= d_thresh:
+                    vel = ( p1 - p2 ) / time_step
+                    ee_vel[0:3] += weight*vel
+
+        ## END -----------------------------------------------------------------------------#
+        
+        # calculate joint velocities, singularity check is already included in the function
+
+        j = self._robot.jacob0(self._robot.q)
+        mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
+        joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
+        
+
+        # update joint states as a command to robot
+
+        current_js = copy.deepcopy(self._robot.q)
+        q = current_js + joint_vel * time_step
+
+
+        # check safety functionality before sending to execute
+
+        if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+            self._state = 'STOPPED'
+
+
+        # send joint command to robot to execute desired motion. Currently available mode is position mode
+
+        self._robot.send_joint_command(q)
+        
+
+    def single_step_joint(self, q : np.ndarray, time_step, tolerance=0.0001):
+
+        self._robot_busy = True
+        if self.object is not None:
+            if self._safety.collision_check_ee(q, self.vertices, self.faces, self.normals):
+                self._log.warning('line_plane ee is nearly collided with object')
+                self._state = 'STOPPED'
+
+        if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+            self._state = 'STOPPED'
+
+        self._robot.send_joint_command(q)
+
 
     def go_to_joint_angles(self, q : np.ndarray, duration=1, tolerance=0.0001):
             
@@ -620,7 +722,9 @@ class Controller():
             poss_diff = np.diff(js - q)
             if np.all(np.abs(poss_diff) < tolerance):
                 self._log.info('Provided joint states is Done')
+                self.action_done = True
                 return True
+            self.action_done = False
             return False
 
         
@@ -689,7 +793,8 @@ class Controller():
 
         return joint_vel
     
-    
+    def action_is_done(self):
+        return self.action_done
 
     # STATE FUNCTION
     # -----------------------------------------------------------------------------------#

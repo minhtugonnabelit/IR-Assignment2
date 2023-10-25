@@ -39,8 +39,8 @@ class Plate():
     # def set_pose(self, pose):
     #     self._mesh.T = pose
 
-    # def get_pose(self):
-    #     return self._pose
+    def get_pose(self):
+        return self._pose
 
     def move_flat_plate(self, pose : SE3):
         """
