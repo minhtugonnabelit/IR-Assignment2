@@ -615,6 +615,17 @@ class Controller():
         self._robot_busy = False
     
     def single_step_cartesian(self, pose : sm.SE3, time_step, tolerance=0.001):
+        """
+        Moves the robot end-effector to a desired pose in Cartesian space using a single step.
+
+        Args:
+            pose (sm.SE3): The desired pose of the end-effector.
+            time_step (float): The time step for the motion.
+            tolerance (float, optional): The tolerance for the motion. Defaults to 0.001.
+
+        Returns:
+            None
+        """
         
         # self._robot_busy = True
         

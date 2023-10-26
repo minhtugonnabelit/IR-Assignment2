@@ -168,7 +168,12 @@ class ControllerInterface():
     
     def action_is_done(self):
         return self._impl.action_is_done()
-        
+    
+    
+    def is_arrived(self, pose, tolerance=0.001):
+        return self._impl.is_arrived(pose, tolerance)
+    
+
     # -----------------------------------------------------------------------------------#
     # Getters
     def get_robot(self):
