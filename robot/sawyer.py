@@ -88,7 +88,7 @@ class Sawyer(M_DHRobot3D):
         # self.gripper = Gripper_Sawyer(env, sawyer_ee= self.fkine(self.q))
         self.gripper = SawyerGripper(base= self.fkine(self.q))
         self.gripper_offset = sm.SE3(0,0,0.14)
-        self.ax = geometry.Axes(0.2, pose=self.fkine(self.q) @ self.gripper_offset)
+        # self.ax = geometry.Axes(0.2, pose=self.fkine(self.q) @ self.gripper_offset)
         self.update_sim()
 
     def _create_DH(self):
@@ -148,7 +148,7 @@ class Sawyer(M_DHRobot3D):
 
         """
         self.add_to_env(self._env)
-        self._env.add(self.ax)
+        # self._env.add(self.ax)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
             self.gripper.add_to_env(self._env)
@@ -207,7 +207,7 @@ class Sawyer(M_DHRobot3D):
         Send joint command to robot. Current mode available is joint position mode
         """
         self.q = q
-        self.ax.T = self.fkine(self.q)@ self.gripper_offset
+        # self.ax.T = self.fkine(self.q)@ self.gripper_offset
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
         self._env.step(0)

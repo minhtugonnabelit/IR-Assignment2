@@ -1073,13 +1073,9 @@ class RobotGUI:
 
     def mission_callback(self, event, values,):
 
-        state_mission = self.mission.system_state()
-
-
         if self.mission.mission_completed():
-            self.mission.reset_mission()
             self.mission_thread.join()
-
+            self.mission.reset_mission()
 
         if event == '-A_UPDATE-JOINTS-':
 
@@ -1111,9 +1107,8 @@ class RobotGUI:
             self.window['-m_RZ-'].update(
                 f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
 
-
         if event == '-UPDATE-STATE-MISSION-':
-            # state_mission = self.mission.system_state()
+            state_mission = self.mission.system_state()
             self.window['-STATE-MISSION-'].update(f'{state_mission}')
             
             if state_mission == 'IDLE':
@@ -1123,44 +1118,26 @@ class RobotGUI:
             elif state_mission == 'ENABLED':
                 self.window['-STATE-MISSION-'].update(text_color='white',
                                                 background_color='green')
-                
-            elif state_mission == 'PROCESSING':
-                pass
-
             
-
         if event == '-MISSION_ENABLE-':
             self.mission.enable_system()
-            self.mission.mission_state = 'IDLE'
-
-
-        if event == '-MISSION_RESUME-':
-            if state_mission == 'STOPPED':
-                self.mission_thread = threading.Thread(target=self.mission.run)
-                self.mission_thread.start()
-                self.mission.mission_state = 'PROCESSING'
         
+        elif event == '-MISSION_DISABLE-':
+            self.mission.disable_system()
 
         elif event == '-MISSION_HOME-':
-            self.mission._home_system()
-            # self.mission._bender_robot.send_command('HOME')
-            # self.mission._picker_robot.send_command('HOME')
+            # self.mission._home_system()
+            self.mission._bender_robot.send_command('HOME')
+            self.mission._picker_robot.send_command('HOME')
 
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()
             self.mission_thread.join()
-            if state_mission == 'STOPPED':
-                self.mission.mission_state == 'IDLE'
-            else:
-                self.mission.mission_state = 'STOPPED'
 
         elif event == '-MISSION_RUN-':
-            if state_mission == 'IDLE':
-                self.mission_thread = threading.Thread(target=self.mission.run)
-                self.mission_thread.start()
-                self.mission.mission_state = 'PROCESSING'
-
-
+            self.mission_thread = threading.Thread(target=self.mission.run)
+            self.mission_thread.start()
+            # self.mission.run()
 
     def getori(self, robot):
         ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
