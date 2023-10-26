@@ -126,6 +126,7 @@ class RobotGUI:
 
         self.flag_busy_sawyer = False
         self.flag_busy_astorino = False
+        self.flashing = True
 
         self.button_and_slider_keys_sawyer = ['-SLIDER0-', '-SLIDER1-', '-SLIDER2-', '-SLIDER3-', '-SLIDER4-', '-SLIDER5-', '-SLIDER6-',
                                               '-MINUSPITCH-', '-MINUSROLL-', '-MINUSYAW-', '-MINUSX-', '-MINUSY-', '-MINUSZ-', '-PLUSPITCH-', '-PLUSROLL-', '-PLUSX-', '-PLUSY-', '-PLUSYAW-', '-PLUSZ-',
@@ -136,6 +137,9 @@ class RobotGUI:
                                                 '-A_MINUSPITCH-', '-A_MINUSROLL-', '-A_MINUSYAW-', '-A_MINUSX-', '-A_MINUSY-', '-A_MINUSZ-', '-A_PLUSPITCH-', '-A_PLUSROLL-', '-A_PLUSX-', '-A_PLUSY-', '-A_PLUSYAW-', '-A_PLUSZ-',
                                                 '-A_END-EFFECTOR-', '-A_RJOINT-', '-A_CARTX-', '-A_CARTY-', '-A_CARTZ-', '-A_ROLL-', '-A_PITCH-', '-A_YAW-',
                                                 '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_DISABLE-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
+
+        self.buttons_mission = ['-MISSION_HOME-', '-MISSION_RUN-', '-MISSION_PAUSE-', '-MISSION_RESUME-', '-MISSION_ENABLE-', '-MISSION_DISABLE-', '-MISSION_STOP-']
+            
 
     def create_window(self):
         tab_group_layout = [
@@ -611,19 +615,19 @@ class RobotGUI:
             ],
 
             [
-                sg.Button('Home System', key='-MISSION_HOME-', size=(16, 3)), sg.Button('Run Mission', key='-MISSION_RUN-', size=(16, 3))
+                sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
+            ],
+            
+            [
+               sg.Button('Run Mission', key='-MISSION_RUN-', size=(34, 3), pad= (6,0))
             ],
 
             [
                 sg.Button('Pause Mission', key='-MISSION_PAUSE-', size=(16, 3)), sg.Button('Resume Mission', key='-MISSION_RESUME-', size=(16, 3))
             ],
-
+            
             [
-                sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
-            ],
-
-            [
-                sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(16, 3))
+                sg.Button('Home System', key='-MISSION_HOME-', size=(16, 3)), sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(16, 3))
             ],
         ]
 
@@ -1077,6 +1081,7 @@ class RobotGUI:
 
 
         if self.mission.mission_completed():
+            self.mission.enable_system()
             self.mission.reset_mission()
             self.mission_thread.join()
 
@@ -1119,22 +1124,50 @@ class RobotGUI:
             if state_mission == 'IDLE':
                 self.window['-STATE-MISSION-'].update(text_color='purple',
                                                 background_color='yellow')
+                
+                for key in self.buttons_mission:
+                    if key != '-MISSION_ENABLE-':
+                        self.window[key].update(disabled= True)
+                    else: self.window[key].update(disabled = False)
             
             elif state_mission == 'ENABLED':
                 self.window['-STATE-MISSION-'].update(text_color='white',
                                                 background_color='green')
                 
+                for key in self.buttons_mission:
+                    if key == '-MISSION_ENABLE-' or key == '-MISSION_STOP-' or key == '-MISSION_RESUME-' or key == '-MISSION_PAUSE-':
+                        self.window[key].update(disabled= True)
+                    else: self.window[key].update(disabled= False)
+                
+                
             elif state_mission == 'PROCESSING':
-                pass
+                if self.flashing:
+                    self.window['-STATE-MISSION-'].update(text_color='black',
+                                                    background_color='white')
+                else:
+                    self.window['-STATE-MISSION-'].update(text_color='black',
+                                                    background_color='green')
+                self.flashing = not self.flashing
+                
+                for key in self.buttons_mission:
+                    if key == '-MISSION_ENABLE-' or key == '-MISSION_RUN-' or key == '-MISSION_HOME-' or key == '-MISSION_RESUME-' :
+                        self.window[key].update(disabled= True)
+                    else: self.window[key].update(disabled= False)
+
 
             
 
         if event == '-MISSION_ENABLE-':
             self.mission.enable_system()
+            self.mission.mission_state = 'ENABLED'
+
+
+        elif event == '-MISSION_DISABLE-':
+            self.mission.disable_system()
             self.mission.mission_state = 'IDLE'
+            
 
-
-        if event == '-MISSION_RESUME-':
+        elif event == '-MISSION_RESUME-':
             if state_mission == 'STOPPED':
                 self.mission_thread = threading.Thread(target=self.mission.run)
                 self.mission_thread.start()
@@ -1142,9 +1175,9 @@ class RobotGUI:
         
 
         elif event == '-MISSION_HOME-':
-            self.mission._home_system()
-            # self.mission._bender_robot.send_command('HOME')
-            # self.mission._picker_robot.send_command('HOME')
+            # self.mission._home_system()
+            self.mission._bender_robot.send_command('HOME')
+            self.mission._picker_robot.send_command('HOME')
 
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()
@@ -1155,7 +1188,7 @@ class RobotGUI:
                 self.mission.mission_state = 'STOPPED'
 
         elif event == '-MISSION_RUN-':
-            if state_mission == 'IDLE':
+            if state_mission == 'ENABLED':
                 self.mission_thread = threading.Thread(target=self.mission.run)
                 self.mission_thread.start()
                 self.mission.mission_state = 'PROCESSING'

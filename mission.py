@@ -571,6 +571,7 @@ class Mission():
 
                 print('task completed') 
                 self.plate_index += 1
+                
 
                 if  self.plate_index <= len(self._plates_list)-1:
 
@@ -598,6 +599,7 @@ class Mission():
         """
         Check if mission is completed
         """
+        
         return self.index == len(self._action_list) and self.plate_index == len(self._plates_list) and self.step_is_done()
 
 
