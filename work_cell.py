@@ -38,6 +38,7 @@ class WorkCell():
         self._light_curtain_laser = self._add_model('light_curtain_laser.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        # self._bunny = self._add_model('bunny.dae',  sm.SE3(0, 0, 0))
         
     def get_cell_center(self):
         """

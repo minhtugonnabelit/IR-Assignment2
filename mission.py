@@ -36,7 +36,7 @@ class Mission():
 
     """
 
-    STEP = 50
+    STEP = 150
 
     def __init__(self, plates_list, workcell : WorkCell, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
@@ -85,7 +85,7 @@ class Mission():
             self._astor_grip,
             self._tilt_plate,
             self._bend_plate,
-            self._drop_obejct,
+            # self._drop_object,
             self._unbend_plate,
             self._astor_release,
             self._hold_plate,
@@ -141,7 +141,7 @@ class Mission():
 
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         # # grip_pose = sm.SE3(-0.09,0.91,0.91) 
         # # non-blocking method
@@ -170,10 +170,10 @@ class Mission():
         current_pose = self._picker_robot.get_ee_pose()    
 
         pose_ori = grip_pose.A[0:3,0:3]
-        path_sawyer = np.empty((self.STEP, 3))
+        path_sawyer = np.empty((30, 3))
 
-        for i in range(self.STEP):
-            t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
+        for i in range(30):
+            t = i / (30 - 1) # Interpolation parameter [0, 1]
             path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*grip_pose.A[0:3,3]
 
         index = 0
@@ -187,7 +187,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         # # non-blocking method
         # command = {
@@ -216,10 +216,10 @@ class Mission():
         current_pose = self._picker_robot.get_ee_pose()
 
         pose_ori = hang_pose.A[0:3,0:3]
-        path_sawyer = np.empty((self.STEP, 3))
+        path_sawyer = np.empty((30, 3))
 
-        for i in range(self.STEP):
-            t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
+        for i in range(30):
+            t = i / (30 - 1) # Interpolation parameter [0, 1]
             path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*hang_pose.A[0:3,3]
 
         index = 0
@@ -233,7 +233,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         # non-blocking method
         # command = {
@@ -270,7 +270,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(sawyer_gripper_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         # # non-blocking method
         # command = {
@@ -299,7 +299,7 @@ class Mission():
             self._bender_robot.single_step_cartesian(path_astor[index], 0.01)
             index += 1
             self.done = self._bender_robot.is_arrived(astorino_gripper_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         self._bender_robot.close_gripper()
 
@@ -321,7 +321,7 @@ class Mission():
         - @param forth: True for tilting forth, False for back
         """
 
-        path_plate = rtb.ctraj(self._plates_list[plt_index].get_pose(), self.TILTEDPOSE, 50)
+        path_plate = rtb.ctraj(self._plates_list[plt_index].get_pose(), self.TILTEDPOSE, 30)
         picker_last_pose = path_plate[-1] @ self._PICKER_GRIP_POSE
         bender_last_pose = path_plate[-1] @ self._BENDER_GRIP_POSE
 
@@ -337,7 +337,7 @@ class Mission():
             
             self.done = self._picker_robot.is_arrived(picker_last_pose) and self._bender_robot.is_arrived(bender_last_pose)
 
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
 
     def _bend_plate(self, plt_index):
@@ -346,7 +346,8 @@ class Mission():
         """
         step = 20
         self.all_seg = []
-
+        step_bunny_slide = 0.2
+        step_bunny = step_bunny_slide / step
         for i in range(step):
 
             seg_array = []
@@ -362,31 +363,42 @@ class Mission():
             bend_ori = bend.A[0:3,0:3] @ self._BENDER_GRIP_POSE.A[0:3,0:3]
             bend.A[0:3,0:3] = bend_ori
 
+            # drop bunny
+            self._plates_list[plt_index].drop_bunny_step(step= step_bunny*i)
+
             # position of the grasping pose is kept
             picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
             bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
 
+            
             # send motion command
             self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
             self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
 
             self.all_seg.append(seg_array)
-            time.sleep(0.01)
+            
+
+            # time.sleep(0.01)
         
 
-    def _drop_obejct(self, plt_index):
-        """
-        STEP 5: Drop the object
-        After this step, consider mission done, can send completion signal, move back home 
-        or move on to another mission
-        """
-        pass
+    # def _drop_object(self, plt_index):
+    #     """
+    #     STEP 5: Drop the object
+    #     After this step, consider mission done, can send completion signal, move back home 
+    #     or move on to another mission
+    #     """
+        
+    #     self._plates_list[plt_index].drop_bunny_step()
+        
 
     def _unbend_plate(self, plt_index):
         """
         Coordinate 2 arms to unbend the plate
         """
-
+        step = len(self.all_seg)
+        step_bunny_drop = 0.055
+        step_bunny = step_bunny_drop / step
+        
         for i, seg_array in enumerate(reversed(self.all_seg)):
 
             _pick, _bend = self._plates_list[plt_index].unbend(seg_array)
@@ -401,6 +413,9 @@ class Mission():
             bend_ori = bend.A[0:3,0:3] @ self._BENDER_GRIP_POSE.A[0:3,0:3]
             bend.A[0:3,0:3] = bend_ori
 
+            # drop bunny
+            self._plates_list[plt_index].drop_bunny_step_box(step= step_bunny*i)
+
             # position of the grasping pose is kept
             picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
             bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
@@ -409,7 +424,7 @@ class Mission():
             self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
             self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
 
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
     
     def _astor_release(self, i):
@@ -429,17 +444,17 @@ class Mission():
         """
         hang_pose = self.HANGPOSES[plt_index] @ self._PICKER_GRIP_POSE
         fix_pose = sm.SE3(-0.15,0,0.1) @ self._picker_robot.get_ee_pose() 
-        fix_path = rtb.ctraj(self._picker_robot.get_ee_pose(), fix_pose, self.STEP)
+        fix_path = rtb.ctraj(self._picker_robot.get_ee_pose(), fix_pose, 30)
         
 
         index = 0
         while index < len(fix_path) and self._picker_robot.system_activated():
             self._picker_robot.single_step_cartesian(fix_path[index], 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
-            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
+            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose), part_relate = False)
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         path_sawyer = rtb.ctraj(fix_pose, hang_pose, self.STEP)
 
@@ -447,10 +462,10 @@ class Mission():
         while index < len(path_sawyer) and self._picker_robot.system_activated():
             self._picker_robot.single_step_cartesian(path_sawyer[index], 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
-            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
+            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose), part_relate = False)
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
         
 
         print('plate held')
@@ -464,10 +479,10 @@ class Mission():
         current_pose = self._picker_robot.get_ee_pose()
 
         pose_ori = return_pose.A[0:3,0:3]
-        path_sawyer = np.empty((self.STEP, 3))
+        path_sawyer = np.empty((30, 3))
 
-        for i in range(self.STEP):
-            t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
+        for i in range(30):
+            t = i / (30 - 1) # Interpolation parameter [0, 1]
             path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*return_pose.A[0:3,3]
 
         index = 0
@@ -476,11 +491,11 @@ class Mission():
             pose.A[0:3,0:3] = pose_ori
             self._picker_robot.single_step_cartesian(pose, 0.01)
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
-            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
+            self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose), part_relate = False)
 
             index += 1
             self.done = self._picker_robot.is_arrived(return_pose)
-            time.sleep(0.01)
+            # time.sleep(0.01)
 
         self._picker_robot.open_gripper()  
 
@@ -564,8 +579,8 @@ class Mission():
                 
                 if self.step_is_done():
                     self.index += 1
-
-                time.sleep(0.5)
+            
+                # time.sleep(0.5)
 
             if self.task_completed():   
 

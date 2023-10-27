@@ -69,16 +69,19 @@ class RobotGUI:
         self.log = RobotGUI._init_log(log_level)
 
         # Init environment object:
-
+        # self.bunny_location = 
+        
         self.work_cell = WorkCell(self.env, self._cell_center)
         self.plate = Plate(self._cell_center @
-                           sm.SE3(-0.35, 0.9, 0.905), self.env)
+                           sm.SE3(-0.35, 0.9, 0.905), self.env, bunny_location= sm.SE3(0.03, 0, 0) * sm.SE3.Rz(-np.pi/2))
         self.plate1 = Plate(self._cell_center @ 
-                            sm.SE3(-0.35, 0.4, 0.905), self.env)
+                            sm.SE3(-0.35, 0.4, 0.905), self.env, bunny_location= sm.SE3(-0.03, 0.01, 0) * sm.SE3.Rz(np.pi/2))
         
         self.plates_list = []
         self.plates_list.append(self.plate)
         self.plates_list.append(self.plate1)
+        
+        
 
         # Initialize robot
 
@@ -656,7 +659,7 @@ class RobotGUI:
             self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
                                         flag_print_running_astorino=flag_print_running_astorino)
             self.mission_callback(event=event, values=values)
-            # self.env.step(0)
+            
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
@@ -1172,6 +1175,7 @@ class RobotGUI:
                 self.mission_thread = threading.Thread(target=self.mission.run)
                 self.mission_thread.start()
                 self.mission.mission_state = 'PROCESSING'
+                
         
 
         elif event == '-MISSION_HOME-':

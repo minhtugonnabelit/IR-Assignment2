@@ -137,7 +137,7 @@ class Controller():
             except queue.Empty:
                 pass
 
-            time.sleep(0.5)
+            # time.sleep(0.5)
 
     def send_command(self, command):
         """
@@ -721,7 +721,7 @@ class Controller():
         - @param tolerance: tolerance to consider the robot has reached the desired pose (default 0.001)
         """
 
-        step = 100
+        step = 150
         time_step = duration/step
 
         # Defined quintic polynomial trajectory
@@ -760,7 +760,7 @@ class Controller():
             # send joint command to robot to execute desired motion. Currently available mode is position mode
 
             self._robot.send_joint_command(path.q[index])
-            time.sleep(time_step)
+            time.sleep(0)
 
 
         self._robot_busy = False
