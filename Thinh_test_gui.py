@@ -660,6 +660,8 @@ class RobotGUI:
                                         flag_print_running_astorino=flag_print_running_astorino)
             self.mission_callback(event=event, values=values)
             
+            self.env.step(0.05)
+            
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()

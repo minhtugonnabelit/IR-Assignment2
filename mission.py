@@ -137,7 +137,7 @@ class Mission():
 
             pose = sm.SE3(path_sawyer[index])
             pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.01)
+            self._picker_robot.single_step_cartesian(pose, 0.05)
 
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
@@ -181,7 +181,7 @@ class Mission():
 
             pose = sm.SE3(path_sawyer[index])
             pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.01)
+            self._picker_robot.single_step_cartesian(pose, 0.05)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
@@ -227,7 +227,7 @@ class Mission():
 
             pose = sm.SE3(path_sawyer[index])
             pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.01)
+            self._picker_robot.single_step_cartesian(pose, 0.05)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))

@@ -1,0 +1,288 @@
+2023-10-27 17:13:43,571,INFO,Thinh_test_gui.py,_init_log,1243,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\27_10_2023_lelon.log
+2023-10-27 17:13:57,832,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:15:57,007,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:15:57,012,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:15:57,881,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:15:57,962,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:15:57,963,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:16:09,703,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:16:17,993,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:16:17,994,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:16:22,909,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:25,946,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:28,426,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:38,056,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:16:38,058,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:16:41,343,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:41,476,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:41,644,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:41,797,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:41,927,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:42,082,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:42,191,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:49,537,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:49,592,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:54,161,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:54,163,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:16:58,081,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:16:58,081,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:17:03,463,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:18,088,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:17:18,089,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:17:20,270,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:20,379,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:20,481,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:23,333,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:36,782,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:38,148,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:17:38,149,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:17:39,984,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:42,651,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:53,800,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:53,870,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:53,954,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:54,044,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:54,125,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:54,203,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:17:58,163,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:17:58,163,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:18:00,234,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:00,276,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:04,752,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:04,752,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:13,505,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:18,146,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:18:18,147,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:18:27,388,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:27,483,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:27,571,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:30,277,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:18:38,183,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:18:38,188,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:18:46,620,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:18:49,259,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:20:21,795,INFO,Thinh_test_gui.py,_init_log,1245,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\27_10_2023_lelon.log
+2023-10-27 17:20:30,845,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:20:34,959,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:20:34,960,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:20:35,888,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:20:41,777,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:20:41,777,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:20:48,522,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:21:01,782,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:21:01,784,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:21:01,870,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:04,985,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:07,569,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:19,873,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:19,963,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:20,071,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:20,171,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:20,273,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:20,371,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:20,469,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:21,789,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:21:21,789,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:21:27,509,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:27,559,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:32,104,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:32,106,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:41,494,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:41,844,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:21:41,844,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:21:57,268,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:57,361,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:21:57,497,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:00,204,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:01,851,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:22:01,852,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:22:13,548,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:16,699,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:19,296,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:21,919,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:22:21,922,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:22:31,673,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:31,769,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:31,867,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:31,958,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:32,051,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:32,143,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:39,153,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:39,210,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:41,925,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:22:41,925,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:22:43,721,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:43,721,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:22:52,939,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:23:01,961,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:23:01,961,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:23:08,318,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:23:08,413,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:23:08,513,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:23:11,108,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:23:21,968,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:23:22,016,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:23:27,964,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:23:30,182,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:23:42,185,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:23:42,185,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:24:02,184,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:24:02,184,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:24:22,191,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:24:22,194,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:24:42,308,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:24:42,308,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:25:02,528,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:25:02,528,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:25:22,693,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:25:22,693,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:25:42,876,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:25:42,877,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:25:48,569,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:25:48,569,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:26:02,054,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:02,908,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:26:02,908,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:26:05,151,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:07,770,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:19,964,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,058,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,153,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,232,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,314,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,389,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:20,467,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:22,939,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:26:22,986,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:26:26,444,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:26,484,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:30,442,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:30,442,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:38,786,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:26:42,998,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:26:43,013,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:26:50,061,INFO,Thinh_test_gui.py,_init_log,1245,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\27_10_2023_lelon.log
+2023-10-27 17:26:59,824,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:27:04,805,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:27:04,805,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:27:10,053,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:27:10,054,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:27:13,018,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:27:26,010,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:27:30,116,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:27:30,117,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:27:39,955,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:43,176,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:45,946,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:50,108,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:27:50,108,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:27:58,887,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:58,950,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:59,029,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:59,108,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:59,171,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:59,250,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:27:59,329,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:28:05,274,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:28:05,314,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:28:09,202,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:28:09,202,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:28:10,140,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:28:10,141,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:28:16,768,INFO,Thinh_test_gui.py,_init_log,1245,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\27_10_2023_lelon.log
+2023-10-27 17:28:26,494,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:28:33,587,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:28:33,587,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
+2023-10-27 17:28:34,335,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:28:36,758,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:28:36,758,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:28:47,489,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:28:56,817,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:28:56,817,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:29:01,934,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:05,340,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:08,215,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:16,860,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:29:16,860,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:29:19,218,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,302,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,377,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,452,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,528,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,604,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:19,683,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:25,360,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:25,416,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:29,285,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:29,285,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:36,860,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:29:36,860,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:29:37,500,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:50,710,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:50,784,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:50,859,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:53,052,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:29:56,851,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:29:56,851,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:30:04,432,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:07,229,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:09,409,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:16,879,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:30:16,879,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:30:20,116,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:20,185,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:20,261,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:20,331,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:20,414,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:20,484,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:26,220,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:26,261,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:30,414,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:30,414,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:36,880,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:30:36,880,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:30:38,679,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:51,559,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:51,629,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:51,712,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:53,855,INFO,controller.py,is_arrived,365,Provided goal is Done
+2023-10-27 17:30:56,914,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:30:56,920,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:31:07,928,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:31:09,815,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:31:17,281,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:31:17,282,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:31:37,461,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:31:37,461,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:31:57,634,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:31:57,634,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:32:17,700,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:32:17,700,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:32:37,862,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:32:37,862,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:32:58,005,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:32:58,005,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:33:18,192,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:33:18,192,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:33:38,225,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:33:38,225,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:33:58,253,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:33:58,253,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:34:18,375,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:34:18,430,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:34:38,446,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:34:38,447,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:34:58,770,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:34:58,770,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:35:18,798,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:35:18,798,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:35:38,781,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:35:38,781,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:35:58,895,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:35:58,895,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:36:19,216,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:36:19,216,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:36:39,311,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-27 17:36:39,312,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-27 17:36:46,679,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-10-27 17:36:46,679,INFO,server.py,handler,268,connection closed
