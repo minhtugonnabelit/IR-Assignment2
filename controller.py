@@ -673,7 +673,7 @@ class Controller():
 
         ## END -----------------------------------------------------------------------------#
         
-        # calculate joint velocities, singularity check is already included in the function
+        # calculate joint velocities, singularity check is already included in the function 
 
         j = self._robot.jacob0(self._robot.q)
         mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01

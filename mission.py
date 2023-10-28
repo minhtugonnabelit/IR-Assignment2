@@ -60,7 +60,6 @@ class Mission():
         self.JOINEDPOSE = sm.SE3(0.5, 0, 0.9) @ sm.SE3.RPY(90.0,0.0,0.0, unit = 'deg', order='xyz')
         self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(np.pi/3)
 
-
         # end effector pose relative to plate base
         self._PICKER_GRIP_POSE = sm.SE3(0.25,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
         self._BENDER_GRIP_POSE = sm.SE3(-0.23,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
@@ -85,7 +84,6 @@ class Mission():
             self._astor_grip,
             self._tilt_plate,
             self._bend_plate,
-            # self._drop_object,
             self._unbend_plate,
             self._astor_release,
             self._hold_plate,
@@ -289,7 +287,8 @@ class Mission():
         """
         STEP 4: Astor joins by gripping the other side of the plate
         """
-
+        if plt_index > 0:
+            self._BENDER_GRIP_POSE = sm.SE3.Rx(-np.pi/90) @ self._BENDER_GRIP_POSE
         # plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0, 0.0, 0.0, unit = 'deg', order='xyz')
         astorino_gripper_pose = self.JOINEDPOSE @ self._BENDER_GRIP_POSE
         path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), astorino_gripper_pose, self.STEP)
@@ -381,16 +380,6 @@ class Mission():
             # time.sleep(0.01)
         
 
-    # def _drop_object(self, plt_index):
-    #     """
-    #     STEP 5: Drop the object
-    #     After this step, consider mission done, can send completion signal, move back home 
-    #     or move on to another mission
-    #     """
-        
-    #     self._plates_list[plt_index].drop_bunny_step()
-        
-
     def _unbend_plate(self, plt_index):
         """
         Coordinate 2 arms to unbend the plate
@@ -435,6 +424,7 @@ class Mission():
         # path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1), self.STEP)
 
         self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1))
+        # self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3.RPY(180,0,0, unit = 'deg', order='xyz'))
     
 
     def _hold_plate(self, plt_index):

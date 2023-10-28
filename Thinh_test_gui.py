@@ -141,7 +141,7 @@ class RobotGUI:
                                                 '-A_END-EFFECTOR-', '-A_RJOINT-', '-A_CARTX-', '-A_CARTY-', '-A_CARTZ-', '-A_ROLL-', '-A_PITCH-', '-A_YAW-',
                                                 '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_DISABLE-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
 
-        self.buttons_mission = ['-MISSION_HOME-', '-MISSION_RUN-', '-MISSION_PAUSE-', '-MISSION_RESUME-', '-MISSION_ENABLE-', '-MISSION_DISABLE-', '-MISSION_STOP-']
+        self.buttons_mission = ['-MISSION_RUN-', '-MISSION_ENABLE-', '-MISSION_DISABLE-', '-MISSION_STOP-']
             
 
     def create_window(self):
@@ -625,12 +625,9 @@ class RobotGUI:
                sg.Button('Run Mission', key='-MISSION_RUN-', size=(34, 3), pad= (6,0))
             ],
 
-            [
-                sg.Button('Pause Mission', key='-MISSION_PAUSE-', size=(16, 3)), sg.Button('Resume Mission', key='-MISSION_RESUME-', size=(16, 3))
-            ],
             
             [
-                sg.Button('Home System', key='-MISSION_HOME-', size=(16, 3)), sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(16, 3))
+               sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(34, 3), pad= (6,3))
             ],
         ]
 
@@ -655,7 +652,7 @@ class RobotGUI:
             if event == sg.WIN_CLOSED:
                 break
             self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
-                                      flag_print_running_sawyer=flag_print_running_sawyer)
+                                        flag_print_running_sawyer=flag_print_running_sawyer)
             self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
                                         flag_print_running_astorino=flag_print_running_astorino)
             self.mission_callback(event=event, values=values)
@@ -1080,7 +1077,7 @@ class RobotGUI:
             self.sawyer_controller.send_command('-Rz')
 
 
-    def mission_callback(self, event, values,):
+    def mission_callback(self, event, values):
 
         state_mission = self.mission.system_state()
 
@@ -1136,16 +1133,23 @@ class RobotGUI:
                     else: self.window[key].update(disabled = False)
             
             elif state_mission == 'ENABLED':
+                self.window['-MISSION_DISABLE-'].update(disabled= False)
+                
                 self.window['-STATE-MISSION-'].update(text_color='white',
                                                 background_color='green')
                 
                 for key in self.buttons_mission:
-                    if key == '-MISSION_ENABLE-' or key == '-MISSION_STOP-' or key == '-MISSION_RESUME-' or key == '-MISSION_PAUSE-':
+                    if key == '-MISSION_ENABLE-':
                         self.window[key].update(disabled= True)
+                    elif key == '-MISSION_STOP-':
+                        if self.sawyer_controller.get_busy_status() or self.astorino_controller.get_busy_status():
+                            self.window[key].update(disabled= False)
+                        else: self.window[key].update(disabled= True)
                     else: self.window[key].update(disabled= False)
-                
+                    
                 
             elif state_mission == 'PROCESSING':
+                
                 if self.flashing:
                     self.window['-STATE-MISSION-'].update(text_color='black',
                                                     background_color='white')
@@ -1155,9 +1159,16 @@ class RobotGUI:
                 self.flashing = not self.flashing
                 
                 for key in self.buttons_mission:
-                    if key == '-MISSION_ENABLE-' or key == '-MISSION_RUN-' or key == '-MISSION_HOME-' or key == '-MISSION_RESUME-' :
+                    if key == '-MISSION_ENABLE-' or key == '-MISSION_RUN-' or key == '-MISSION_DISABLE-' :
                         self.window[key].update(disabled= True)
                     else: self.window[key].update(disabled= False)
+                    
+            elif state_mission == 'STOPPED':
+                self.window['-MISSION_DISABLE-'].update(disabled= True)
+                self.window['-STATE-MISSION-'].update(background_color='red', text_color = 'white')
+                self.window['-MISSION_STOP-'].update('Release E-Stop')
+            
+                
 
 
             
@@ -1172,24 +1183,28 @@ class RobotGUI:
             self.mission.mission_state = 'IDLE'
             
 
-        elif event == '-MISSION_RESUME-':
-            if state_mission == 'STOPPED':
-                self.mission_thread = threading.Thread(target=self.mission.run)
-                self.mission_thread.start()
-                self.mission.mission_state = 'PROCESSING'
+        # elif event == '-MISSION_RESUME-':
+        #     if state_mission == 'STOPPED':
+        #         self.mission_thread = threading.Thread(target=self.mission.run)
+        #         self.mission_thread.start()
+        #         self.mission.mission_state = 'PROCESSING'
                 
         
 
-        elif event == '-MISSION_HOME-':
-            # self.mission._home_system()
-            self.mission._bender_robot.send_command('HOME')
-            self.mission._picker_robot.send_command('HOME')
+        # elif event == '-MISSION_HOME-':
+        #     # self.mission._home_system()
+        #     self.mission._bender_robot.send_command('HOME')
+        #     self.mission._picker_robot.send_command('HOME')
+        #     self.window['-MISSION_STOP-'].update(disabled= False)
+            
+            
 
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()
             self.mission_thread.join()
             if state_mission == 'STOPPED':
                 self.mission.mission_state == 'IDLE'
+                self.window['-MISSION_STOP-'].update('Emergency Stop')
             else:
                 self.mission.mission_state = 'STOPPED'
 
