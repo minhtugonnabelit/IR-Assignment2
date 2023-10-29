@@ -139,7 +139,7 @@ class RobotGUI:
         self.button_and_slider_keys_astorino = ['-A_SLIDER0-', '-A_SLIDER1-', '-A_SLIDER2-', '-A_SLIDER3-', '-A_SLIDER4-', '-A_SLIDER5-',
                                                 '-A_MINUSPITCH-', '-A_MINUSROLL-', '-A_MINUSYAW-', '-A_MINUSX-', '-A_MINUSY-', '-A_MINUSZ-', '-A_PLUSPITCH-', '-A_PLUSROLL-', '-A_PLUSX-', '-A_PLUSY-', '-A_PLUSYAW-', '-A_PLUSZ-',
                                                 '-A_END-EFFECTOR-', '-A_RJOINT-', '-A_CARTX-', '-A_CARTY-', '-A_CARTZ-', '-A_ROLL-', '-A_PITCH-', '-A_YAW-',
-                                                '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_DISABLE-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
+                                                '-A_CONFIRM-', '-A_ENABLE-', '-A_ESTOP-', '-A_GAMEPAD_ENABLE-', '-A_HOME-']
 
         self.buttons_mission = ['-MISSION_RUN-', '-MISSION_ENABLE-', '-MISSION_DISABLE-', '-MISSION_STOP-']
             
@@ -534,10 +534,8 @@ class RobotGUI:
             [
                 sg.Button('ENABLE CONTROLLER', key='-A_ENABLE-',
                           size=(20, 1), pad=(5, 5)),
-                sg.Button('GAMEPAD MODE',
-                          key='-A_GAMEPAD_ENABLE-', size=(15, 1)),
-                sg.Button('DISABLE GAMEPAD',
-                          key='-A_GAMEPAD_DISABLE-', size=(18, 1)),
+                sg.Button('GAMEPAD OFF',
+                          key='-A_GAMEPAD_ENABLE-', size=(18, 1)),
                 sg.Button('EMERGENCY STOP', key='-A_ESTOP-',
                           button_color=('white', 'red'), size=(30, 1))
             ],
@@ -686,7 +684,7 @@ class RobotGUI:
                 float_value = float(input_value)
                 input_values.append(float_value)
             except ValueError:
-                print(f"Invalid input: {input_value}")
+                self.log.warning(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
         pose = self.astorino.base @ sm.SE3(input_values[0], input_values[1], input_values[2]
@@ -782,9 +780,10 @@ class RobotGUI:
 
         # event activated with HOME button
         elif event == '-A_HOME-':
-            if self.astorino_controller.disable_gamepad is False:
-                self.astorino_controller.disable_gamepad()
+            # if self.astorino_controller.disable_gamepad is False:
+            #     self.astorino_controller.disable_gamepad()
             self.astorino_controller.send_command('HOME')
+            self.astorino_controller.set_event_GUI(event)
 
         # event enabled with ENABLE button
         elif event == '-A_ENABLE-':
@@ -794,6 +793,7 @@ class RobotGUI:
                 self.window['-A_MSG-'].update('')
                 self.window['-A_MSG-'].print('System is Ready')
                 self.window['-A_ENABLE-'].update(disabled=True)
+                self.astorino_controller.set_event_GUI(event)
 
         # event activated with E-stop button
         elif event == '-A_ESTOP-':
@@ -817,11 +817,19 @@ class RobotGUI:
                 self.astorino_controller.send_command('CARTESIAN_POSE')
 
         elif event == '-A_GAMEPAD_ENABLE-':
-            self.astorino_controller.send_command("GAMEPAD_ENABLE")
+            # self.astorino_controller.send_command("GAMEPAD_ENABLE")
             # self.astorino_controller.gamepad_control()
-
-        elif event == '-A_GAMEPAD_DISABLE-':
-            self.astorino_controller.disable_gamepad()
+            gamepad_status = self.astorino_controller.get_gamepad_status()
+            if not gamepad_status: # If Gamepad is off
+                self.astorino_controller.send_command("GAMEPAD_ENABLE")
+                joy_name = self.astorino_controller.get_gamepad_name()
+                self.window['-A_MSG-'].print(f'Your {joy_name} is ready!')
+                self.window['-A_GAMEPAD_ENABLE-'].update('GAMEPAD ON', disabled = True)
+            else:
+                self.astorino_controller.disable_gamepad()
+                joy_name = self.astorino_controller.get_gamepad_name()
+                self.window['-A_MSG-'].print(f'Disable {joy_name}!')
+                self.window['-A_GAMEPAD_ENABLE-'].update('GAMEPAD OFF', disabled = False)
 
         # event activated with +X button
         elif event == '-A_PLUSX-':
@@ -941,7 +949,6 @@ class RobotGUI:
                     if key != '-ENABLE-':
                         self.window[key].update(disabled=True)
                     else: self.window[key].update(disabled= False)
-                    
                 self.window['-ESTOP-'].update('EMERGENCY STOP')
 
             elif state == 'ENABLED':
@@ -1000,16 +1007,12 @@ class RobotGUI:
         elif event == '-ENABLE-':
             self.sawyer_controller.send_command('ENABLE')
             state = self.sawyer_controller.system_state()
-
             if state == 'IDLE':
                 self.window['-MSG-'].update('')
                 self.window['-MSG-'].print('System is Ready')
                 self.window['-ENABLE-'].update(disabled=True)
                 self.sawyer_controller.set_event_GUI(event)
                 
-                
-
-
         # event activated with E-stop button
         elif event == '-ESTOP-':
             state = self.sawyer_controller.system_state()
@@ -1138,7 +1141,6 @@ class RobotGUI:
 
 
         if event == '-UPDATE-STATE-MISSION-':
-            # state_mission = self.mission.system_state()
             self.window['-STATE-MISSION-'].update(f'{state_mission}')
             
             if state_mission == 'IDLE':
