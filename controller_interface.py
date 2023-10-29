@@ -31,6 +31,14 @@ class ControllerInterface():
         """
         return self._impl.update_collision_object(side, center)
 
+    def get_gamepad_name(self):
+        return self._impl.get_gamepad_name()
+
+    def get_gamepad_status(self):
+        return self._impl.get_gamepad_status()
+    
+    def set_event_GUI(self, event: str):
+        self._impl.set_event_GUI(event)
 
     def gamepad_control(self):
         """

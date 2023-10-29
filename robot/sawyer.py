@@ -37,9 +37,13 @@ class Sawyer(M_DHRobot3D):
         gripper_ready=False,
         gui=None,
     ):
+        self._gripper_ready = gripper_ready
+        if self._gripper_ready:
+            self._offset_gripper = 0.16
+        else: self._offset_gripper = 0
+    
         # DH links
         links = self._create_DH()
-        self._gripper_ready = gripper_ready
         self._env = env
 
         # Names of the robot link files in the directory
@@ -85,11 +89,10 @@ class Sawyer(M_DHRobot3D):
         self.set_neutral_js(self._NEUTRAL)
 
         # Add gripper
-        # self.gripper = Gripper_Sawyer(env, sawyer_ee= self.fkine(self.q))
         self.gripper = SawyerGripper(base= self.fkine(self.q))
-        self.gripper_offset = sm.SE3(0,0,0.14)
-        # self.ax = geometry.Axes(0.2, pose=self.fkine(self.q) @ self.gripper_offset)
+        self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
         self.update_sim()
+        
 
     def _create_DH(self):
         """
@@ -98,10 +101,9 @@ class Sawyer(M_DHRobot3D):
 
         # deg = np.pi / 180
         mm = 1e-3
-
         # kinematic parameters
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
-        d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
+        d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75 + self._offset_gripper/mm] * mm
         alpha = [-np.pi / 2, -np.pi / 2, -np.pi /
                  2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
         qlim = np.deg2rad([[-175, 175],
@@ -148,7 +150,7 @@ class Sawyer(M_DHRobot3D):
 
         """
         self.add_to_env(self._env)
-        # self._env.add(self.ax)
+        self._env.add(self.ax)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
             self.gripper.add_to_env(self._env)
@@ -207,7 +209,7 @@ class Sawyer(M_DHRobot3D):
         Send joint command to robot. Current mode available is joint position mode
         """
         self.q = q
-        # self.ax.T = self.fkine(self.q)@ self.gripper_offset
+        self.ax.T = self.fkine(self.q)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
         self._env.step(0)
@@ -312,7 +314,7 @@ class SawyerGripper:
         links = self._create_DH()
         base_init = sm.SE3(0, 0, 0)  # This base is created just to initial the gripper model, then the main 'base' as a class property is used for asssiging the primary base
         self._base = base # set attribute here: when we use "base", base at _init_ has the value, then it will be assigned to function set_base(value) at attribute function
-
+        
 
         ## Right finger properties
 
@@ -329,7 +331,7 @@ class SawyerGripper:
             qtest=self._qtest,
         )
         
-        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.16,0,0)
         self._right_finger.base = (
             self._base.A @ self.base_tf_right.A
         )  
@@ -351,7 +353,7 @@ class SawyerGripper:
             qtest=self._qtest
         )
 
-        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)
+        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.16,0,0)
         self._left_finger.base = (
             self._base.A @ self.base_tf_left.A
         )

@@ -61,8 +61,8 @@ class Mission():
         self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(np.pi/3)
 
         # end effector pose relative to plate base
-        self._PICKER_GRIP_POSE = sm.SE3(0.25,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
-        self._BENDER_GRIP_POSE = sm.SE3(-0.23,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
+        self._PICKER_GRIP_POSE = sm.SE3(0.09,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
+        self._BENDER_GRIP_POSE = sm.SE3(-0.1,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
 
         #----------------
         self._cell_center = self._workcell.get_cell_center()
@@ -376,8 +376,8 @@ class Mission():
             self._plates_list[plt_index].drop_bunny_step(step= step_bunny*i)
 
             # position of the grasping pose is kept
-            picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
-            bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
+            picker_grip_pose = pick
+            bender_grip_pose = bend 
 
             
             # send motion command
@@ -395,7 +395,7 @@ class Mission():
         Coordinate 2 arms to unbend the plate
         """
         step = len(self.all_seg)
-        step_bunny_drop = 0.055
+        step_bunny_drop = 0.02
         step_bunny = step_bunny_drop / step
         
         for i, seg_array in enumerate(reversed(self.all_seg)):
@@ -416,8 +416,8 @@ class Mission():
             self._plates_list[plt_index].drop_bunny_step_box(step= step_bunny*i)
 
             # position of the grasping pose is kept
-            picker_grip_pose = pick @ sm.SE3(np.linalg.inv(self._picker_robot.get_robot().gripper_offset.A))
-            bender_grip_pose = bend @ sm.SE3(np.linalg.inv(self._bender_robot.get_robot().gripper_offset.A))
+            picker_grip_pose = pick
+            bender_grip_pose = bend
 
             # send motion command
             self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
