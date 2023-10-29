@@ -76,7 +76,7 @@ class Plate():
         self._env.add(self._bunny)
 
 
-    def bend(self, i, seg_array):
+    def bend(self, increment, seg_array):
         """
         Bend the plate
         Return the pose of 2 outer segments
@@ -92,11 +92,11 @@ class Plate():
 
         # Bending parameters        
         # Increment is the increment of seg_pose after each step
-        INCREMENT = pi/300 * i
+        # INCREMENT = pi/300 * i
         
         seg_pose = self._pose
         for seg in self._segments[:middle_segment_number]:
-            seg_pose = seg_pose * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(INCREMENT) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
+            seg_pose = seg_pose * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(increment) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
             seg.T = seg_pose     
             seg_array.append(seg_pose)
         picker_pose = seg_pose
@@ -106,7 +106,7 @@ class Plate():
 
         seg_pose = self._pose
         for seg in self._segments[(middle_segment_number+1):]:
-            seg_pose = seg_pose * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(-INCREMENT) * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0)
+            seg_pose = seg_pose * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(-increment) * SE3.Trans(-Plate.SEGMENT_LENGTH/2,0,0)
             seg.T = seg_pose   
             seg_array.append(seg_pose)      
         bender_pose = seg_pose

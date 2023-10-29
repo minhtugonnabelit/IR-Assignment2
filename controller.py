@@ -250,6 +250,7 @@ class Controller():
 
         joystick = Controller._joystick_init()
         self._disable_gamepad = False
+        time_step = 0.1
 
         if joystick is not None:
 
@@ -259,8 +260,11 @@ class Controller():
             vel_scale = {'linear': 0.7, 'angular': 0.8}
 
 
-            # Main loop to check joystick functionality
+            # estop count
+            last_estop_button = False
 
+
+            # Main loop to check joystick functionality
             while not self._disable_gamepad:
 
                 for event in pygame.event.get():
@@ -268,11 +272,19 @@ class Controller():
                         pygame.quit()
                         sys.exit()
 
-                if joystick.get_button(3):
-                    if self._state == 'STOPPED':
-                        self.disengage_estop()
-                    else:
-                        self.engage_estop()
+                # estop ------------------------------------
+                estop_button = joystick.get_button(3)
+
+                if estop_button:      
+                    if not last_estop_button:
+                        last_estop_button = True
+                        if self._state == 'STOPPED':
+                            self.disengage_estop()
+                        else:
+                            self.engage_estop()
+                else:
+                    last_estop_button = False
+                # -------------------------------------------
 
                 if joystick.get_button(5):
                     self.enable_system()
@@ -305,7 +317,7 @@ class Controller():
                     # collision avoidance damping
 
                     d_thresh = 0.05
-                    time_step = 0.05
+                    
                     gamepad_max_gain = 1
 
                     self.is_collided = False
@@ -345,7 +357,10 @@ class Controller():
 
                     # send joint command to robot to execute desired motion. Currently available mode is position mode
                     self._robot.send_joint_command(q)
-                    time.sleep(time_step)
+
+
+
+                time.sleep(time_step)
         else:
             self._log.error('No joystick found!')
 

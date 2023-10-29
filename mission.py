@@ -214,11 +214,17 @@ class Mission():
         current_pose = self._picker_robot.get_ee_pose()
 
         pose_ori = hang_pose.A[0:3,0:3]
-        path_sawyer = np.empty((30, 3))
+        path_sawyer = np.empty((self.STEP, 3))
 
-        for i in range(30):
-            t = i / (30 - 1) # Interpolation parameter [0, 1]
-            path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*hang_pose.A[0:3,3]
+        s = rtb.trapezoidal(0,1,self.STEP).s
+
+        for i in range(self.STEP):
+            # t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
+            path_sawyer[i, :] = (1 - s[i])*current_pose.A[0:3,3] +s[i]*hang_pose.A[0:3,3]
+
+        # for i in range(30):
+        #     t = i / (30 - 1) # Interpolation parameter [0, 1]
+        #     path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*hang_pose.A[0:3,3]
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
@@ -343,14 +349,18 @@ class Mission():
         """
         Coordinate 2 arms to bend the plate and return to unbend position
         """
-        step = 20
+        step = 50
         self.all_seg = []
         step_bunny_slide = 0.2
         step_bunny = step_bunny_slide / step
+
+        s = rtb.trapezoidal(0, np.deg2rad(12), step).s
+
+
         for i in range(step):
 
             seg_array = []
-            _pick, _bend = self._plates_list[plt_index].bend(i, seg_array)
+            _pick, _bend = self._plates_list[plt_index].bend(s[i], seg_array)
 
             # somehow this copy is real necessary, otherwise the pose will be updated
             pick = copy.deepcopy(_pick)

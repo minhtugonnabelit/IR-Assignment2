@@ -1170,7 +1170,6 @@ class RobotGUI:
             
                 
 
-
             
 
         if event == '-MISSION_ENABLE-':
