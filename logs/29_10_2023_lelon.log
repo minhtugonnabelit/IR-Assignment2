@@ -8081,3 +8081,87 @@
 2023-10-30 04:51:47,792,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
 2023-10-30 04:52:07,856,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
 2023-10-30 04:52:07,857,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:52:27,932,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:52:27,935,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:52:47,942,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:52:47,942,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:53:05,005,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:53:07,997,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:53:08,001,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:53:28,042,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:53:28,047,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:53:48,068,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:53:48,116,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:53:52,685,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:53:52,687,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:53:55,930,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:53:55,945,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:54:08,129,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:54:08,136,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:56:14,896,INFO,main.py,_init_log,1279,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\29_10_2023_lelon.log
+2023-10-30 04:56:24,045,INFO,controller.py,is_arrived,928,Provided joint states is Done
+2023-10-30 04:56:26,714,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:56:36,820,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:56:36,821,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:56:37,474,INFO,controller.py,engage_estop,1013,E-stop engaged. System is halted.
+2023-10-30 04:56:37,936,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:56:39,136,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:56:54,112,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:56:55,102,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:56:56,867,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:56:56,870,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:57:16,904,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:57:16,995,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:57:37,052,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:57:37,053,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:57:45,318,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:57:45,804,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:57:54,170,INFO,controller.py,engage_estop,1013,E-stop engaged. System is halted.
+2023-10-30 04:57:55,090,INFO,controller.py,disengage_estop,1024,E-stop disengaged. System is now idle and awaiting enable.
+2023-10-30 04:57:55,710,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 04:57:57,101,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:57:57,101,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:58:17,173,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:58:17,174,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:58:37,199,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:58:37,200,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:58:57,265,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:58:57,265,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:59:17,319,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:59:17,320,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:59:37,344,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:59:37,438,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 04:59:57,465,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 04:59:57,466,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:00:17,472,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:00:17,473,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:00:37,552,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:00:37,553,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:00:57,606,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:00:57,607,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:01:17,699,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:01:17,700,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:09:16,609,INFO,main.py,_init_log,1279,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\29_10_2023_lelon.log
+2023-10-30 05:09:25,676,INFO,controller.py,is_arrived,928,Provided joint states is Done
+2023-10-30 05:09:32,401,INFO,controller.py,enable_system,1029,System is enabled. Ready for operation.
+2023-10-30 05:09:36,635,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:09:36,724,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:09:56,782,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:09:56,782,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:10:03,277,INFO,controller.py,is_arrived,928,Provided joint states is Done
+2023-10-30 05:10:16,841,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:10:16,843,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:10:36,930,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:10:36,931,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:10:56,994,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:10:56,994,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:11:17,010,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:11:17,011,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:11:37,077,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:11:37,173,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:11:57,192,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:11:57,194,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:12:17,251,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:12:17,252,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-30 05:12:37,271,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-30 05:12:37,272,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong

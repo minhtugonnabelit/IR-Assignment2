@@ -11,6 +11,7 @@ from robot.sawyer import Sawyer
 from robot.astorino import Astorino
 from controller_interface import ControllerInterface
 from mission import Mission
+from human import Human
 from work_cell import WorkCell
 from plate import Plate
 from rectangularprism import RectangularPrism
@@ -71,6 +72,7 @@ class RobotGUI:
         # Init environment object:
         
         self.work_cell = WorkCell(self.env, self._cell_center)
+        self.human = Human(self.env, self._cell_center, sm.SE3(1,1,0))
         self.plate = Plate(self._cell_center @
                            sm.SE3(-0.35, 0.9, 0.905), self.env, bunny_location= sm.SE3(0.03, 0, 0) * sm.SE3.Rz(-np.pi/2))
         self.plate1 = Plate(self._cell_center @ 
@@ -602,17 +604,18 @@ class RobotGUI:
                 15, 1), justification='center', key='-STATE-MISSION-', text_color='black', background_color=('yellow'))
         ]]
         
-
-        # Define the layout for the second tab
-        tab3_layout = [
+        human_state = [[
+            sg.Text('Status: ', size=(0, 1), justification='right', key='-HUMAN_STATE_LABEL-',
+                    background_color='black', font=('Ubuntu Mono', 12)),
+            sg.Text(f'{self.mission.system_state()}', size=(
+                15, 1), justification='center', key='-STATE-HUMAN-', text_color='black', background_color=('yellow'))
+        ]]
+        
+        left_column = [
             [
-                sg.Frame('Mission Manager', layout=headers, font=('Ubuntu Mono', 30), background_color='black')
+                sg.Frame('Mission State', layout= mission_state,  font=('Ubuntu Mono', 24), background_color='black'),
             ],
             
-            [
-                sg.Frame('Mission State', layout=mission_state, font=('Ubuntu Mono', 24), background_color='black'), 
-            ],
-
             [
                 sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
             ],
@@ -621,10 +624,60 @@ class RobotGUI:
                sg.Button('Run Mission', key='-MISSION_RUN-', size=(34, 3), pad= (6,0))
             ],
 
-            
             [
                sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(34, 3), pad= (6,3))
             ],
+        ]
+        
+        right_column = [
+            [
+                sg.Frame('Human State', layout= human_state,  font=('Ubuntu Mono', 24), background_color='black'),
+            ],
+            
+            [
+                sg.Button('Enable Human', key='-HUMAN_ENABLE-', size=(16, 3)), sg.Button('Disable Human', key='-HUMAN_DISABLE-', size=(16, 3))
+            ],
+            
+            [
+                sg.Button('GAMEPAD HUMAN OFF', key='-HUMAN_GAMEPAD-', size=(34, 3))
+            ],
+            
+            [
+                sg.Button('KEYBOARD HUMAN OFF', key='-HUMAN_KEYBOARD-', size=(34, 3))
+            ],
+            
+        ]
+        
+        
+
+        # Define the layout for the second tab
+        tab3_layout = [
+            [
+                sg.Frame('Mission Manager', layout=headers, font=('Ubuntu Mono', 30), background_color='black')
+            ],
+            
+            # [
+            #     sg.Frame('Mission State', layout=mission_state, font=('Ubuntu Mono', 24), background_color='black'), 
+            # ],
+
+            [
+                sg.Column(left_column, element_justification= 'center',
+                          background_color= 'black', pad= (10,0), expand_x= True),
+                sg.Column(right_column, element_justification= 'center',
+                          vertical_alignment= 'top', background_color= 'black', pad= (10,0), expand_x= True)
+            ]
+            # [
+            #     sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
+            # ],
+            
+            # [
+            #    sg.Button('Run Mission', key='-MISSION_RUN-', size=(34, 3), pad= (6,0))
+            # ],
+
+            
+            # [
+            #    sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(34, 3), pad= (6,3))
+            # ],
         ]
 
         return tab3_layout
@@ -642,7 +695,8 @@ class RobotGUI:
         flag_print_running_astorino = [True]
 
         self.mission_thread = threading.Thread(target=self.mission.run)
-
+        # self.human_thread = threading.Thread(target=self.human.run)
+        
         while True:
             event, values = self.window.read()
             if event == sg.WIN_CLOSED:
@@ -652,6 +706,8 @@ class RobotGUI:
             self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
                                         flag_print_running_astorino=flag_print_running_astorino)
             self.mission_callback(event=event, values=values)
+            
+            self.human_control(event=event, values= values)
             
             # self.env.step(0.05)
             
@@ -1110,7 +1166,6 @@ class RobotGUI:
 
 
         if event == '-A_UPDATE-JOINTS-':
-
             self.window['-mA_X-'].update(
                 f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
             self.window['-mA_Y-'].update(
@@ -1125,7 +1180,6 @@ class RobotGUI:
                 f'Rz: {np.rad2deg(self.getori(self.astorino)[2]):.2f} deg')
             
         if event == '-UPDATE-JOINTS-':
-
             self.window['-m_X-'].update(
                 f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]:.2f} m')
             self.window['-m_Y-'].update(
@@ -1142,7 +1196,6 @@ class RobotGUI:
 
         if event == '-UPDATE-STATE-MISSION-':
             self.window['-STATE-MISSION-'].update(f'{state_mission}')
-            
             if state_mission == 'IDLE':
                 self.window['-STATE-MISSION-'].update(text_color='purple',
                                                 background_color='yellow')
@@ -1189,7 +1242,12 @@ class RobotGUI:
                 self.window['-MISSION_STOP-'].update('Release E-Stop')
             
                 
-
+        if self.mission.mission_state == 'PROCESSING':
+            if self.human.is_in_workcell():
+                self.sawyer_controller.engage_estop()
+                self.astorino_controller.engage_estop()
+                self.mission.mission_state = 'STOPPED'
+                
             
 
         if event == '-MISSION_ENABLE-':
@@ -1200,24 +1258,8 @@ class RobotGUI:
         elif event == '-MISSION_DISABLE-':
             self.mission.disable_system()
             self.mission.mission_state = 'IDLE'
+                      
             
-
-        # elif event == '-MISSION_RESUME-':
-        #     if state_mission == 'STOPPED':
-        #         self.mission_thread = threading.Thread(target=self.mission.run)
-        #         self.mission_thread.start()
-        #         self.mission.mission_state = 'PROCESSING'
-                
-        
-
-        # elif event == '-MISSION_HOME-':
-        #     # self.mission._home_system()
-        #     self.mission._bender_robot.send_command('HOME')
-        #     self.mission._picker_robot.send_command('HOME')
-        #     self.window['-MISSION_STOP-'].update(disabled= False)
-            
-            
-
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()
             self.mission_thread.join()
@@ -1234,6 +1276,11 @@ class RobotGUI:
                 self.mission.mission_state = 'PROCESSING'
 
 
+    def human_control(self, event, values):
+        if event == '-HUMAN_ENABLE-':
+            self.human_thread = threading.Thread(target=self.human.run)
+            self.human_thread.start()
+            # self.human.human_state = 'MOVING'
 
     def getori(self, robot):
         ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
