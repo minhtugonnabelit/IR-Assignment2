@@ -3739,3 +3739,7 @@
 2023-10-27 14:02:40,676,INFO,controller.py,is_arrived,366,Provided goal is Done
 2023-10-27 14:02:43,036,WARNING,controller.py,go_to_joint_angles,750,line_plane ee is nearly collided with object
 2023-10-27 14:02:44,196,INFO,controller.py,is_arrived,738,Provided joint states is Done
+2023-10-27 17:06:01,660,INFO,Thinh_test_gui.py,_init_log,1239,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/27_10_2023_benjamin.log
+2023-10-27 17:08:14,528,INFO,Thinh_test_gui.py,_init_log,1239,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/27_10_2023_benjamin.log
+2023-10-27 17:08:23,829,INFO,controller.py,is_arrived,736,Provided joint states is Done
+2023-10-27 17:08:28,936,INFO,controller.py,enable_system,831,System is enabled. Ready for operation.
