@@ -16,6 +16,8 @@ from work_cell import WorkCell
 from plate import Plate
 from rectangularprism import RectangularPrism
 
+from PIL import Image
+
 import queue
 import time
 import logging
@@ -23,6 +25,7 @@ import threading
 import copy
 import os
 import argparse
+
 
 # The default log filename
 DAY = time.gmtime()
@@ -50,6 +53,8 @@ class RobotGUI:
     _slider_size = (21, 13)
     _window_size = (900, 700)  # Width x Height
     _cell_center = sm.SE3(0, 0, 0)
+    
+    _script_directory = os.path.dirname(os.path.abspath(__file__))
 
     def __init__(self, args=None):
 
@@ -125,6 +130,8 @@ class RobotGUI:
         self.collision_setup()
 
         # Initialize GUI
+        
+
 
         self.window = self.create_window()
         self.update_gui_thread()
@@ -162,8 +169,10 @@ class RobotGUI:
                 enable_events=True
             )]
         ]
+        icon_path = os.path.join(self._script_directory, "img/robot_small_icon.ico")
         window = sg.Window('System GUI', tab_group_layout, finalize=True,
-                           size=self._window_size, location=(0, 0), resizable=False)
+                           size=self._window_size, location=(0, 0), resizable=False, icon= icon_path, titlebar_icon= icon_path)
+        window.set_icon(icon_path)
 
         return window
 
@@ -246,7 +255,7 @@ class RobotGUI:
             [sg.Frame('Joint Space Jogging',
                       [
                           [sg.Slider(range=(self.sawyer_qlim[0, 0], self.sawyer_qlim[1, 0]), default_value=np.rad2deg(self.sawyer.q[0]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER0-', enable_events=True, tick_interval=0.1),
+                                     size=self._slider_size, key='-SLIDER0-', enable_events=True, resolution=0.1),
                            sg.Text('L1:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[0])} deg', size=(
@@ -254,7 +263,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 1], self.sawyer_qlim[1, 1]), default_value=np.rad2deg(self.sawyer.q[1]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER1-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER1-', enable_events=True, resolution=0.1),
                            sg.Text('L2:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[1])} deg', size=(
@@ -262,7 +271,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 2], self.sawyer_qlim[1, 2]), default_value=np.rad2deg(self.sawyer.q[2]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER2-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER2-', enable_events=True, resolution=0.1),
                            sg.Text('L3:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[2])} deg', size=(
@@ -270,7 +279,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 3], self.sawyer_qlim[1, 3]), default_value=np.rad2deg(self.sawyer.q[3]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER3-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER3-', enable_events=True, resolution=0.1),
                            sg.Text('L4:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[3])} deg', size=(
@@ -278,7 +287,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 4], self.sawyer_qlim[1, 4]), default_value=np.rad2deg(self.sawyer.q[4]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER4-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER4-', enable_events=True, resolution=0.1),
                            sg.Text('L5:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[4])} deg', size=(
@@ -286,7 +295,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 5], self.sawyer_qlim[1, 5]), default_value=np.rad2deg(self.sawyer.q[5]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER5-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER5-', enable_events=True, resolution=0.1),
                            sg.Text('L6:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[5])} deg', size=(
@@ -294,7 +303,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.sawyer_qlim[0, 6], self.sawyer_qlim[1, 6]), default_value=np.rad2deg(self.sawyer.q[6]), orientation='h',
-                                     size=self._slider_size, key='-SLIDER6-', enable_events=True),
+                                     size=self._slider_size, key='-SLIDER6-', enable_events=True, resolution=0.1),
                            sg.Text('L7:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.sawyer.q[6])} deg', size=(6, 1), key='-J5-', justification='right')]
@@ -421,7 +430,7 @@ class RobotGUI:
             [sg.Frame('Joint Space Jogging',
                       [
                           [sg.Slider(range=(self.astorino_qlim[0, 0], self.astorino_qlim[1, 0]), default_value=np.rad2deg(self.astorino.q[0]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER0-', enable_events=True, tick_interval=0.1),
+                                     size=self._slider_size, key='-A_SLIDER0-', enable_events=True, resolution=0.1),
                            sg.Text('L1:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[0])} deg', size=(
@@ -429,7 +438,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.astorino_qlim[0, 1], self.astorino_qlim[1, 1]), default_value=np.rad2deg(self.astorino.q[1]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER1-', enable_events=True),
+                                     size=self._slider_size, key='-A_SLIDER1-', enable_events=True, resolution=0.1),
                            sg.Text('L2:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[1])} deg', size=(
@@ -437,7 +446,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.astorino_qlim[0, 2], self.astorino_qlim[1, 2]), default_value=np.rad2deg(self.astorino.q[2]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER2-', enable_events=True),
+                                     size=self._slider_size, key='-A_SLIDER2-', enable_events=True, resolution=0.1),
                            sg.Text('L3:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[2])} deg', size=(
@@ -445,7 +454,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.astorino_qlim[0, 3], self.astorino_qlim[1, 3]), default_value=np.rad2deg(self.astorino.q[3]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER3-', enable_events=True),
+                                     size=self._slider_size, key='-A_SLIDER3-', enable_events=True, resolution=0.1),
                            sg.Text('L4:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[3])} deg', size=(
@@ -453,7 +462,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.astorino_qlim[0, 4], self.astorino_qlim[1, 4]), default_value=np.rad2deg(self.astorino.q[4]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER4-', enable_events=True),
+                                     size=self._slider_size, key='-A_SLIDER4-', enable_events=True, resolution=0.1),
                            sg.Text('L5:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[4])} deg', size=(
@@ -461,7 +470,7 @@ class RobotGUI:
                            ],
 
                           [sg.Slider(range=(self.astorino_qlim[0, 5], self.astorino_qlim[1, 5]), default_value=np.rad2deg(self.astorino.q[5]), orientation='h',
-                                     size=self._slider_size, key='-A_SLIDER5-', enable_events=True),
+                                     size=self._slider_size, key='-A_SLIDER5-', enable_events=True, resolution=0.1),
                            sg.Text('L6:', size=(2, 1),
                                    background_color='black'),
                            sg.Text(f'{np.rad2deg(self.astorino.q[5])} deg', size=(
@@ -607,8 +616,8 @@ class RobotGUI:
         human_state = [[
             sg.Text('Status: ', size=(0, 1), justification='right', key='-HUMAN_STATE_LABEL-',
                     background_color='black', font=('Ubuntu Mono', 12)),
-            sg.Text(f'{self.mission.system_state()}', size=(
-                15, 1), justification='center', key='-STATE-HUMAN-', text_color='black', background_color=('yellow'))
+            sg.Text(f'{self.human.human_state()}', size=(
+                15, 1), justification='center', key='-STATE-HUMAN-', text_color='white', background_color=('green'))
         ]]
         
         left_column = [
@@ -635,17 +644,24 @@ class RobotGUI:
             ],
             
             [
-                sg.Button('Enable Human', key='-HUMAN_ENABLE-', size=(16, 3)), sg.Button('Disable Human', key='-HUMAN_DISABLE-', size=(16, 3))
-            ],
-            
-            [
-                sg.Button('GAMEPAD HUMAN OFF', key='-HUMAN_GAMEPAD-', size=(34, 3))
-            ],
-            
-            [
                 sg.Button('KEYBOARD HUMAN OFF', key='-HUMAN_KEYBOARD-', size=(34, 3))
             ],
             
+            [sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
+                        size=self._slider_size, key='-H_SLIDERX-', enable_events=True, resolution=0.0001),
+            sg.Text('X:', size=(2, 1),
+                    background_color='black'),
+            sg.Text(f'{self.human.get_pose()[0,3]} mm', size=(
+                6, 1), key='-H_X-', justification='right'),
+            ],
+            
+            [sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
+                        size=self._slider_size, key='-H_SLIDERY-', enable_events=True, resolution=0.0001),
+            sg.Text('Y:', size=(2, 1),
+                    background_color='black'),
+            sg.Text(f'{self.human.get_pose()[1,3]} mm', size=(
+                6, 1), key='-H_Y-', justification='right'),
+            ],
         ]
         
         
@@ -695,7 +711,7 @@ class RobotGUI:
         flag_print_running_astorino = [True]
 
         self.mission_thread = threading.Thread(target=self.mission.run)
-        # self.human_thread = threading.Thread(target=self.human.run)
+        self.human_thread = threading.Thread(target=self.human.keyboard_move)
         
         while True:
             event, values = self.window.read()
@@ -1238,8 +1254,10 @@ class RobotGUI:
                     
             elif state_mission == 'STOPPED':
                 self.window['-MISSION_DISABLE-'].update(disabled= True)
+                self.window['-MISSION_RUN-'].update(disabled= True)
                 self.window['-STATE-MISSION-'].update(background_color='red', text_color = 'white')
-                self.window['-MISSION_STOP-'].update('Release E-Stop')
+                self.window['-MISSION_STOP-'].update('Release E-Stop',disabled= False)
+
             
                 
         if self.mission.mission_state == 'PROCESSING':
@@ -1276,11 +1294,31 @@ class RobotGUI:
                 self.mission.mission_state = 'PROCESSING'
 
 
-    def human_control(self, event, values):
-        if event == '-HUMAN_ENABLE-':
-            self.human_thread = threading.Thread(target=self.human.run)
-            self.human_thread.start()
-            # self.human.human_state = 'MOVING'
+    def human_control(self, event, values): # while loop here
+        state_human = self.human.human_state()
+        
+        if event == f'-H_SLIDERX-' or event == f'-H_SLIDERY-':
+            self.human.move(x= values['-H_SLIDERX-'], y= values['-H_SLIDERY-'])
+            self.env.step(0.01)
+            
+        if state_human == 'SAFE':
+            self.window['-STATE-HUMAN-'].update('SAFE',background_color= 'green')
+        else: self.window['-STATE-HUMAN-'].update('DANGER', text_color= 'white', background_color= 'red')
+        
+        if event == '-HUMAN_KEYBOARD-':
+            keyboard_status = self.human.get_keyboard_status()
+            if not keyboard_status: # If keyboard is off
+                self.human.enable_keyboard()
+                self.human_thread = threading.Thread(target=self.human.keyboard_move)
+                self.human_thread.start()
+                
+                self.window['-HUMAN_KEYBOARD-'].update('KEYBOARD HUMAN ON')
+            else:
+                self.human.disable_keyboard()
+                self.window['-HUMAN_KEYBOARD-'].update('KEYBOARD HUMAN OFF')
+
+        
+        
 
     def getori(self, robot):
         ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
