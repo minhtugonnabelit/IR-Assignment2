@@ -20,7 +20,6 @@ class WorkCell():
         self._center = cell_location
 
         # add human model
-        self._human = self._add_model('worker.stl', sm.SE3(2.5, 1.5, 0), color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
         self._cart = self._add_model('cart.dae', sm.SE3(0.65, 0, 0) @ sm.SE3.Rz(-90,'deg'))
         self._desk = self._add_model('desk.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._saywer_stand = self._add_model('saywer_stand.dae' , sm.SE3(0.55, 0.8, 0) @ sm.SE3.Rz(-90,'deg'))
@@ -34,10 +33,10 @@ class WorkCell():
         self._tiles = self._add_model('tiles.dae', sm.SE3(0,0,-0.015))
         self._fire_extinguisher_0 = self._add_model('fire_extinguisher.dae', sm.SE3(1.135,-1.07,0))
         self._fire_extinguisher_1 = self._add_model('fire_extinguisher.dae', sm.SE3(-0.65,1.428,0) @ sm.SE3.Rz(90,'deg'))
-        self._light_curtain_cyl = self._add_model('light_curtain_cyl.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._light_curtain_laser = self._add_model('light_curtain_laser.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        self._light_curtain_cyl = self._add_model('light_curtain_cyl1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        self._light_curtain_laser = self._add_model('light_curtain_laser1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        # self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        # self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         
     def get_cell_center(self):
         """

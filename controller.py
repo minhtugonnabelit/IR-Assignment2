@@ -1,5 +1,6 @@
 import copy
 import sys
+import os
 import pygame
 import queue
 import time
@@ -28,15 +29,18 @@ class Controller():
         self._ui_pose = self._robot.fkine(self._ui_js)
         self._shutdown = False
         self._disable_gamepad = True
+        self._gamepad_status = False
         self._command_queue = queue.Queue()
         self._safety = Safety(self._robot, log)
         self._robot_busy = False
         self.object = None
         self._log = log
         self.action_done = True
-
+        self._print_once = True
+        self._read_event = None
+        
         if self._robot.name == 'Sawyer':
-            self._ee_offset = sm.SE3(0, 0, 0.138)
+            self._ee_offset = sm.SE3(0, 0, 0.16)
         elif self._robot.name == 'Astorino':
             self._ee_offset = sm.SE3(0, 0, 0.1)
 
@@ -46,7 +50,6 @@ class Controller():
             "ENABLE": self.enable_system,
             "DISABLE": self.disable_system,
             "HOME": self.go_to_home,
-            
             "+X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0.1, 0, 0),),
             "-X": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(-0.1, 0, 0),),
             "+Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0.1, 0),),
@@ -67,6 +70,8 @@ class Controller():
             "GO_TO_CARTESIAN_POSE": self.go_to_cartesian_pose,
             "GO_TO_JOINT_ANGLES": self.go_to_joint_angles,
         }  
+        
+        self.joystick_object = None
 
     
     def launch(self):
@@ -81,9 +86,12 @@ class Controller():
         Check if system is activated
         """
         if self._state == "ENABLED":
+            self._print_once = True
             return True
         else:
-            print(f'System is not enabled. Current state: {self._state}')
+            if self._print_once:
+                print(f'System is not enabled. Current state: {self._state}')
+                self._print_once = False 
             return False
 
     def update_collision_object(self, side, center):
@@ -100,7 +108,7 @@ class Controller():
         return self.avoidance_object
 
     @staticmethod
-    def _joystick_init():
+    def _joystick_init(self):
 
         # Setup joystick
         pygame.init()
@@ -109,6 +117,7 @@ class Controller():
             joystick = None
         else:
             joystick = pygame.joystick.Joystick(0)
+            self.joystick_object = joystick
 
         return joystick
     
@@ -137,7 +146,7 @@ class Controller():
             except queue.Empty:
                 pass
 
-            time.sleep(0.5)
+            # time.sleep(0.5)
 
     def send_command(self, command):
         """
@@ -238,7 +247,11 @@ class Controller():
         ### Disable gamepad
         Function to disable gamepad control
         """
+        self._gamepad_status = False
         self._disable_gamepad = True
+
+    def get_gamepad_status(self):
+        return self._gamepad_status
 
     def gamepad_control(self):
         """
@@ -247,107 +260,285 @@ class Controller():
         This function extract value of each axis and button from gamepad and 
         convert it to robot end effector velocity to solve for joint velocity
         """
-
-        joystick = Controller._joystick_init()
+        self.joystick_object = Controller._joystick_init(self)
+ 
         self._disable_gamepad = False
+        self._gamepad_status = True
+        time_step = 0.001
 
-        if joystick is not None:
-
+        # if joystick is not None:
+        if self.joystick_object is not None:
+            
             # Print joystick information
 
-            joystick.init()
-            vel_scale = {'linear': 0.7, 'angular': 0.8}
+            # joystick.init()
+            self.joystick_object.init()
+            vel_scale = {'linear': 10, 'angular': 20}
+
+
+            # estop count
+            last_estop_button = False
 
 
             # Main loop to check joystick functionality
 
-            while not self._disable_gamepad:
+            if os.name == 'nt': # Windows
+                self._gamepad_windows(joystick= self.joystick_object, # joystick
+                                    vel_scale=vel_scale,
+                                    time_step=time_step)
+                
+                
+            else: # Linux
+                self._gamepad_linux(joystick= joystick,
+                                    vel_scale=vel_scale,
+                                    last_estop_button= last_estop_button,
+                                    time_step=time_step)
+                
+            
+        else:
+            self._log.error('No joystick found!')
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
+    def get_gamepad_name(self):
+        self.joystick_object = Controller._joystick_init(self)
+        return self.joystick_object.get_name()
 
-                if joystick.get_button(3):
+    def _gamepad_windows(self, joystick, vel_scale, time_step):
+        while not self._disable_gamepad:
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            # estop ------------------------------------
+            estop_button = joystick.get_button(2)
+            release_estop_button = joystick.get_button(3)
+            
+            if estop_button and self._state == 'ENABLED':
+                self.engage_estop()
+            elif release_estop_button:
+                if self._state == 'STOPPED':
+                    self.disengage_estop()  
+            
+            # -------------------------------------------
+
+            if joystick.get_button(10) or self._read_event == '-ENABLE-' or self._read_event == '-A_ENABLE-':
+                self.enable_system()
+                self._read_event = None
+
+            if self.system_activated():
+
+                if joystick.get_button(8) and joystick.get_button(9) or self._read_event == '-HOME-' or self._read_event == '-A_HOME-':
+                    
+                    self.go_to_home()
+
+                if joystick.get_button(5):
+                    self._robot.open_gripper()
+
+                if joystick.get_button(4):
+                    self._robot.close_gripper()
+                
+                
+                # Filter
+                axes_threshold = 0.2
+                gamepad_max_gain = 1
+                gamepad_min_gain = 0
+                linear_vel_z = 0
+                angular_vel_z = 0
+                
+                # Get the joystick axes
+                if abs(joystick.get_axis(0)) >= axes_threshold:  # Control Linear X
+                    linear_vel_x = joystick.get_axis(0)
+                    if linear_vel_x > 0: linear_vel_x = np.interp(linear_vel_x, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                    else: linear_vel_x = np.interp(linear_vel_x, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                else: linear_vel_x = 0
+        
+                
+                # BECAUSE WE WANT TO UTILIZE AXIS 1 (LEFT JOYSTICK : MOVE DOWNWARD AND UPWARD)
+                
+                if joystick.get_button(0):  # Control Linear Z
+                    if abs(joystick.get_axis(1)) >= axes_threshold: 
+                        linear_vel_z = -joystick.get_axis(1)
+                        if linear_vel_z > 0: linear_vel_z = np.interp(linear_vel_z, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                        else: linear_vel_z = np.interp(linear_vel_z, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                    else: linear_vel_z = 0   
+                else:                        
+                    if joystick.get_button(1):   # Control Angular Z
+                        if abs(joystick.get_axis(1)) >= axes_threshold: 
+                            angular_vel_z = -joystick.get_axis(1)
+                            if angular_vel_z > 0: angular_vel_z = np.interp(angular_vel_z, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                            else: angular_vel_z = np.interp(angular_vel_z, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                        else: angular_vel_z = 0 
+                        
+                    else:   # Control Linear Y
+                        if abs(joystick.get_axis(1)) >= axes_threshold: 
+                            linear_vel_y = -joystick.get_axis(1)
+                            if linear_vel_y > 0: linear_vel_y = np.interp(linear_vel_y, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                            else: linear_vel_y = np.interp(linear_vel_y, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                        else: linear_vel_y = 0    
+                    
+
+                if abs(joystick.get_axis(2)) >= axes_threshold:     # Control Angular X
+                    angular_vel_x = joystick.get_axis(2)
+                    if angular_vel_x > 0: angular_vel_x = np.interp(angular_vel_x, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                    else: angular_vel_x = np.interp(angular_vel_x, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                else: angular_vel_x = 0
+            
+                if abs(joystick.get_axis(3)) >= axes_threshold:     # Control Angular Y
+                    angular_vel_y = joystick.get_axis(3)
+                    if angular_vel_y > 0: angular_vel_y = np.interp(angular_vel_y, [axes_threshold, gamepad_max_gain], [gamepad_min_gain ,gamepad_max_gain])
+                    else: angular_vel_y = np.interp(angular_vel_y, [-gamepad_max_gain, -axes_threshold], [-gamepad_max_gain ,-gamepad_min_gain])
+                else: angular_vel_y = 0    
+                
+    
+                linear_vel = np.asarray([linear_vel_x, linear_vel_y, linear_vel_z]) * vel_scale['linear'] 
+                angular_vel = np.asarray([angular_vel_x, angular_vel_y, angular_vel_z]) * vel_scale['angular']                
+                ee_vel = np.hstack((linear_vel, angular_vel))
+                
+                
+
+
+
+                # collision avoidance damping
+                d_thresh = 0.05
+
+                # Check collision
+                self.is_collided = False
+                if self.object is not None:
+                    if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
+                        self.is_collided = True
+                        # self._log.warning('line_plane ee is nearly collided with object')
+                        
+                    if self.is_collided is True:
+                        # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                        d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                        if d <= d_thresh:
+                            vel = ( p1 - p2 ) / time_step
+                            ee_vel[0:3] += gamepad_max_gain * vel
+
+
+                # calculate joint velocities
+
+                j = self._robot.jacob0(self._robot.q)
+                mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
+
+                joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
+
+
+                # update joint states as a command to robot
+
+                current_js = copy.deepcopy(self._robot.q)
+                q = current_js + joint_vel * time_step
+
+
+                # check if ee is too close to the ground
+
+                if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+                    self._state = 'STOPPED'
+                    continue
+
+                # send joint command to robot to execute desired motion. Currently available mode is position mode
+                self._robot.send_joint_command(q)
+                
+            time.sleep(0.01)
+
+
+    # ------------------------------- GAMEPAD RUN LINUX
+    
+    def _gamepad_linux(self, joystick, vel_scale, last_estop_button, time_step):
+        while not self._disable_gamepad:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            # estop ------------------------------------
+            estop_button = joystick.get_button(3)
+
+            if estop_button:      
+                if not last_estop_button:
+                    last_estop_button = True
                     if self._state == 'STOPPED':
                         self.disengage_estop()
                     else:
                         self.engage_estop()
+            else:
+                last_estop_button = False
+            # -------------------------------------------
 
-                if joystick.get_button(5):
-                    self.enable_system()
+            if joystick.get_button(5):
+                self.enable_system()
 
-                if self.system_activated():
+            if self.system_activated():
 
-                    if joystick.get_button(4):
-                        self.go_to_home()
+                if joystick.get_button(4):
+                    self.go_to_home()
 
-                    if joystick.get_button(6):
-                        self._robot.open_gripper()
+                if joystick.get_button(6):
+                    self._robot.open_gripper()
 
-                    if joystick.get_button(7):
-                        self._robot.close_gripper()
+                if joystick.get_button(7):
+                    self._robot.close_gripper()
 
-                    vz = 0
-                    if joystick.get_button(1):
-                        vz = 0.5
-                    elif joystick.get_button(2):
-                       vz = -0.5
-                    
+                vz = 0
+                if joystick.get_button(1):
+                    vz = 0.5
+                elif joystick.get_button(2):
+                    vz = -0.5
+                
 
-                    # get linear and angular velocity
+                # get linear and angular velocity
 
-                    linear_vel = np.asarray([joystick.get_axis(1), -joystick.get_axis(0), vz]) * vel_scale['linear'] 
-                    angular_vel = np.asarray([0, joystick.get_axis(4), joystick.get_axis(3)]) * vel_scale['angular']
-                    ee_vel = np.hstack((linear_vel, angular_vel))
-
-
-                    # collision avoidance damping
-
-                    d_thresh = 0.05
-                    time_step = 0.05
-                    gamepad_max_gain = 1
-
-                    self.is_collided = False
-                    if self.object is not None:
-                        if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
-                            self.is_collided = True
-                            # self._log.warning('line_plane ee is nearly collided with object')
-                            
-                        if self.is_collided is True:
-                            # get distance between ee and object,  also extracting the closest points to use as damping velocity
-                            d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
-                            if d <= d_thresh:
-                                vel = ( p1 - p2 ) / time_step
-                                ee_vel[0:3] += gamepad_max_gain * vel
+                linear_vel = np.asarray([joystick.get_axis(1), -joystick.get_axis(0), vz]) * vel_scale['linear'] 
+                angular_vel = np.asarray([0, joystick.get_axis(4), joystick.get_axis(3)]) * vel_scale['angular']
+                ee_vel = np.hstack((linear_vel, angular_vel))
 
 
-                    # calculate joint velocities
+                # collision avoidance damping
 
-                    j = self._robot.jacob0(self._robot.q)
-                    mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
+                d_thresh = 0.05
+                
+                gamepad_max_gain = 1
 
-                    joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
+                self.is_collided = False
+                if self.object is not None:
+                    if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
+                        self.is_collided = True
+                        # self._log.warning('line_plane ee is nearly collided with object')
+                        
+                    if self.is_collided is True:
+                        # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                        d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                        if d <= d_thresh:
+                            vel = ( p1 - p2 ) / time_step
+                            ee_vel[0:3] += gamepad_max_gain * vel
 
 
-                    # update joint states as a command to robot
+                # calculate joint velocities
 
-                    current_js = copy.deepcopy(self._robot.q)
-                    q = current_js + joint_vel * time_step
+                j = self._robot.jacob0(self._robot.q)
+                mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
-
-                    # check if ee is too close to the ground
-
-                    if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
-                        self._state = 'STOPPED'
-                        continue
+                joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
 
 
-                    # send joint command to robot to execute desired motion. Currently available mode is position mode
-                    self._robot.send_joint_command(q)
-                    time.sleep(time_step)
-        else:
-            self._log.error('No joystick found!')
+                # update joint states as a command to robot
+
+                current_js = copy.deepcopy(self._robot.q)
+                q = current_js + joint_vel * time_step
+
+
+                # check if ee is too close to the ground
+
+                if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+                    self._state = 'STOPPED'
+                    continue
+
+                # send joint command to robot to execute desired motion. Currently available mode is position mode
+                self._robot.send_joint_command(q)
+                
+            time.sleep(time_step)
 
     # -----------------------------------------------------------------------------------#
     ### GENERAL MOTION FUNCTION
@@ -362,7 +553,7 @@ class Controller():
         ee_pose = self._robot.fkine(self._robot.q)
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
-            self._log.info('Provided goal is Done')
+            # self._log.info('Provided goal is Done')
             self.action_done = True
             return True
         self.action_done = False
@@ -497,6 +688,7 @@ class Controller():
 
         step = 50
         time_step = duration/step
+        
         path = rtb.ctraj(self._robot.fkine(self._robot.q), pose, t=step)
 
         vel_scale = {'linear': 0.6, 'angular': 0.8}
@@ -673,7 +865,7 @@ class Controller():
 
         ## END -----------------------------------------------------------------------------#
         
-        # calculate joint velocities, singularity check is already included in the function
+        # calculate joint velocities, singularity check is already included in the function 
 
         j = self._robot.jacob0(self._robot.q)
         mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
@@ -721,7 +913,7 @@ class Controller():
         - @param tolerance: tolerance to consider the robot has reached the desired pose (default 0.001)
         """
 
-        step = 100
+        step = 150
         time_step = duration/step
 
         # Defined quintic polynomial trajectory
@@ -742,6 +934,12 @@ class Controller():
         
         index = 0
         while not is_arrived() and self.system_activated():
+            
+            if self._gamepad_status: # Estop for homing in gamepad mode
+                if self.joystick_object.get_button(2):
+                    self._state = 'STOPPED'
+                    break
+                
             self._robot_busy = True
             if self.object is not None:
                 if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
@@ -760,7 +958,7 @@ class Controller():
             # send joint command to robot to execute desired motion. Currently available mode is position mode
 
             self._robot.send_joint_command(path.q[index])
-            time.sleep(time_step)
+            time.sleep(0)
 
 
         self._robot_busy = False
@@ -815,7 +1013,7 @@ class Controller():
         self._log.info("E-stop engaged. System is halted.")
 
     def update_estop_state(self):
-        if self._state == 'ENABLED' or self._state == 'IDLE':
+        if self._state == 'ENABLED':
             self._state = 'STOPPED'
         else:
             self._state = 'IDLE'
@@ -835,4 +1033,5 @@ class Controller():
             self._state = "IDLE"
             self._log.info("System is disabled. Back to idle state.")
 
-   
+    def set_event_GUI(self, event: str):
+        self._read_event = event

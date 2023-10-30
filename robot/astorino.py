@@ -30,9 +30,14 @@ class Astorino(M_DHRobot3D):
         gripper_ready = False, # Indicate for mounting gripper
         gui = None
     ):
+        self._gripper_ready = gripper_ready
+        if self._gripper_ready:
+            self._offset_gripper = 0.13
+        else: self._offset_gripper = 0
+        
         # DH links
         links = self._create_DH() # need to work on function
-        self._gripper_ready = gripper_ready
+        
         self._env = env
         
         # Names of the robot link files in the directory
@@ -78,8 +83,8 @@ class Astorino(M_DHRobot3D):
 
         # Add gripper
         self.gripper = AstorinoGripper(base= self.fkine(self.q))
-        self.gripper_offset = sm.SE3(0,0,0.13)
-        # self.ax = geometry.Axes(0.2, pose=self.fkine(self.q) @ self.gripper_offset)
+        # self.gripper_offset = sm.SE3(0,0,0.13)
+        self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
 
         self.update_sim()
 
@@ -95,7 +100,7 @@ class Astorino(M_DHRobot3D):
         # 63.5 start from link 2 (base: no, link 1: no)
 
         a = np.r_[63.5,  222, 66,     0,  0,  0]*mm
-        d = np.r_[165.98,  0,  0, 286.5,  0,  0]*mm
+        d = np.r_[165.98,  0,  0, 286.5,  0,  0 + self._offset_gripper/mm]*mm
         
         alpha = [-np.pi/2, 0, -np.pi/2, np.pi/2, np.pi/2, 0]
         offset = [0,0,0,0,np.pi/2,0]
@@ -116,7 +121,7 @@ class Astorino(M_DHRobot3D):
         Update simulation
         """
         self.add_to_env(self._env)
-        # self._env.add(self.ax)
+        self._env.add(self.ax)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
             self.gripper.add_to_env(self._env)
@@ -174,7 +179,7 @@ class Astorino(M_DHRobot3D):
         Send joint command to robot. Current mode available is joint position mode
         """
         self.q = q
-        # self.ax.T = self.fkine(self.q) @ self.gripper_offset
+        self.ax.T = self.fkine(self.q)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
         self._env.step(0)  
@@ -259,7 +264,7 @@ class AstorinoGripper:
             qtest= self._qtest
         )
         
-        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0)  # NEED TO FIX
+        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.13,0,0)
         self._right_finger.base = (
             self._base.A @ self.base_tf_right.A
         )
@@ -281,7 +286,7 @@ class AstorinoGripper:
             qtest=self._qtest
         )
 
-        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007,0,0) # NEED TO FIX
+        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.13,0,0)
         self._left_finger.base = (
             self._base.A @ self.base_tf_left.A
         )
