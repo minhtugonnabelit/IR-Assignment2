@@ -289,7 +289,7 @@ class Controller():
                 
                 
             else: # Linux
-                self._gamepad_linux(joystick= joystick,
+                self._gamepad_linux(joystick= self.joystick_object,
                                     vel_scale=vel_scale,
                                     last_estop_button= last_estop_button,
                                     time_step=time_step)
@@ -394,11 +394,8 @@ class Controller():
                 linear_vel = np.asarray([linear_vel_x, linear_vel_y, linear_vel_z]) * vel_scale['linear'] 
                 angular_vel = np.asarray([angular_vel_x, angular_vel_y, angular_vel_z]) * vel_scale['angular']                
                 ee_vel = np.hstack((linear_vel, angular_vel))
-                
-                
-
-
-
+               
+               
                 # collision avoidance damping
                 d_thresh = 0.05
 
@@ -801,7 +798,7 @@ class Controller():
             # send joint command to robot to execute desired motion. Currently available mode is position mode
 
             self._robot.send_joint_command(q)
-            time.sleep(time_step)
+            # time.sleep(time_step)
 
 
         self._robot_busy = False
@@ -958,7 +955,7 @@ class Controller():
             # send joint command to robot to execute desired motion. Currently available mode is position mode
 
             self._robot.send_joint_command(path.q[index])
-            time.sleep(0)
+            # time.sleep(0)
 
 
         self._robot_busy = False

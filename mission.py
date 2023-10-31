@@ -185,21 +185,6 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
-            # time.sleep(0.01)
-
-        # # non-blocking method
-        # command = {
-        #     "name": "GO_TO_CARTESIAN_POSE",
-        #     "args": [lift_pose]
-        # }
-        # self._picker_robot.send_command(command)
-
-        # for i in range(50):
-        #     self._plate.move_flat_plate(lift_pose @ sm.SE3(0,0,0.1/50))
-        #     time.sleep(0.01)
-
-        # # blocking method
-        # self._picker_robot.go_to_cartesian_pose(lift_pose)
 
         print('plate lifted')
 
@@ -212,19 +197,14 @@ class Mission():
         # hang the plate
         hang_pose = self.HANGPOSES[plt_index] @ self._PICKER_GRIP_POSE
         current_pose = self._picker_robot.get_ee_pose()
+        
 
         pose_ori = hang_pose.A[0:3,0:3]
         path_sawyer = np.empty((self.STEP, 3))
-
         s = rtb.trapezoidal(0,1,self.STEP).s
-
         for i in range(self.STEP):
-            # t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
             path_sawyer[i, :] = (1 - s[i])*current_pose.A[0:3,3] +s[i]*hang_pose.A[0:3,3]
 
-        # for i in range(30):
-        #     t = i / (30 - 1) # Interpolation parameter [0, 1]
-        #     path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*hang_pose.A[0:3,3]
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
@@ -237,17 +217,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            # time.sleep(0.01)
 
-        # non-blocking method
-        # command = {
-        #     "name": "GO_TO_CARTESIAN_POSE",
-        #     "args": [hang_pose]
-        # }
-        # self._picker_robot.send_command(command)
-
-        # # blocking method
-        # self._picker_robot.go_to_cartesian_pose(hang_pose)
 
         print('plate hanged')
 
@@ -274,17 +244,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
             index += 1
             self.done = self._picker_robot.is_arrived(sawyer_gripper_pose)
-            # time.sleep(0.01)
 
-        # # non-blocking method
-        # command = {
-        #     "name": "GO_TO_JOINT_ANGLES",
-        #     "args": [desired_js]
-        # }
-        # self._picker_robot.send_command(command)
-
-        # # blocking method
-        # self._picker_robot.go_to_joint_angles(desired_js)
 
         print('plate moved')
 
@@ -295,7 +255,6 @@ class Mission():
         """
         if plt_index > 0:
             self._BENDER_GRIP_POSE = sm.SE3.Rx(-np.pi/90) @ self._BENDER_GRIP_POSE
-        # plate_desired_pose = sm.SE3(0.5, 0, 0.87) @ sm.SE3.RPY(90.0, 0.0, 0.0, unit = 'deg', order='xyz')
         astorino_gripper_pose = self.JOINEDPOSE @ self._BENDER_GRIP_POSE
         path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), astorino_gripper_pose, self.STEP)
     
@@ -304,19 +263,9 @@ class Mission():
             self._bender_robot.single_step_cartesian(path_astor[index], 0.01)
             index += 1
             self.done = self._bender_robot.is_arrived(astorino_gripper_pose)
-            # time.sleep(0.01)
 
         self._bender_robot.close_gripper()
 
-        # non-blocking method
-        # command = {
-        #     "name": "GO_TO_CARTESIAN_POSE",
-        #     "args": [plate_pose]
-        # }
-        # self._bender_robot.send_command(command)
-
-        # # blocking method
-        # self._bender_robot.go_to_cartesian_pose(plate_pose)
 
         print('astor gripped')
 
@@ -342,7 +291,6 @@ class Mission():
             
             self.done = self._picker_robot.is_arrived(picker_last_pose) and self._bender_robot.is_arrived(bender_last_pose)
 
-            # time.sleep(0.01)
 
 
     def _bend_plate(self, plt_index):
@@ -385,10 +333,7 @@ class Mission():
             self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
 
             self.all_seg.append(seg_array)
-            
-
-            # time.sleep(0.01)
-        
+                    
 
     def _unbend_plate(self, plt_index):
         """
@@ -423,8 +368,6 @@ class Mission():
             self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
             self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
 
-            # time.sleep(0.01)
-
     
     def _astor_release(self, i):
         """
@@ -434,7 +377,6 @@ class Mission():
         # path_astor = rtb.ctraj(self._bender_robot.get_ee_pose(), self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1), self.STEP)
 
         self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1))
-        # self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3.RPY(180,0,0, unit = 'deg', order='xyz'))
     
 
     def _hold_plate(self, plt_index):
@@ -454,7 +396,7 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose), part_relate = False)
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            # time.sleep(0.01)
+
 
         path_sawyer = rtb.ctraj(fix_pose, hang_pose, self.STEP)
 
@@ -465,7 +407,6 @@ class Mission():
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose), part_relate = False)
             index += 1
             self.done = self._picker_robot.is_arrived(hang_pose)
-            # time.sleep(0.01)
         
 
         print('plate held')
@@ -495,7 +436,7 @@ class Mission():
 
             index += 1
             self.done = self._picker_robot.is_arrived(return_pose)
-            # time.sleep(0.01)
+
 
         self._picker_robot.open_gripper()  
 
@@ -503,6 +444,7 @@ class Mission():
             self._home_system()      
 
         print('plate returned')
+
 
     # LLT ==-----------------
     def system_state(self):
@@ -557,6 +499,9 @@ class Mission():
         return viz_object
     
     def run(self):
+        """
+        Run the mission
+        """
 
         while self.plate_index < len(self._plates_list):
 
@@ -567,6 +512,8 @@ class Mission():
             if self.plate_index == 0 and self.index == 0:
                 self._home_system()
             
+            
+            # Loop to go through individual steps for each plate
             while self.index < len(self._action_list):
 
                 # check if system is activated
@@ -580,14 +527,13 @@ class Mission():
                 if self.step_is_done():
                     self.index += 1
             
-                # time.sleep(0.5)
 
+            # check if task is completed
             if self.task_completed():   
 
                 print('task completed') 
                 self.plate_index += 1
                 
-
                 if  self.plate_index <= len(self._plates_list)-1:
 
                     # reset task index
@@ -595,7 +541,6 @@ class Mission():
                     self.index = 0
 
         
-
     def reset_mission(self):
         """
         Reset mission to step 0"""

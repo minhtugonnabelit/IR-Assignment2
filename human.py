@@ -41,16 +41,16 @@ class Human():
         self.workcell_space = RectangularPrism(width=3.6, breadth=4, height=2,center= (self.cell_center @ sm.SE3(0,0,1)).A[0:3,3])
         self.vertices, self.faces, self.normals = self.workcell_space.get_data()
         
-        self._human = self._add_model('worker.stl', self.human_init_pos, color = (1.0, 0.0, 0.0, 1.0)) # -0.341478
-        self.human_thread = threading.Thread(target=self.move)
+        self._human = self._add_model('worker.stl', self.human_init_pos, color = (0.3, 1.0, 0.9, 0.5)) # -0.341478
+        # self.human_thread = threading.Thread(target=self.move)
         
         self.human_status = 'SAFE'
         self._keyboard_status = False
         self._disable_keyboard = True
         
-        # self._keys = None
-        self.human_thread = threading.Thread(target=self.keyboard_move)
-        self.human_thread.start()
+        # # self._keys = None
+        # self.human_thread = threading.Thread(target=self.keyboard_move)
+        # self.human_thread.start()
         
         self._screen = None
         self._x = 0
@@ -78,7 +78,7 @@ class Human():
         speed = 3
         if self._keyboard_status:
 
-            while True:
+            while not self._disable_keyboard:
                 try:
                     self._screen.fill((0,0,0))
                 except:
@@ -94,25 +94,24 @@ class Human():
                 except:
                     pass
                 
-
                 if keys[pygame.K_LEFT]:
                     # Update mesh transformation for left arrow key
                     self._y -= 0.01 * speed
-                    # print('left')
+                    print('left')
                 elif keys[pygame.K_RIGHT]:
                     # Update mesh transformation for right arrow key
                     self._y += 0.01 * speed
-                    # print('right')
+                    print('right')
                     
                 elif keys[pygame.K_UP]:
                     # Update mesh transformation for up arrow key
                     self._x -= 0.01 * speed
-                    # print('up')
+                    print('up')
                     
                 elif keys[pygame.K_DOWN]:
                     # Update mesh transformation for down arrow key
                     self._x += 0.01 * speed
-                    # print('down')
+                    print('down')
 
                 self.move(self._x, self._y)
                 pygame.time.wait(30)
@@ -130,7 +129,6 @@ class Human():
         new_transform = sm.SE3(x,y,0)
         self._human.T = self.human_init_pos @ new_transform
 
-        self._env.step(0.01)
         if self.is_in_workcell():
             self.human_status = 'DANGER'
         else: self.human_status = 'SAFE'

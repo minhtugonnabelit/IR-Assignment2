@@ -34,10 +34,11 @@ class WorkCell():
         self._fire_extinguisher_0 = self._add_model('fire_extinguisher.dae', sm.SE3(1.135,-1.07,0))
         self._fire_extinguisher_1 = self._add_model('fire_extinguisher.dae', sm.SE3(-0.65,1.428,0) @ sm.SE3.Rz(90,'deg'))
         self._light_curtain_cyl = self._add_model('light_curtain_cyl1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        self._light_curtain_laser = self._add_model('light_curtain_laser1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
+        self._light_curtain_laser = self._add_model('light_curtain_laser1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'), color=(0.3,1.0,0.9,0.05))
         # self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         # self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         
+
     def get_cell_center(self):
         """
         Getter for cell center
@@ -46,6 +47,7 @@ class WorkCell():
             _type_: _description_
         """
         return copy.deepcopy(self._center)
+    
     
     def get_cart_location(self):
         """
@@ -56,24 +58,6 @@ class WorkCell():
         """
         return copy.deepcopy(self._cart.T)
 
-    def move_human(self, pose):
-        """
-        Function to move human model in simulation
-
-        Args:
-            pose (_type_): _description_
-        """
-        self._human.T = pose
-        self._env.step(0)
-        
-    def get_human_pose(self):
-        """
-        Getter for human pose to use in work cell safety checking
-
-        Returns:
-            _type_: _description_
-        """
-        return copy.deepcopy(self._human.T)
 
     def _add_model(self, file_path, placement, color=None):
         """

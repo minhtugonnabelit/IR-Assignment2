@@ -240,7 +240,7 @@ class Sawyer(M_DHRobot3D):
         step = np.pi/48 * step / abs(step)
         for i in np.arange(head_ori[2], angle, step):
             self._head.T = smb.trotz(i) @ head_from_base
-            self._env.step(0.02)
+            self._env.step(0.05)
             
 
 
@@ -372,7 +372,7 @@ class SawyerGripper:
         for i in range (steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.02)
+            self._env.step(0.05)
 
     def open(self):
         """
@@ -386,7 +386,7 @@ class SawyerGripper:
         for i in range (steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.02) 
+            self._env.step(0.05) 
 
 
     # -----------------------------------------------------------------------------------#

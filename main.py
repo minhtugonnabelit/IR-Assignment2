@@ -46,6 +46,51 @@ def load_args():
     return parser.parse_args()
 
 
+def _create_new_logfile(basename):
+
+    # Create a directory where we want to save the log file
+    current_dir = os.path.dirname(__file__)
+    log_dir = os.path.join(current_dir, "logs")
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    full_filename = os.path.join(log_dir, f"{basename}")
+    return full_filename
+
+
+def _init_log(log_level):
+
+    # First, lets get the root logger
+    log = logging.getLogger('root')
+
+    # Create a new log file and setup logging to a file
+    log_file = _create_new_logfile(LOG_FILE_NAME)
+    file_handler = logging.FileHandler(log_file, mode='a')
+    formatter_file = logging.Formatter(LOG_FORMAT_FILE)
+    file_handler.setFormatter(formatter_file)
+    file_handler.setLevel(logging.DEBUG)
+
+    # Create a log file to go to the console
+    stream_handler = logging.StreamHandler()
+    formatter_console = logging.Formatter(LOG_FORMAT_CONSOLE)
+    stream_handler.setFormatter(formatter_console)
+
+    # Here you can optionally set the name of the log
+    stream_handler.set_name("console_log")
+
+    # Set the log level for the console output (based on what we passed into this function)
+    stream_handler.setLevel(log_level)
+
+    # Set the main logging level to debug so the file handler can support it. The stream handler (to console) will use the level set above.
+    log.setLevel(logging.DEBUG)
+    log.addHandler(file_handler)
+    log.addHandler(stream_handler)
+    log.info(f"Saving logs to: {file_handler.baseFilename}")
+
+    return log
+
+
 class RobotGUI:
 
     # switch to FULL UPPERCASE?
@@ -72,20 +117,21 @@ class RobotGUI:
             log_level = logging.DEBUG
         else:
             log_level = logging.INFO
-        self.log = RobotGUI._init_log(log_level)
+        self.log = _init_log(log_level)
 
         # Init environment object:
         
-        self.work_cell = WorkCell(self.env, self._cell_center)
+        work_cell = WorkCell(self.env, self._cell_center)
         self.human = Human(self.env, self._cell_center, sm.SE3(1,1,0))
-        self.plate = Plate(self._cell_center @
+
+        plate = Plate(self._cell_center @
                            sm.SE3(-0.35, 0.9, 0.905), self.env, bunny_location= sm.SE3(0.03, 0, 0) * sm.SE3.Rz(-np.pi/2))
-        self.plate1 = Plate(self._cell_center @ 
+        plate1 = Plate(self._cell_center @ 
                             sm.SE3(-0.35, 0.4, 0.905), self.env, bunny_location= sm.SE3(0.04, -0.05, 0) * sm.SE3.Rz(np.pi/2))
         
-        self.plates_list = []
-        self.plates_list.append(self.plate)
-        self.plates_list.append(self.plate1)
+        plates_list = []
+        plates_list.append(plate)
+        plates_list.append(plate1)
         
         
 
@@ -117,11 +163,10 @@ class RobotGUI:
         self.astorino_controller.launch()
         self.astorino_controller.go_to_home()
 
-        self.joystick_name = None
         # Initialize mission manager
 
-        self.mission = Mission(self.plates_list,
-                               self.work_cell,
+        self.mission = Mission(plates_list,
+                               work_cell,
                                self.sawyer_controller,
                                self.astorino_controller)
 
@@ -177,9 +222,9 @@ class RobotGUI:
         return window
 
     def update_gui_thread(self):
-        self.update_GUI = threading.Thread(
+        update_GUI = threading.Thread(
             target=self.gui_updater, daemon=True)
-        self.update_GUI.start()
+        update_GUI.start()
 
     def gui_updater(self):
         while True:
@@ -725,7 +770,7 @@ class RobotGUI:
             
             self.human_control(event=event, values= values)
             
-            # self.env.step(0.05)
+            self.env.step(0.05)
             
 
         self.sawyer_controller.clean()
@@ -1172,15 +1217,18 @@ class RobotGUI:
 
     def mission_callback(self, event, values):
 
+        # Get mission state before doing any actions
         state_mission = self.mission.system_state()
 
 
+        # Reset mission status if the cycle is completed
         if self.mission.mission_completed():
             self.mission.enable_system()
             self.mission.reset_mission()
             self.mission_thread.join()
 
 
+        # Setup for real-time joint states, cartesian pose values and mission state
         if event == '-A_UPDATE-JOINTS-':
             self.window['-mA_X-'].update(
                 f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
@@ -1209,7 +1257,6 @@ class RobotGUI:
             self.window['-m_RZ-'].update(
                 f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
 
-
         if event == '-UPDATE-STATE-MISSION-':
             self.window['-STATE-MISSION-'].update(f'{state_mission}')
             if state_mission == 'IDLE':
@@ -1235,7 +1282,6 @@ class RobotGUI:
                             self.window[key].update(disabled= False)
                         else: self.window[key].update(disabled= True)
                     else: self.window[key].update(disabled= False)
-                    
                 
             elif state_mission == 'PROCESSING':
                 
@@ -1258,26 +1304,26 @@ class RobotGUI:
                 self.window['-STATE-MISSION-'].update(background_color='red', text_color = 'white')
                 self.window['-MISSION_STOP-'].update('Release E-Stop',disabled= False)
 
-            
-                
+
+        # Account for human safety condition while mission is processing     
         if self.mission.mission_state == 'PROCESSING':
             if self.human.is_in_workcell():
                 self.sawyer_controller.engage_estop()
                 self.astorino_controller.engage_estop()
                 self.mission.mission_state = 'STOPPED'
                 
-            
-
+        
+        # Mission state handler
         if event == '-MISSION_ENABLE-':
             self.mission.enable_system()
             self.mission.mission_state = 'ENABLED'
 
-
         elif event == '-MISSION_DISABLE-':
             self.mission.disable_system()
             self.mission.mission_state = 'IDLE'
-                      
-            
+
+
+        # Flow control when mission stop button is pressed    
         elif event == '-MISSION_STOP-':
             self.mission.stop_system()
             self.mission_thread.join()
@@ -1287,24 +1333,33 @@ class RobotGUI:
             else:
                 self.mission.mission_state = 'STOPPED'
 
+
+        # Flow control when mission run button is pressed
         elif event == '-MISSION_RUN-':
             if state_mission == 'ENABLED':
                 self.mission_thread = threading.Thread(target=self.mission.run)
                 self.mission_thread.start()
                 self.mission.mission_state = 'PROCESSING'
 
-
+    
     def human_control(self, event, values): # while loop here
+        """
+        Human control event handler
+        """
         state_human = self.human.human_state()
         
+
+        # Human motion by sliders adjustment
         if event == f'-H_SLIDERX-' or event == f'-H_SLIDERY-':
             self.human.move(x= values['-H_SLIDERX-'], y= values['-H_SLIDERY-'])
-            self.env.step(0.01)
+            self.env.step(0.05)
             
         if state_human == 'SAFE':
             self.window['-STATE-HUMAN-'].update('SAFE',background_color= 'green')
         else: self.window['-STATE-HUMAN-'].update('DANGER', text_color= 'white', background_color= 'red')
         
+
+        # Toggle keyboard control mode
         if event == '-HUMAN_KEYBOARD-':
             keyboard_status = self.human.get_keyboard_status()
             if not keyboard_status: # If keyboard is off
@@ -1315,12 +1370,14 @@ class RobotGUI:
                 self.window['-HUMAN_KEYBOARD-'].update('KEYBOARD HUMAN ON')
             else:
                 self.human.disable_keyboard()
+                self.human_thread.join()
                 self.window['-HUMAN_KEYBOARD-'].update('KEYBOARD HUMAN OFF')
 
         
-        
-
     def getori(self, robot):
+        """
+        Return orientation of the robot in RPY
+        """
         ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
         return ori
 
@@ -1333,49 +1390,6 @@ class RobotGUI:
 
     def blank(size):
         return sg.Text('', size=size, background_color='brown')
-
-    def _init_log(log_level):
-
-        # First, lets get the root logger
-        log = logging.getLogger('root')
-
-        # Create a new log file and setup logging to a file
-        log_file = RobotGUI._create_new_logfile(LOG_FILE_NAME)
-        file_handler = logging.FileHandler(log_file, mode='a')
-        formatter_file = logging.Formatter(LOG_FORMAT_FILE)
-        file_handler.setFormatter(formatter_file)
-        file_handler.setLevel(logging.DEBUG)
-
-        # Create a log file to go to the console
-        stream_handler = logging.StreamHandler()
-        formatter_console = logging.Formatter(LOG_FORMAT_CONSOLE)
-        stream_handler.setFormatter(formatter_console)
-
-        # Here you can optionally set the name of the log
-        stream_handler.set_name("console_log")
-
-        # Set the log level for the console output (based on what we passed into this function)
-        stream_handler.setLevel(log_level)
-
-        # Set the main logging level to debug so the file handler can support it. The stream handler (to console) will use the level set above.
-        log.setLevel(logging.DEBUG)
-        log.addHandler(file_handler)
-        log.addHandler(stream_handler)
-        log.info(f"Saving logs to: {file_handler.baseFilename}")
-
-        return log
-
-    def _create_new_logfile(basename):
-
-        # Create a directory where we want to save the log file
-        current_dir = os.path.dirname(__file__)
-        log_dir = os.path.join(current_dir, "logs")
-
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-
-        full_filename = os.path.join(log_dir, f"{basename}")
-        return full_filename
 
 
 if __name__ == '__main__':
