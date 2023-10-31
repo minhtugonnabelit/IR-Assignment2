@@ -271,6 +271,11 @@ class RobotGUI:
             state_mission = self.mission.system_state()
             self.window.write_event_value('-UPDATE-STATE-MISSION-', state_mission)
 
+            # ----------------------- HUMAN
+            new_pose_human = self.human.get_pose()
+            self.window.write_event_value('-HUMAN_UPDATE-POSE-', new_pose_human)
+            
+            
             time.sleep(0.5)
 
     def tab1_setup(self):
@@ -692,53 +697,37 @@ class RobotGUI:
                 sg.Button('KEYBOARD HUMAN OFF', key='-HUMAN_KEYBOARD-', size=(34, 3))
             ],
             
-            [sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
-                        size=self._slider_size, key='-H_SLIDERX-', enable_events=True, resolution=0.0001),
+            [sg.Text('Offset X:', size= (7,1),background_color='black'), sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
+                        size=self._slider_size, key='-H_SLIDERX-', enable_events=True, resolution=0.1),
             sg.Text('X:', size=(2, 1),
                     background_color='black'),
             sg.Text(f'{self.human.get_pose()[0,3]} mm', size=(
-                6, 1), key='-H_X-', justification='right'),
+                6, 1), key='-H_X-', justification='left', background_color= 'black'),
             ],
             
-            [sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
-                        size=self._slider_size, key='-H_SLIDERY-', enable_events=True, resolution=0.0001),
+            [sg.Text('Offset Y:', size= (7,1),background_color='black'), sg.Slider(range=(-5.0, 5.0), default_value=0.0, orientation='h',
+                        size=self._slider_size, key='-H_SLIDERY-', enable_events=True, resolution=0.1),
             sg.Text('Y:', size=(2, 1),
                     background_color='black'),
             sg.Text(f'{self.human.get_pose()[1,3]} mm', size=(
-                6, 1), key='-H_Y-', justification='right'),
+                6, 1), key='-H_Y-', justification='left', background_color= 'black'),
             ],
         ]
         
         
 
-        # Define the layout for the second tab
+        # Define the layout for the THIRD tab
         tab3_layout = [
             [
                 sg.Frame('Mission Manager', layout=headers, font=('Ubuntu Mono', 30), background_color='black')
             ],
             
-            # [
-            #     sg.Frame('Mission State', layout=mission_state, font=('Ubuntu Mono', 24), background_color='black'), 
-            # ],
-
             [
                 sg.Column(left_column, element_justification= 'center',
                           background_color= 'black', pad= (10,0), expand_x= True),
                 sg.Column(right_column, element_justification= 'center',
                           vertical_alignment= 'top', background_color= 'black', pad= (10,0), expand_x= True)
             ]
-            # [
-            #     sg.Button('Enable System', key='-MISSION_ENABLE-', size=(16, 3)), sg.Button('Disable System', key='-MISSION_DISABLE-', size=(16, 3))
-            # ],
-            
-            # [
-            #    sg.Button('Run Mission', key='-MISSION_RUN-', size=(34, 3), pad= (6,0))
-            # ],
-
-            
-            # [
-            #    sg.Button('Emergency Stop', key='-MISSION_STOP-', button_color=('white', 'red'), size=(34, 3), pad= (6,3))
-            # ],
         ]
 
         return tab3_layout
@@ -1373,6 +1362,10 @@ class RobotGUI:
                 self.human_thread.join()
                 self.window['-HUMAN_KEYBOARD-'].update('KEYBOARD HUMAN OFF')
 
+        elif event == '-HUMAN_UPDATE-POSE-':
+            new_pose_human = self.human.get_pose()
+            self.window['-H_X-'].update(f'{round(new_pose_human[0,3],1)} mm')
+            self.window['-H_Y-'].update(f'{round(new_pose_human[1,3],1)} mm')
         
     def getori(self, robot):
         """
