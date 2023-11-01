@@ -1,0 +1,22 @@
+2023-11-01 18:53:45,012,INFO,Thinh_test_gui.py,_init_log,1264,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 18:54:05,049,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:05,051,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:54:12,064,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:54:25,053,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:25,103,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:54:45,510,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:45,511,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:05,528,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:05,528,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:25,879,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:25,879,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:45,882,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:45,882,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:06,258,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:06,308,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:26,766,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:26,766,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:46,773,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:46,773,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:57:07,135,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:57:07,185,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
