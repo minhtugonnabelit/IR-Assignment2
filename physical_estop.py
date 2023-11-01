@@ -51,5 +51,5 @@ class PhysicalEstop:
 
 
 if __name__ == "__main__":
-    estop = PhysicalEstop()  # modify the port if needed
+    estop = PhysicalEstop(port="/dev/ttyACM0")  # modify the port if needed
 

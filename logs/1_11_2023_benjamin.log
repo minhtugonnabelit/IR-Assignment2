@@ -1,0 +1,166 @@
+2023-11-01 12:45:51,375,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 12:45:58,070,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:46:01,603,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:46:01,603,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:46:12,980,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:46:16,924,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:47:53,763,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:47:54,221,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:48:38,150,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 12:48:45,669,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:48:49,039,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:48:49,039,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:48:49,892,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:48:53,991,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:50:43,083,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:50:43,503,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:51:09,326,WARNING,safety.py,is_self_collided,226,link 4 is collided with head
+2023-11-01 12:51:14,461,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:51:17,289,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 1
+2023-11-01 12:51:19,303,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:51:20,498,WARNING,safety.py,is_self_collided,244,link 5 is collided with link 1
+2023-11-01 12:51:28,138,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 12:51:35,150,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 12:51:44,877,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 12:51:48,583,INFO,controller.py,go_to_cartesian_pose,794,Pose is unreachable!
+2023-11-01 12:51:54,435,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:03,429,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:40:10,371,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:13,939,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:40:13,939,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:40:15,457,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:19,901,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:36,341,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:40:42,917,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:45,010,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:40:46,633,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:40:47,849,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:52,615,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:40:53,296,WARNING,safety.py,is_self_collided,244,link 6 is collided with link 3
+2023-11-01 14:42:12,214,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:42:18,789,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:43:48,335,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:43:55,253,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:44:14,359,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:44:21,414,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:44:32,022,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:44:33,175,WARNING,safety.py,is_self_collided,244,link 4 is collided with link 0
+2023-11-01 14:44:50,754,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:44:57,473,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:44:59,764,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:45:05,352,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:45:40,043,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:45:46,797,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:45:48,373,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:45:53,393,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:46:03,810,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 14:46:10,555,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 14:46:12,693,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 14:46:13,959,WARNING,safety.py,is_self_collided,244,link 4 is collided with link 0
+2023-11-01 16:37:59,730,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 18:51:16,587,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 18:51:23,411,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:51:28,963,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:51:28,963,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:51:30,650,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:51:34,388,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:52:31,683,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 18:52:38,569,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:52:42,887,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:52:42,888,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:52:44,537,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:52:48,255,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:53:47,559,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 18:53:54,543,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:53:58,483,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:53:58,483,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:54:00,183,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:54:04,061,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:55:32,362,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:55:32,841,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:55:45,087,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:55:45,091,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:55:47,840,INFO,controller.py,engage_estop,1010,E-stop engaged. System is halted.
+2023-11-01 18:55:47,840,INFO,controller.py,engage_estop,1010,E-stop engaged. System is halted.
+2023-11-01 18:56:06,682,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:56:06,684,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:56:09,100,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:56:09,157,INFO,controller.py,engage_estop,1010,E-stop engaged. System is halted.
+2023-11-01 18:56:09,157,INFO,controller.py,engage_estop,1010,E-stop engaged. System is halted.
+2023-11-01 18:56:25,646,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:56:25,646,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 18:56:27,172,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:56:31,158,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:57:58,033,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:57:58,231,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:58:05,540,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:58:22,675,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 19:46:29,769,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 19:46:36,830,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 19:47:24,833,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 19:47:24,833,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 19:47:26,727,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 19:47:30,233,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:48:30,654,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 22:48:37,106,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:48:42,658,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:48:42,658,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:48:44,027,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:48:48,543,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:48:52,310,WARNING,safety.py,is_self_collided,226,link 5 is collided with head
+2023-11-01 22:49:20,801,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 22:49:27,634,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:49:29,757,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:49:36,831,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:51:40,544,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 22:51:47,481,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:51:50,728,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:51:56,525,WARNING,safety.py,is_self_collided,244,link 6 is collided with link 2
+2023-11-01 22:54:38,234,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 22:54:45,313,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:54:49,465,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:54:54,792,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:54:58,737,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:55:00,093,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:55:00,094,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:56:23,850,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:56:24,034,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:56:31,474,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:56:31,475,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:02,845,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:03,282,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:22,329,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:24,499,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:27,026,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:58:27,027,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:59:27,673,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:59:27,674,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 23:00:00,726,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 23:00:01,217,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 23:00:36,464,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-01 23:00:44,079,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 23:00:56,793,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 23:01:19,658,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 23:01:21,541,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 23:01:23,170,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 23:01:23,170,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:27:35,503,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-02 02:27:42,941,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:27:47,612,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:27:47,612,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:27:49,281,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:27:52,885,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:28:39,063,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-02 02:28:45,911,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:28:49,943,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:28:49,943,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:28:51,058,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:28:54,317,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:30:28,960,INFO,main.py,_init_log,89,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/1_11_2023_benjamin.log
+2023-11-02 02:30:35,632,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:30:39,347,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:30:39,347,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-02 02:30:41,839,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:30:45,404,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:32:03,647,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-02 02:32:04,287,INFO,controller.py,is_arrived,925,Provided joint states is Done
