@@ -42,7 +42,7 @@ class PhysicalEstop:
                     current_time = time.time()
                     if current_time - self.last_recognize > PhysicalEstop.DEBOUNCE_DELAY:
                         self.last_recognize = time.time()
-                        print("recognize button")
+                        print("pushed")
                         self.triggered = True
 
         finally:
@@ -59,5 +59,5 @@ class PhysicalEstop:
 
 
 if __name__ == "__main__":
-    estop = PhysicalEstop(port="/dev/ttyACM0")  # modify the port if needed
+    estop = PhysicalEstop()  # modify the port if needed
 
