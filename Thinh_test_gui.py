@@ -650,12 +650,24 @@ class RobotGUI:
 
         # Physicall estop
         estop = PhysicalEstop()
+        current_time = time.time()
+        last_time = time.time()
+
 
         while True:
             event, values = self.window.read()
             if event == sg.WIN_CLOSED:
                 break
             
+            if estop.is_pressed():
+                current_time = time.time()
+                if current_time - last_time > 1:
+                    event = '-MISSION_STOP-'
+                    print("Pressed")
+                    last_time = time.time()
+
+            # print(estop.is_pressed())
+
             self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
                                         flag_print_running_sawyer=flag_print_running_sawyer)
             self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
@@ -1173,9 +1185,7 @@ class RobotGUI:
                 self.window['-STATE-MISSION-'].update(background_color='red', text_color = 'white')
                 self.window['-MISSION_STOP-'].update('Release E-Stop')
             
-                
 
-            
 
         if event == '-MISSION_ENABLE-':
             self.mission.enable_system()

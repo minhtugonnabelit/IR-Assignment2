@@ -15,6 +15,7 @@ class PhysicalEstop:
             Linux: /dev/ttyUSB0
             Windows: COMx
         """
+        self.triggered = False
         self.ser = serial.Serial(port, baudrate, timeout=1)
         self.ser.flush()
 
@@ -30,7 +31,7 @@ class PhysicalEstop:
 
     def read_loop(self):
 
-        last_recognize = time.time()
+        self.last_recognize = time.time()
         try:
             while True:
                 button_state = self.read_button()
@@ -39,12 +40,19 @@ class PhysicalEstop:
                 # Deboucer
                 if button_state == 1:
                     current_time = time.time()
-                    if current_time - last_recognize > PhysicalEstop.DEBOUNCE_DELAY:
-                        last_recognize = time.time()
+                    if current_time - self.last_recognize > PhysicalEstop.DEBOUNCE_DELAY:
+                        self.last_recognize = time.time()
                         print("recognize button")
+                        self.triggered = True
 
         finally:
             self.close()
+
+    def is_pressed(self):
+        current_time = time.time()
+        if current_time - self.last_recognize > PhysicalEstop.DEBOUNCE_DELAY:
+            return False
+        return self.triggered
 
     def close(self):
         self.ser.close()
