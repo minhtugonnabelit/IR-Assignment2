@@ -61,8 +61,8 @@ class Mission():
         self.TILTEDPOSE = self.JOINEDPOSE @ sm.SE3.Rx(np.pi/3)
 
         # end effector pose relative to plate base
-        self._PICKER_GRIP_POSE = sm.SE3(0.09,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
-        self._BENDER_GRIP_POSE = sm.SE3(-0.1,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
+        self._PICKER_GRIP_POSE = sm.SE3(0.1,0,0) @ sm.SE3.RPY(0,-90,-180, unit = 'deg', order='xyz')
+        self._BENDER_GRIP_POSE = sm.SE3(-0.11,0,0) @ sm.SE3.RPY(-90,90,-90, unit = 'deg', order='xyz') 
 
         #----------------
         self._cell_center = self._workcell.get_cell_center()
@@ -125,17 +125,26 @@ class Mission():
 
         pose_ori = grip_pose.A[0:3,0:3]
         path_sawyer = np.empty((self.STEP, 3))
-
+        s = rtb.trapezoidal(0,1,self.STEP).s
         for i in range(self.STEP):
-            t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
-            path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*grip_pose.A[0:3,3]
+            # t = i / (self.STEP - 1) # Interpolation parameter [0, 1]
+            # path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*grip_pose.A[0:3,3]
+            path_sawyer[i, :] = (1 - s[i])*current_pose.A[0:3,3] + s[i]*grip_pose.A[0:3,3]
+
+        path = []
+        for pose in path_sawyer:
+            p = sm.SE3(pose)
+            p.A[:3,:3] = pose_ori
+            path.append(p)
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated() is True:
 
-            pose = sm.SE3(path_sawyer[index])
-            pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.05)
+            # pose = sm.SE3(path_sawyer[index])
+            # pose.A[0:3,0:3] = pose_ori          
+            # self._picker_robot.single_step_cartesian(pose, 0.05)
+            self._picker_robot.single_step_cartesian(path[index], 0.05)
+
 
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
@@ -174,12 +183,19 @@ class Mission():
             t = i / (30 - 1) # Interpolation parameter [0, 1]
             path_sawyer[i, :] = (1 - t)*current_pose.A[0:3,3] +t*grip_pose.A[0:3,3]
 
+        path = []
+        for pose in path_sawyer:
+            p = sm.SE3(pose)
+            p.A[:3,:3] = pose_ori
+            path.append(p)
+
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
 
-            pose = sm.SE3(path_sawyer[index])
-            pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.05)
+            # pose = sm.SE3(path_sawyer[index])
+            # pose.A[0:3,0:3] = pose_ori          
+            # self._picker_robot.single_step_cartesian(pose, 0.05)
+            self._picker_robot.single_step_cartesian(path[index], 0.05)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
