@@ -16,6 +16,7 @@ from work_cell import WorkCell
 from plate import Plate
 from physical_estop import PhysicalEstop
 from rectangularprism import RectangularPrism
+from physical_estop import PhysicalEstop
 
 from PIL import Image
 
@@ -172,7 +173,6 @@ class RobotGUI:
                                self.astorino_controller)
 
         # set up collision
-
         # self.collision_setup()
 
         # Initialize GUI
@@ -747,23 +747,24 @@ class RobotGUI:
 
         self.mission_thread = threading.Thread(target=self.mission.run)
         self.human_thread = threading.Thread(target=self.human.keyboard_move)
-
-
-        # # Physicall estop
-        # estop = PhysicalEstop()
-        # current_time = time.time()
-        # last_time = time.time()
         
+        # Physicall estop
+        estop = PhysicalEstop()
+        current_time = time.time()
+        last_time = time.time()
+
+            
         while True:
             event, values = self.window.read()
             if event == sg.WIN_CLOSED:
                 break
 
-            # if estop.is_pressed():
-            #     current_time = time.time()
-            #     if current_time - last_time > 1:
-            #         event = '-MISSION_STOP-'
-            #         last_time = time.time()
+            if estop.is_pressed():
+                current_time = time.time()
+                if current_time - last_time > 1:
+                    event = '-MISSION_STOP-'
+                    print("Pressed")
+                    last_time = time.time()
 
             self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
                                         flag_print_running_sawyer=flag_print_running_sawyer)
