@@ -14,6 +14,7 @@ from mission import Mission
 from human import Human
 from work_cell import WorkCell
 from plate import Plate
+from physical_estop import PhysicalEstop
 from rectangularprism import RectangularPrism
 from physical_estop import PhysicalEstop
 
@@ -773,7 +774,7 @@ class RobotGUI:
             
             self.human_control(event=event, values= values)
             
-            self.env.step(0.05)
+            self.env.step(0.02)
             
 
         self.sawyer_controller.clean()
@@ -790,7 +791,7 @@ class RobotGUI:
                     self.astorino_controller.set_joint_value(
                         i, values[f'-A_SLIDER{i}-'])
                     self.astorino_controller.update_js()
-                    self.env.step(0)
+                    # self.env.step(0.02)
         else:
             for i in range(6):
                 self.astorino_controller.set_joint_value(
@@ -824,12 +825,25 @@ class RobotGUI:
             self.window['-A_J3-'].update(f'{new_joint_states[4]:.2f} ')
             self.window['-A_J4-'].update(f'{new_joint_states[5]:.2f} ')
 
+            # self.window['-A_X-'].update(
+            #     f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
+            # self.window['-A_Y-'].update(
+            #     f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]:.2f} m')
+            # self.window['-A_Z-'].update(
+            #     f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]:.2f} m')
+            # self.window['-A_RX-'].update(
+            #     f'Rx: {np.rad2deg(self.getori(self.astorino)[0]):.2f} deg')
+            # self.window['-A_RY-'].update(
+            #     f'Ry: {np.rad2deg(self.getori(self.astorino)[1]):.2f} deg')
+            # self.window['-A_RZ-'].update(
+            #     f'Rz: {np.rad2deg(self.getori(self.astorino)[2]):.2f} deg')
+            
             self.window['-A_X-'].update(
-                f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
+                f'X: {(self.astorino.base.inv() @ self.astorino.fkine(self.astorino.q)).A[0,3]:.2f} m')
             self.window['-A_Y-'].update(
-                f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]:.2f} m')
+                f'Y: {(self.astorino.base.inv() @ self.astorino.fkine(self.astorino.q)).A[1,3]:.2f} m')
             self.window['-A_Z-'].update(
-                f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]:.2f} m')
+                f'Z: {(self.astorino.base.inv() @ self.astorino.fkine(self.astorino.q)).A[2,3]:.2f} m')
             self.window['-A_RX-'].update(
                 f'Rx: {np.rad2deg(self.getori(self.astorino)[0]):.2f} deg')
             self.window['-A_RY-'].update(
@@ -1044,12 +1058,25 @@ class RobotGUI:
             self.window['-J4-'].update(f'{new_joint_states[5]:.2f} ')
             self.window['-J5-'].update(f'{new_joint_states[6]:.2f} ')
 
+            # self.window['-X-'].update(
+            #     f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]:.2f} m')
+            # self.window['-Y-'].update(
+            #     f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]:.2f} m')
+            # self.window['-Z-'].update(
+            #     f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]:.2f} m')
+            # self.window['-RX-'].update(
+            #     f'Rx: {np.rad2deg(self.getori(self.sawyer)[0]):.2f} deg')
+            # self.window['-RY-'].update(
+            #     f'Ry: {np.rad2deg(self.getori(self.sawyer)[1]):.2f} deg')
+            # self.window['-RZ-'].update(
+            #     f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
+            
             self.window['-X-'].update(
-                f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]:.2f} m')
+                f'X: {(self.sawyer.base.inv() @ self.sawyer.fkine(self.sawyer.q)).A[0,3]:.2f} m')
             self.window['-Y-'].update(
-                f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]:.2f} m')
+                f'Y: {(self.sawyer.base.inv() @ self.sawyer.fkine(self.sawyer.q)).A[1,3]:.2f} m')
             self.window['-Z-'].update(
-                f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]:.2f} m')
+                f'Z: {(self.sawyer.base.inv() @ self.sawyer.fkine(self.sawyer.q)).A[2,3]:.2f} m')
             self.window['-RX-'].update(
                 f'Rx: {np.rad2deg(self.getori(self.sawyer)[0]):.2f} deg')
             self.window['-RY-'].update(
@@ -1385,7 +1412,8 @@ class RobotGUI:
         """
         Return orientation of the robot in RPY
         """
-        ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
+        # ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
+        ori = smb.tr2rpy((robot.base.inv() @ robot.fkine(robot.q)).A[0:3, 0:3], order='xyz')
         return ori
 
     def collision_setup(self):
