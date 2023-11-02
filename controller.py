@@ -38,6 +38,7 @@ class Controller():
         self.action_done = True
         self._print_once = True
         self._read_event = None
+        self.is_collided = False
         
         if self._robot.name == 'Sawyer':
             self._ee_offset = sm.SE3(0, 0, 0.16)
@@ -103,7 +104,7 @@ class Controller():
         self.vertices, self.faces, self.normals = self.object.get_data()
 
         # create Cuboid object for collision avoidance
-        self.avoidance_object = geometry.Cuboid(side, pose=center)
+        self.avoidance_object = geometry.Cuboid(side, pose=center, color= (1.0,0.0,0.0,1.0))
 
         return self.avoidance_object
 
@@ -846,19 +847,19 @@ class Controller():
                 self._log.warning('line_plane ee is nearly collided with object')
                 # break
 
-            if self.is_collided is True:
+            # if self.is_collided is True:
 
-                # set threshold and damping
-                d_thresh = 0.01
+            #     # set threshold and damping
+            #     d_thresh = 0.01
 
-                # weight of the damping vel for collision avoidance
-                weight = 0.5
+            #     # weight of the damping vel for collision avoidance
+            #     weight = 0.5
 
-                # get distance between ee and object,  also extracting the closest points to use as damping velocity
-                d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
-                if d <= d_thresh:
-                    vel = ( p1 - p2 ) / time_step
-                    ee_vel[0:3] += weight*vel
+            #     # get distance between ee and object,  also extracting the closest points to use as damping velocity
+            #     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+            #     if d <= d_thresh:
+            #         vel = ( p1 - p2 ) / time_step
+            #         ee_vel[0:3] += weight*vel
 
         ## END -----------------------------------------------------------------------------#
         
@@ -892,7 +893,8 @@ class Controller():
         if self.object is not None:
             if self._safety.collision_check_ee(q, self.vertices, self.faces, self.normals):
                 self._log.warning('line_plane ee is nearly collided with object')
-                self._state = 'STOPPED'
+                # self._state = 'STOPPED'
+                self.is_collided = True
 
         if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
             self._state = 'STOPPED'

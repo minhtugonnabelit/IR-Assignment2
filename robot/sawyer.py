@@ -25,7 +25,8 @@ class Sawyer(M_DHRobot3D):
 
 
     """
-    _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  # [0.00, -0.9, 0.00, -1.9, 0.00, -0.97, 3.14] #  [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.14]
+    _NEUTRAL= np.deg2rad(np.array([-51.26, -40.96, -7.47, 83.18, -61.48, -69.74, 134.15]))
+    # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  # [0.00, -0.9, 0.00, -1.9, 0.00, -0.97, 3.14] #  [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.14]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
 
     # -----------------------------------------------------------------------------------#
@@ -469,14 +470,15 @@ if __name__ == "__main__":
     # generate robot
     r = Sawyer(env, gripper_ready=True)
 
-    time.sleep(2)
-    q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
+    time.sleep(0.5)
+    # q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
+    q_goal = r._NEUTRAL
     qtraj = rtb.jtraj(r.q, q_goal, 200).q
     for q in qtraj:
         r.send_joint_command(q)
         time.sleep(0.02)
 
     r.close_gripper()
-    time.sleep(1)
+    # time.sleep(1)
     r.open_gripper()
     env.hold()

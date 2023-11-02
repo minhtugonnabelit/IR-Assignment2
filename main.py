@@ -172,7 +172,7 @@ class RobotGUI:
                                self.astorino_controller)
 
         # set up collision
-        # self.collision_setup()
+        self.collision_setup()
 
         # Initialize GUI
         
@@ -748,7 +748,7 @@ class RobotGUI:
         self.human_thread = threading.Thread(target=self.human.keyboard_move)
         
         # Physicall estop
-        estop = PhysicalEstop()
+        # estop = PhysicalEstop()
         current_time = time.time()
         last_time = time.time()
 
@@ -758,12 +758,12 @@ class RobotGUI:
             if event == sg.WIN_CLOSED:
                 break
 
-            if estop.is_pressed():
-                current_time = time.time()
-                if current_time - last_time > 1:
-                    event = '-MISSION_STOP-'
-                    print("Pressed")
-                    last_time = time.time()
+            # if estop.is_pressed():
+            #     current_time = time.time()
+            #     if current_time - last_time > 1:
+            #         event = '-MISSION_STOP-'
+            #         print("Pressed")
+            #         last_time = time.time()
 
             self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
                                         flag_print_running_sawyer=flag_print_running_sawyer)
@@ -1355,7 +1355,7 @@ class RobotGUI:
         # Human motion by sliders adjustment
         if event == f'-H_SLIDERX-' or event == f'-H_SLIDERY-':
             self.human.move(x= values['-H_SLIDERX-'], y= values['-H_SLIDERY-'])
-            self.env.step(0.05)
+            self.env.step(0.0)
             
         if state_human == 'SAFE':
             self.window['-STATE-HUMAN-'].update('SAFE',background_color= 'green')
@@ -1390,8 +1390,8 @@ class RobotGUI:
 
     def collision_setup(self):
 
-        side = [0.2, 0.2, 0.2]
-        center = self._cell_center @ sm.SE3(-0.2, 0., 0.87)
+        side = [0.7, 0.01, 0.2]
+        center = self._cell_center @ sm.SE3(-0.45, 0.65, 0.92)
         viz_object = self.mission.update_collision_object(side, center)
         obj_id = self.env.add(viz_object)
 

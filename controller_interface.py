@@ -102,6 +102,9 @@ class ControllerInterface():
         self._impl._update_robot_js()
 
 
+    def robot_is_collided(self):
+        return self._impl.robot_is_collided()
+
     def move(self):
         """
         Execute a joint space trajectory

@@ -125,26 +125,33 @@ class Safety:
         lines = []
             
         lastlink_norm = np.linalg.norm(tr[-1].A[:3,3] - tr[-2].A[:3,3])
-        start1 = smb.transl(0,offset,-lastlink_norm) @ tr[-1].A
+        start1 = tr[-1].A @ smb.transl(0.05 ,offset + 0.07,-lastlink_norm)
         line1 = {'start': start1, 
-                    'end': smb.transl(0,0,lastlink_norm*2) @ start1}
+                    'end': start1 @ smb.transl(0,0,lastlink_norm*1.5)}
         
-        start2 = smb.transl(0,-offset,-lastlink_norm) @ tr[-1].A
+        start2 = tr[-1].A @ smb.transl(0,-offset - 0.07,-lastlink_norm)
         line2 = {'start': start2,
-                    'end': smb.transl(0,0,lastlink_norm*2) @ start2}
+                    'end': start2 @ smb.transl(0,0,lastlink_norm*2) }
         
-        start3 = smb.transl(offset,0,-lastlink_norm) @ tr[-1].A
+        start3 = tr[-1].A @ smb.transl(offset,0,-lastlink_norm) 
         line3 = {'start': start3,
-                    'end': smb.transl(0,0,lastlink_norm*2) @ start3}
+                    'end': start3 @ smb.transl(0,0,lastlink_norm*2)}
         
-        start4 = smb.transl(-offset,0,-lastlink_norm) @ tr[-1].A
+        start4 =  tr[-1].A @ smb.transl(-offset,0,-lastlink_norm)
         line4 = {'start': start4,
-                    'end': smb.transl(0,0,lastlink_norm*2) @ start4}
+                    'end': start4 @ smb.transl(0,0,lastlink_norm*2)}
+        
+        #----- skew right 45 deg
+        start5 =  tr[-1].A @ smb.transl(offset+0.1,-offset-0.1,-lastlink_norm)
+        line5 = {'start': start5,
+                    'end': start5 @ smb.transl(0,0,lastlink_norm*2)}
+
         
         lines.append(line1)
         lines.append(line2)
         lines.append(line3)
         lines.append(line4)
+        lines.append(line5)
 
         return lines
     
