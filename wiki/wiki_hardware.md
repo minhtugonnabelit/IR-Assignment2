@@ -1,4 +1,9 @@
 # Real robot picker: Rethink Robotics Sawyer
+<p align="center">
+  <img height="400" alt="Universal Robots A/S" src="/wiki/media/demo.gif">
+</p>
+
+
 
 
 

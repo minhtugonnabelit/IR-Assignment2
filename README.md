@@ -2,6 +2,10 @@
 
 ## Overview
 
+<p align="center">
+  <img height="500" alt="Universal Robots A/S" src="wiki/media/system.png">
+</p>
+
 This project presents a comprehensive solution to 3D printing automation, specifically focused on the continuous collection of printed objects. By eliminating the need for manual intervention, it streamlines the production process and enhances efficiency. 
 
 Two robotic manipulators are coordinated within a high-level robot motion control system. Once a print is finalized, the `picker_robot` picks up the plate, transferring it to the `bender_robot`. Together, they meticulously grip and bend the plate, ensuring the printed object is detached seamlessly. 
@@ -48,7 +52,7 @@ Two robotic manipulators are coordinated within a high-level robot motion contro
 
 - **Safety Equipment:** Fire extinguisher 
 
-**Real robot control**: Real hardware implementation is demonstrated with ROS for the `picker_robot`. The model is chosen to be a Rethink Sawyer. Refer to its Wiki for [real picker robot control](https://github.com/jhavl/swift).
+**Real robot control**: Real hardware implementation is demonstrated with ROS for the `picker_robot`. The model is chosen to be a Rethink Sawyer. Refer to its Wiki for [real picker robot control](https://github.com/minhtugonnabelit/IR-Assignment2/edit/main/wiki/wiki_hardware.md#real-robot-picker-rethink-robotics-sawyer).
 
 ## Operating Modes
 
