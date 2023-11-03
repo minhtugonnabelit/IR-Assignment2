@@ -1,4 +1,4 @@
-# 3D Printing Automation with Robotic Manipulators
+# Robotic Arms for Automated Removal of 3D Printed Components
 
 ## Overview
 
@@ -10,7 +10,7 @@ Two robotic manipulators are coordinated within a high-level robot motion contro
 
 **Dual Robotic Manipulators**: Collaboratively working to ensure the smooth detachment of 3D printed objects. Motion calculations for the manipulators are handled by the [robotictoolbox](https://github.com/petercorke/roboticstoolbox-python) library developed by Peter Corke. This ensures precise and reliable calculations for robot movements.
 
-**Real-time Visualisation**: Observe the manipulators in action in a visualised environment. The visualization of the entire operation is presented in [Swift](https://github.com/jhavl/swift) environment. It provides a real-time, visually rich representation of the manipulators in action.  
+**Real-time Visualisation**: Observe the manipulators in action in a visualized environment. The visualization of the entire operation is presented in [Swift](https://github.com/jhavl/swift) environment. It provides a real-time, visually rich representation of the manipulators in action.  
 
 **Interactive Testing GUI:** Found in the main.py script, this GUI mimics user interaction similar to the functionality of a teach pendant on other robot models. The interface includes draggable buttons and sliders. By default, buttons are vertically aligned; for custom arrangements, modifications are required by delving into the `SwiftElement` package.  
 
@@ -77,7 +77,7 @@ The system operates in two primary modes:
 </p>
 
 ## Dependencies
-To set up and run the visualisation, the following dependencies are required:
+To set up and run the visualization, the following dependencies are required:
 
 `numpy`
 
@@ -91,6 +91,6 @@ To set up and run the visualisation, the following dependencies are required:
 
 `pyserial`
 
-Please ensure all dependencies are installed before running the visualisation.
+Please ensure all dependencies are installed before running the visualization.
 
 Thank you for your interest in our 3D Printing Automation project. We hope you find this simulation insightful and valuable
