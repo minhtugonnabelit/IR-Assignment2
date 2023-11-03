@@ -8,7 +8,9 @@
 
 
 # Physical Hardware Emergency Stop
-[vid](https://www.youtube.com/watch?v=GuR2Qcfq7tA&ab_channel=romanticstories)
-<video src='[your URL here](https://www.youtube.com/watch?v=GuR2Qcfq7tA&ab_channel=romanticstories)https://www.youtube.com/watch?v=GuR2Qcfq7tA&ab_channel=romanticstories' width=180/>
+<p align="center">
+  <img height="400" alt="physical_button.gif" src="/wiki/media/physical_button.gif">
+</p>
+
 
 # Human Teleop For Light Curtain Check
