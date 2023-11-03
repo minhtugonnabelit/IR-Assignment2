@@ -52,7 +52,7 @@ Two robotic manipulators are coordinated within a high-level robot motion contro
 
 - **Safety Equipment:** Fire extinguisher 
 
-**Real robot control**: Real hardware implementation is demonstrated with ROS for the `picker_robot`. The model is chosen to be a Rethink Sawyer. Refer to its Wiki for [real picker robot control](https://github.com/minhtugonnabelit/IR-Assignment2/edit/main/wiki/wiki_hardware.md#real-robot-picker-rethink-robotics-sawyer).
+**Real robot control**: Real hardware implementation is demonstrated with ROS for the `picker_robot`. The model is chosen to be a Rethink Sawyer. Refer to its Wiki for [real picker robot control](https://github.com/minhtugonnabelit/IR-Assignment2/blob/main/wiki/wiki_hardware.md#real-robot-picker-rethink-robotics-sawyer).
 
 ## Operating Modes
 
