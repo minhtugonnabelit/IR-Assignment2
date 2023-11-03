@@ -3,7 +3,7 @@
 ## Overview
 
 <p align="center">
-  <img height="500" alt="Universal Robots A/S" src="wiki/media/system.png">
+  <img height="400" alt="Universal Robots A/S" src="wiki/media/system.png">
 </p>
 
 This project presents a comprehensive solution to 3D printing automation, specifically focused on the continuous collection of printed objects. By eliminating the need for manual intervention, it streamlines the production process and enhances efficiency. 
