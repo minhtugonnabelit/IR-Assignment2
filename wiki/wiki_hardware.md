@@ -13,3 +13,5 @@
 [YouTube Short](https://youtube.com/shorts/7t4vNS0YFIg?si=9_PYrffwCSsbJdnx)
 
 # Human Teleop For Light Curtain Check
+
+[YouTube Short](https://youtube.com/shorts/7t4vNS0YFIg?si=ReuUT4ASnj1nWFi9)
