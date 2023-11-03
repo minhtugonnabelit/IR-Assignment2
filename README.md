@@ -46,6 +46,8 @@ Two robotic manipulators are coordinated within a high-level robot motion contro
   
   The operation remains halted until the user intervenes to ensure safety and resume operations.
 
+- **Safety Equipment:** Fire extinguisher 
+
 **Real robot control**: Real hardware implementation is demonstrated with ROS for the `picker_robot`. The model is chosen to be a Rethink Sawyer. Refer to its Wiki for [real picker robot control](https://github.com/jhavl/swift).
 
 ## Operating Modes
@@ -58,14 +60,21 @@ The system operates in two primary modes:
 
   To initialize this mode, go to the corresponding `Controller tab` of either robot in the GUI and adjust sliders to control the robot joints 
 
+<p align="center">
+  <img height="300" alt="Universal Robots A/S" src="wiki/media/astorino_gui.png">
+</p>
+
 - **Mission Mode**  
 
   In mission mode, the robotic manipulators automatically execute the task of gripping the plate and bending it in unison. This is to detach the printed object from the plate once the printing process is completed.
 
-To initialize this mode, go to the `Mission Controller tab`
+  To initialize this mode, go to the `Mission Controller tab`
 
-Both modes can be accessed and initialized directly from the GUI. Refer to the GUI documentation (or the GUI section of this README) for further instructions.
+  Both modes can be accessed and initialized directly from the GUI. Refer to the GUI documentation (or the GUI section of this README) for further instructions.
 
+<p align="center">
+  <img height="300" alt="Universal Robots A/S" src="wiki/media/mission_GUI.png">
+</p>
 
 ## Dependencies
 To set up and run the visualisation, the following dependencies are required:
