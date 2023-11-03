@@ -1,0 +1,131 @@
+2023-11-03 16:16:23,994,INFO,main.py,_init_log,91,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/3_11_2023_quanvu.log
+2023-11-03 16:16:43,984,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:16:43,985,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:16:50,675,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:17:04,128,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:17:04,128,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:17:05,458,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:17:05,458,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:17:06,557,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:17:08,819,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:17:17,808,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,823,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,842,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,859,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,876,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,895,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,919,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,941,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,963,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:17,987,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,004,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,021,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,039,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,055,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,073,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,091,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,109,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,127,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,145,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,168,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,190,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,212,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,236,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,259,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,281,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,304,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,326,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,353,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,376,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:18,403,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,287,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,306,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,324,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,340,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,356,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,381,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,396,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,412,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:19,431,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:17:47,773,INFO,main.py,_init_log,91,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/3_11_2023_quanvu.log
+2023-11-03 16:18:07,752,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:18:07,755,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:18:15,996,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:18:28,224,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:18:28,244,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:18:48,417,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:18:48,437,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:19:08,602,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:19:08,602,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:19:28,796,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:19:28,797,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:19:39,295,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:19:39,295,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:19:49,005,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:19:49,026,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:20:00,737,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:20:03,207,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 16:20:09,036,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:20:09,065,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:20:17,190,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:17,191,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:22,678,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,694,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,714,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,740,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,762,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,785,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,808,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,829,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,857,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,879,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,900,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,923,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,945,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,966,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:22,988,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,013,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,043,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,062,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,082,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,112,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,142,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,173,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,198,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,228,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,254,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,276,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,296,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,315,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,339,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:23,355,WARNING,controller.py,single_step_cartesian,847,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,253,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,269,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,285,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,303,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,323,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,344,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,365,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,385,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,410,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,434,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,456,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,477,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,499,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,534,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,562,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,590,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,618,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:24,645,WARNING,controller.py,single_step_joint,895,line_plane ee is nearly collided with object
+2023-11-03 16:20:29,172,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:20:29,192,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 16:20:32,573,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:32,574,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:39,765,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:39,765,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:43,334,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:43,334,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:47,909,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:47,909,INFO,controller.py,enable_system,1028,System is enabled. Ready for operation.
+2023-11-03 16:20:49,344,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 16:20:49,344,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
