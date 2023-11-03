@@ -65,7 +65,7 @@ The system operates in two primary modes:
   To initialize this mode, go to the corresponding `Controller tab` of either robot in the GUI and adjust sliders to control the robot joints 
 
 <p align="center">
-  <img height="300" alt="Universal Robots A/S" src="wiki/media/astorino_gui.png">
+  <img height="400" alt="astorino_gui" src="wiki/media/astorino_gui.png">
 </p>
 
 - **Mission Mode**  
@@ -77,7 +77,7 @@ The system operates in two primary modes:
   Both modes can be accessed and initialized directly from the GUI. Refer to the GUI documentation (or the GUI section of this README) for further instructions.
 
 <p align="center">
-  <img height="300" alt="Universal Robots A/S" src="wiki/media/mission_GUI.png">
+  <img height="400" alt="mission_GUI" src="wiki/media/mission_GUI.png">
 </p>
 
 ## Dependencies
