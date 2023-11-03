@@ -750,8 +750,8 @@ class RobotGUI:
         
         # Physicall estop
         # estop = PhysicalEstop()
-        current_time = time.time()
-        last_time = time.time()
+        # current_time = time.time()
+        # last_time = time.time()
 
             
         while True:
