@@ -30,6 +30,9 @@ class WorkCell():
         self._estop_0 = self._add_model('estop.dae', sm.SE3(0.86, -0.464, 0.81))
         self._estop_1 = self._add_model('estop.dae', sm.SE3(0.86, -1.1233, 0.81))
         self._estop_2 = self._add_model('estop.dae', sm.SE3(-0.75, 1.15, 0.81))
+        self._estop_3 = self._add_model('estop.dae', sm.SE3(1.85, 2.05, 1.2) * sm.SE3.Ry(90,'deg'))
+        self._estop_4 = self._add_model('estop.dae', sm.SE3(1.85, -2.05, 1.2) * sm.SE3.Ry(90,'deg'))
+
         self._tiles = self._add_model('tiles.dae', sm.SE3(0,0,-0.015))
         self._fire_extinguisher_0 = self._add_model('fire_extinguisher.dae', sm.SE3(1.135,-1.07,0))
         self._fire_extinguisher_1 = self._add_model('fire_extinguisher.dae', sm.SE3(-0.65,1.428,0) @ sm.SE3.Rz(90,'deg'))

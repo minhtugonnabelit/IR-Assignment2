@@ -761,13 +761,17 @@ class Controller():
                     d_thresh = 0.01
 
                     # weight of the damping vel for collision avoidance
-                    weight = 0.5
+                    weight = 0.4
 
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
                     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
                     if d <= d_thresh:
+                        damp = (1-np.power(d/d_thresh, 2)) * weight 
+
                         vel = ( p1 - p2 ) / time_step
-                        ee_vel[0:3] += weight*vel
+                        # ee_vel[0:3] += weight*vel  
+                        ee_vel[0:3] += damp * vel
+
 
             ## END -----------------------------------------------------------------------------#
             
@@ -847,19 +851,26 @@ class Controller():
                 self._log.warning('line_plane ee is nearly collided with object')
                 # break
 
-            # if self.is_collided is True:
+            if self.is_collided is True:
 
-            #     # set threshold and damping
-            #     d_thresh = 0.01
+                # set threshold and damping
+                d_thresh = 0.008
 
-            #     # weight of the damping vel for collision avoidance
-            #     weight = 0.5
+                # weight of the damping vel for collision avoidance
+                weight = 0.06
 
-            #     # get distance between ee and object,  also extracting the closest points to use as damping velocity
-            #     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
-            #     if d <= d_thresh:
-            #         vel = ( p1 - p2 ) / time_step
-            #         ee_vel[0:3] += weight*vel
+                # get distance between ee and object,  also extracting the closest points to use as damping velocity
+                d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                if d <= d_thresh:
+                    damp = (1-np.power(d/d_thresh, 2)) * weight 
+
+                    # vel = ( p1 - p2 ) / time_step
+                    vel = ( p1 - p2 ) / np.linalg.norm(p1-p2)
+
+                    # ee_vel[0:3] += weight*vel  
+                    ee_vel[0:3] += damp * vel
+                    # vel = ( p1 - p2 ) / time_step
+                    # ee_vel[0:3] += weight*vel
 
         ## END -----------------------------------------------------------------------------#
         

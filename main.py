@@ -1041,7 +1041,7 @@ class RobotGUI:
                 self.log.warning(f"Invalid input: {input_value}")
 
         # Convert the input values to a SE3 object and input as Cartesian pose for robot to work out
-        pose = sm.SE3(input_values[0], input_values[1], input_values[2]
+        pose = self.sawyer.base @ sm.SE3(input_values[0], input_values[1], input_values[2]
                       ) @ sm.SE3.RPY(input_values[3:6], order='xyz', unit='deg')
 
         self.sawyer_controller.set_cartesian_value(pose)

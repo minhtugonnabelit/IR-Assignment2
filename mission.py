@@ -107,7 +107,7 @@ class Mission():
             # go up if got plate gripped, else move backward to avoid
             if bring_plate:
                 fix_pose = sm.SE3(0,0,0.005) @ robot.get_ee_pose()
-            else: fix_pose = robot.get_ee_pose() @ sm.SE3(0,0,-0.01)
+            else: fix_pose = robot.get_ee_pose() @ sm.SE3(0,0,-0.07)
             
             robot.single_step_cartesian(fix_pose, 0.02)
             
