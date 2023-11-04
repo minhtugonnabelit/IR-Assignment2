@@ -4488,3 +4488,47 @@ websockets.exceptions.ConnectionClosedError: no close frame received or sent
 2023-11-03 01:18:03,751,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
 2023-11-03 01:18:23,754,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
 2023-11-03 01:18:23,754,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 01:18:43,764,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 01:18:43,764,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 01:18:53,541,INFO,main.py,_init_log,91,Saving logs to: D:\University\UTS\2023\A_Spring 2023\41013 Industrial Robotics\Assignment\Assignment 2\IR-Assignment2\logs\2_11_2023_lelon.log
+2023-11-03 01:19:03,770,INFO,controller.py,is_arrived,927,Provided joint states is Done
+2023-11-03 01:19:13,483,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-03 01:19:13,483,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-03 01:19:21,841,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-11-03 01:19:21,841,ERROR,server.py,handler,242,connection handler failed
+Traceback (most recent call last):
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 959, in transfer_data
+    message = await self.read_message()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1029, in read_message
+    frame = await self.read_data_frame(max_size=self.max_size)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1104, in read_data_frame
+    frame = await self.read_frame(max_size)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 1161, in read_frame
+    frame = await Frame.read(
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\framing.py", line 95, in read
+    mask_bits = await reader(4)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\streams.py", line 712, in readexactly
+    raise self._exception
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\proactor_events.py", line 299, in _loop_reading
+    self._read_fut = self._loop._proactor.recv(self._sock, 32768)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\lib\asyncio\windows_events.py", line 454, in recv
+    ov.WSARecv(conn.fileno(), nbytes, flags)
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\server.py", line 240, in handler
+    await self.ws_handler(self)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\server.py", line 1186, in _ws_handler
+    return await cast(
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\swift\SwiftRoute.py", line 320, in serve
+    await self.expect_message(websocket, expected)
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\swift\SwiftRoute.py", line 325, in expect_message
+    recieved = await websocket.recv()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 568, in recv
+    await self.ensure_open()
+  File "C:\Users\lelon\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\websockets\legacy\protocol.py", line 935, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedError: no close frame received or sent
+2023-11-03 01:19:21,847,INFO,server.py,handler,268,connection closed
