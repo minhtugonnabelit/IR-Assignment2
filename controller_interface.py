@@ -205,12 +205,13 @@ class ControllerInterface():
 
         return copy.deepcopy(self._impl._robot.q)
     
-    def get_ee_pose(self):
+    def get_ee_pose(self, q = None):
         """
         Getter for end-effector pose """
-        
-        return self._impl._robot.fkine(self._impl._robot.q)
-    
+        if q is None:
+            return self._impl._robot.fkine(self._impl._robot.q)
+        else :
+            return self._impl._robot.fkine(q)
 
     # -----------------------------------------------------------------------------------#
     # STATE FUNCTION

@@ -104,7 +104,7 @@ class Controller():
         self.vertices, self.faces, self.normals = self.object.get_data()
 
         # create Cuboid object for collision avoidance
-        self.avoidance_object = geometry.Cuboid(side, pose=center, color= (1.0,0.0,0.0,1.0))
+        self.avoidance_object = geometry.Cuboid(side, pose=center, color= (0.549,0.29,0.004,0.7))
 
         return self.avoidance_object
 

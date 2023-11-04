@@ -95,33 +95,42 @@ class Mission():
         self._action_list2 = []
         
     def _collision_avoidance(self, robot, plate,  bring_plate: bool,  bring_part: bool, gripper_pose, desired_js, right_to_left: bool):
+
+        # Defining avoidance direction
         if right_to_left: 
             move_through_obstacle = 0.011
         else: move_through_obstacle = -0.011 # move left to right
-    
+
+        # Start avoiding obstacle
         while robot.robot_is_collided():
+
+            # go up if got plate gripped, else move backward to avoid
             if bring_plate:
                 fix_pose = sm.SE3(0,0,0.005) @ robot.get_ee_pose()
-            else: fix_pose = sm.SE3(0.005,0,0) @ robot.get_ee_pose()
+            else: fix_pose = robot.get_ee_pose() @ sm.SE3(0,0,-0.01)
             
             robot.single_step_cartesian(fix_pose, 0.02)
             
+            # option to animate the plate or not
             if bring_plate:
                 plate_pose = robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
                 plate.move_flat_plate(sm.SE3(plate_pose), bring_part)   
             
+        # minor fixing to completely avoid
         for _ in range(20):
             if bring_plate:
                 fix_pose_2 = robot.get_ee_pose() @ sm.SE3(-0.0015, move_through_obstacle, 0)
             else: 
-                if right_to_left:
-                    fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle*3, 0)
-                else: fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, -move_through_obstacle*3, 0)
+                # if right_to_left:
+                fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle, 0)
+                # else: fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle, 0)
+                
             robot.single_step_cartesian(fix_pose_2, 0.02)
             if bring_plate:
                 plate_pose = robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
                 plate.move_flat_plate(sm.SE3(plate_pose), bring_part)  
                 
+        # try to get back to current
         new_path = rtb.jtraj(robot.get_joint_angles(), desired_js, self.STEP).q
         index = 0
         while index < len(new_path) and robot.system_activated():
@@ -511,16 +520,28 @@ class Mission():
 
         if plt_index == len(self._plates_list) - 1:
             #------------------------ NEED TO FIX HERE
-            _New_NEUTRAL_picker_robot = np.deg2rad(np.array([-19.82, -50.55, -12.42, 125.71, -28.77, -81.69, 102.75]))
-            self._picker_robot.go_to_joint_angles(_New_NEUTRAL_picker_robot,duration= 2)
-            desired_js = self._picker_robot.get_robot().ikine_LM(self._picker_robot.get_ee_pose(_New_NEUTRAL_picker_robot), q0 = self._picker_robot.get_joint_angles()).q
+            # _New_NEUTRAL_picker_robot = np.deg2rad(np.array([-19.82, -50.55, -12.42, 125.71, -28.77, -81.69, 102.75]))
+            # self._picker_robot.go_to_joint_angles(_New_NEUTRAL_picker_robot,duration= 2)
+
+            neutral_js = self._picker_robot.get_robot().neutral
+            home_pose = self._picker_robot.get_ee_pose(neutral_js)
+            path_sawyer = rtb.jtraj(self._picker_robot.get_joint_angles(), neutral_js, self.STEP).q
+            
+            index = 0
+            while index < len(path_sawyer) and self._picker_robot.system_activated() and not self._picker_robot.robot_is_collided():
+                self._picker_robot.single_step_joint(path_sawyer[index], 0.01)
+                index += 1
+                self.done = self._picker_robot.is_arrived(home_pose)
+            # desired_js = _New_NEUTRAL_picker_robot
+            # gripper_pose = self._picker_robot.get_ee_pose(_New_NEUTRAL_picker_robot)
+            # desired_js = self._picker_robot.get_robot().ikine_LM(self._picker_robot.get_ee_pose(_New_NEUTRAL_picker_robot), q0 = self._picker_robot.get_joint_angles()).q
             if self._picker_robot.robot_is_collided():
                 self._collision_avoidance(robot= self._picker_robot, 
                                         plate= self._plates_list[plt_index], 
                                         bring_plate= False,
                                         bring_part= False,
-                                        gripper_pose= _New_NEUTRAL_picker_robot,
-                                        desired_js= desired_js,
+                                        gripper_pose= home_pose  ,
+                                        desired_js= neutral_js,
                                         right_to_left= False)
             #--------------------- NEED TO FIX HERE
             
