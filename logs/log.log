@@ -19,3 +19,4 @@
 2023-10-17 10:10:58,543,WARNING,logging_demo.py,main,165,Here is an example WARNING log message
 2023-10-17 10:10:58,543,ERROR,logging_demo.py,main,167,Here is an example ERROR log message
 2023-10-17 10:10:58,543,CRITICAL,logging_demo.py,main,169,Here is an example CRITICAL log message
+2023-10-19 11:56:13,101,INFO,Thinh_test_gui.py,_init_log,857,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/log.log

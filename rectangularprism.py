@@ -16,9 +16,6 @@ class RectangularPrism:
         self._faces = self._calculate_faces()
         self._normals = self._calculate_normals()
         self.obj = Poly3DCollection(self._vertices[self._faces], linewidths=0.5, edgecolors='k')
-        # self.obj.set_facecolor(color)
-
-        # self._plot_prism()
     
     def _calculate_vertices(self):
         vertices = np.zeros((8, 3))
@@ -58,16 +55,6 @@ class RectangularPrism:
             normals.append(normal)
         return normals
     
-    # def _plot_prism(self):
-    #     existing_axes = plt.gcf().axes
-    #     if len(existing_axes) == 0: # If no current axes, then create one
-    #         ax = plt.gcf().add_subplot(projection='3d')
-    #     else: # If there is a current axes, check and plot on that one
-    #         ax = plt.gca()
-    #         if not isinstance(ax, Axes3D):
-    #             ax = plt.gcf().add_subplot(projection='3d')
-        
-    #     ax.add_collection(self.obj)
     
     def get_data(self):
         return self._vertices, self._faces, self._normals

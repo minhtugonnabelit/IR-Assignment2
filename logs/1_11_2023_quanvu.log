@@ -1,0 +1,341 @@
+2023-11-01 18:53:45,012,INFO,Thinh_test_gui.py,_init_log,1264,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 18:54:05,049,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:05,051,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:54:12,064,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 18:54:25,053,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:25,103,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:54:45,510,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:54:45,511,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:05,528,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:05,528,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:25,879,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:25,879,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:55:45,882,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:55:45,882,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:06,258,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:06,308,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:26,766,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:26,766,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:56:46,773,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:56:46,773,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:57:07,135,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:57:07,185,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:57:27,627,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:57:27,678,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:57:48,130,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 18:57:48,181,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 18:58:01,529,DEBUG,protocol.py,connection_lost,1494,= connection is CLOSED
+2023-11-01 18:58:01,530,ERROR,server.py,handler,242,connection handler failed
+Traceback (most recent call last):
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/websockets/legacy/server.py", line 240, in handler
+    await self.ws_handler(self)
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/websockets/legacy/server.py", line 1186, in _ws_handler
+    return await cast(
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/swift/SwiftRoute.py", line 320, in serve
+    await self.expect_message(websocket, expected)
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/swift/SwiftRoute.py", line 325, in expect_message
+    recieved = await websocket.recv()
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/websockets/legacy/protocol.py", line 568, in recv
+    await self.ensure_open()
+  File "/home/quanvu/uts/industrial_robotic/industrial_robotics_env/lib/python3.10/site-packages/websockets/legacy/protocol.py", line 935, in ensure_open
+    raise self.connection_closed_exc()
+websockets.exceptions.ConnectionClosedOK: received 1001 (going away); then sent 1001 (going away)
+2023-11-01 18:58:01,533,INFO,server.py,handler,268,connection closed
+2023-11-01 21:36:06,580,INFO,Thinh_test_gui.py,_init_log,1264,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 21:36:26,567,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:36:26,569,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:36:35,650,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:36:46,730,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:36:46,730,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:37:06,762,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:37:07,220,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:37:27,250,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:37:27,251,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:37:47,538,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:37:47,586,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:38:08,032,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:38:08,032,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:38:10,983,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 21:38:10,983,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 21:38:25,175,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:38:27,626,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:38:28,065,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:38:28,066,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:38:48,069,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:38:48,085,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:39:08,090,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:39:08,091,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:39:28,548,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:39:28,549,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:39:48,549,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:39:48,598,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:40:08,894,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:40:08,945,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:40:28,946,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:40:29,403,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:40:49,444,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:40:49,444,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:41:09,745,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:41:09,745,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:41:29,760,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:41:29,760,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:41:50,117,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:41:50,117,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:42:10,122,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:42:10,123,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:42:30,483,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:42:30,483,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:42:50,515,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:42:50,976,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:43:10,985,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:43:10,985,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:43:31,344,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:43:31,344,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:43:51,389,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:43:51,389,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:44:11,709,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:44:11,760,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:44:32,211,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:44:32,211,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:44:52,223,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:44:52,223,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:45:12,587,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:45:12,588,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:45:32,623,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:45:32,623,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:45:52,931,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:45:52,981,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:46:13,432,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:46:13,432,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:46:33,435,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:46:33,485,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:46:53,787,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:46:53,837,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:47:14,286,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:47:14,286,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:47:34,307,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:47:34,307,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:47:54,601,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:47:54,652,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:48:14,657,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:48:15,113,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:48:35,149,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:48:35,149,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:48:55,446,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:48:55,447,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:49:15,486,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:49:15,486,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:49:35,788,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:49:35,788,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:49:55,821,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:49:55,821,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:50:16,117,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:50:16,117,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:50:36,155,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:50:36,156,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:50:56,476,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:50:56,477,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:51:16,509,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:51:16,971,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:51:36,976,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:51:36,976,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:51:57,341,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:51:57,341,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:52:17,382,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:52:17,383,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:52:37,721,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:52:37,722,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:52:57,770,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:52:58,231,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:53:18,268,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:53:18,727,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:53:38,772,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:53:38,772,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:53:59,055,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:53:59,105,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:54:19,564,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:54:19,615,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:54:40,056,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:54:40,056,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:54:57,731,INFO,Thinh_test_gui.py,_init_log,1266,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 21:55:17,752,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:55:17,753,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:55:26,302,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:55:37,998,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:55:37,998,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:55:58,004,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:55:58,005,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:56:09,990,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 21:56:09,991,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 21:56:12,160,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:56:14,588,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:56:18,030,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:56:18,031,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:56:38,032,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:56:38,061,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:56:58,063,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 21:56:58,063,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 21:57:07,150,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 21:57:07,596,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:00:28,299,INFO,Thinh_test_gui.py,_init_log,1266,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:00:48,333,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:00:48,333,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:00:56,643,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:01:02,204,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:01:02,204,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:01:04,682,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:01:07,130,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:01:08,348,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:01:08,365,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:03:59,992,INFO,Thinh_test_gui.py,_init_log,1268,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:04:20,029,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:04:20,031,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:04:27,977,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:04:32,748,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:04:32,748,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:04:33,644,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:04:36,177,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:04:40,055,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:04:40,057,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:05:00,078,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:05:00,078,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:05:41,375,INFO,Thinh_test_gui.py,_init_log,1268,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:06:01,433,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:06:01,434,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:06:09,886,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:06:21,559,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:06:21,609,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:06:23,502,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:06:23,503,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:06:24,795,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:06:27,257,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:06:41,609,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:06:41,611,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:07:04,194,INFO,Thinh_test_gui.py,_init_log,1268,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:07:24,175,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:07:24,176,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:07:36,338,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:07:41,953,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:07:41,954,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:07:43,853,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:07:44,177,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:07:44,177,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:07:46,276,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:08:04,593,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:08:04,643,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:08:10,793,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:08:10,793,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:08:14,372,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:08:16,813,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:08:25,090,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:08:25,090,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:08:32,221,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:08:32,221,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:08:34,547,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:08:37,010,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:08:45,104,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:08:45,106,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:09:05,347,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:09:05,347,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:09:10,788,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:09:10,788,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:09:25,648,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:09:25,698,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:09:37,764,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:09:37,764,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:09:45,981,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:09:45,981,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:13:00,288,INFO,Thinh_test_gui.py,_init_log,1274,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:13:20,249,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:13:20,250,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:13:28,905,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:13:55,905,INFO,Thinh_test_gui.py,_init_log,1274,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:14:15,929,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:14:15,930,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:14:24,036,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:14:35,481,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:14:35,482,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:14:36,381,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:14:36,432,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:14:37,280,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:14:39,758,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:14:56,480,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:14:56,480,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:15:16,881,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:15:16,881,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:15:24,073,INFO,Thinh_test_gui.py,_init_log,1274,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/1_11_2023_quanvu.log
+2023-11-01 22:15:44,063,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:15:44,064,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:15:52,874,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:16:04,464,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:16:04,514,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:16:12,034,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:16:12,034,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:16:17,300,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:16:19,738,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:16:24,536,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:16:24,998,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:16:33,265,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:16:33,265,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:16:36,003,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:16:38,443,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:16:45,029,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:16:45,030,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:16:54,354,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:16:54,354,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:17:05,367,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:17:05,368,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:17:25,399,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:17:25,399,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:17:44,851,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:17:44,851,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:17:45,681,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:17:45,682,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:17:57,629,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:18:00,086,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:18:05,684,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:18:05,713,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:18:11,667,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:18:11,667,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:18:25,724,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:18:25,725,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:18:42,966,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:18:42,967,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:18:45,735,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:18:45,757,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:19:06,062,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:19:06,112,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:19:08,978,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:19:08,978,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:19:26,120,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:19:26,123,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:19:27,603,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:19:27,931,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:19:31,552,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:19:31,552,INFO,controller.py,is_arrived,925,Provided joint states is Done
+2023-11-01 22:19:46,130,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:19:46,151,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:19:54,816,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:19:54,816,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:20:06,161,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:20:06,162,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:20:15,652,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:20:15,652,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:20:26,614,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:20:26,614,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:20:27,984,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:20:27,985,INFO,controller.py,enable_system,1026,System is enabled. Ready for operation.
+2023-11-01 22:20:46,642,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:20:46,642,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:21:07,083,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:21:07,133,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:21:27,581,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:21:27,581,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:21:47,626,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:21:47,626,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:22:07,921,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:22:07,921,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:22:27,922,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:22:27,922,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-11-01 22:22:48,294,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-11-01 22:22:48,294,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong

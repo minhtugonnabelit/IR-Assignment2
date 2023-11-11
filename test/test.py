@@ -1,19 +1,60 @@
-import roboticstoolbox as rtb
-import numpy as np
-import spatialmath as sm
-import spatialgeometry as geometry
-import spatialmath.base as smb
-from swift import Swift
-from controller import Controller
-from robot import Sawyer
+# [Sunday 18:01] Anh Minh Tu
+import pygame
 
+import sys
+ 
+# Initialize the pygame library
 
+pygame.init()
+ 
+# Setup joystick
 
-env = Swift()
+joystick_count = pygame.joystick.get_count()
 
+if joystick_count == 0:
 
-sawyer = Sawyer(env)
-sawyer_controller = Controller(sawyer, env)
+    raise Exception('No joystick found')
 
-object = geometry.Cuboid([0.1, 0.1, 0.1], pose=sm.SE3(sawyer.base.A @ smb.transl(0.5,0.2,0.2)), name='object')
-# sawyer_controller.add_object(object)
+else:
+
+    joystick = pygame.joystick.Joystick(0)  # NOTE: Change 0 to another number if multiple joysticks present
+
+    joystick.init()
+ 
+# Print joystick information
+
+joy_name = joystick.get_name()
+
+joy_axes = joystick.get_numaxes()
+
+joy_buttons = joystick.get_numbuttons()
+ 
+print(f'Your joystick ({joy_name}) has:')
+
+print(f' - {joy_buttons} buttons')
+
+print(f' - {joy_axes} axes')
+ 
+# Main loop to check joystick functionality
+
+while True:
+
+    for event in pygame.event.get():
+
+        if event.type == pygame.QUIT:
+
+            pygame.quit()
+
+            sys.exit()
+ 
+    # Print buttons/axes info to the console
+
+    button_info = [f'Button[{i}]:{joystick.get_button(i)}' for i in range(joy_buttons)]
+
+    axis_info = [f'Axes[{i}]:{joystick.get_axis(i):.3f}' for i in range(joy_axes)]
+ 
+    info_str = '--------------\n' + '\n'.join(button_info + axis_info) + '\n--------------\n'
+
+    print(info_str)
+ 
+    pygame.time.delay(50)  # Pause for 50 ms (equivalent to pause(0.05) in MATLAB)

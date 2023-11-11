@@ -79,6 +79,14 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         self._relation_matrices = [np.linalg.inv(link_transforms[i]) @ self._qtest_transforms[i] 
                                    for i in range(len(link_transforms))] 
         
+    #-----------------------------------------------------------------------------------#
+    # Simple motion command
+    def send_joint_command(self, q):
+        """
+        Send joint command to robot. Current mode available is joint position mode
+        """
+        self.q = q
+
     
     # -----------------------------------------------------------------------------------#
     def _update_3dmodel(self):

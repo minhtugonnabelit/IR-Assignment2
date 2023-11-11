@@ -1,0 +1,301 @@
+2023-10-24 14:26:52,480,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:26:59,947,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:27:10,154,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:27:16,483,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:31:49,634,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:31:56,784,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:32:00,865,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:32:00,874,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:32:07,755,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:33:05,448,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 14:33:08,309,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:33:10,966,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:33:14,258,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:33:16,414,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:33:18,528,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 14:34:40,990,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:34:47,977,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:34:50,019,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:34:56,692,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:34:57,373,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:35:12,746,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 14:35:15,833,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:35:18,462,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:35:21,670,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:35:23,925,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:35:25,928,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 14:38:09,573,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:38:16,266,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:38:19,333,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:39:09,406,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:39:13,997,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:39:19,604,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:45:10,588,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:45:17,437,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:46:03,263,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 14:46:10,192,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:46:15,294,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:46:20,549,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:59:10,670,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:59:14,649,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 14:59:18,605,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 14:59:21,556,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:59:24,072,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 14:59:27,489,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:59:29,664,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 14:59:31,724,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 16:00:59,632,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:01:06,688,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:01:09,238,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:01:14,465,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:01:15,389,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:01:20,321,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:01:23,149,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:01:25,581,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:01:28,753,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:01:30,937,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:01:33,010,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:01:54,350,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:02:01,093,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:02:12,834,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:02:15,919,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:02:19,824,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:02:21,824,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:02:40,368,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:02:46,851,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:02:50,930,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:02:50,937,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:02:57,602,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:02:59,739,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:03:02,659,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:03:05,143,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:03:08,283,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:03:10,441,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:03:12,497,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:06:47,819,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:06:54,390,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:07:10,218,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:07:10,226,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:07:16,632,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:07:21,381,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:07:24,190,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:07:26,610,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:07:29,652,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:07:31,757,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:07:33,571,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:17:01,838,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:17:07,337,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:37:45,326,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:37:52,275,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:38:37,707,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:38:44,236,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:38:51,386,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:38:53,933,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:38:59,324,WARNING,safety.py,is_self_collided,226,link 6 is collided with head
+2023-10-24 16:39:02,175,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:39:04,194,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:40:36,204,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:40:43,394,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:40:45,432,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:40:47,484,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:40:53,263,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:40:56,326,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:40:59,817,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:41:02,331,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:41:04,535,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:43:46,491,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:43:54,020,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:43:56,569,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:44:02,677,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:44:52,726,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:44:56,226,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:45:01,944,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:45:06,318,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:45:54,839,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:46:02,245,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:46:04,280,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:46:10,364,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:46:17,505,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:46:37,516,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:46:47,543,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:46:51,268,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:46:53,719,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:46:55,709,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:54:02,421,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:54:09,302,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:54:11,851,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:54:18,397,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:54:24,642,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:54:30,296,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:54:33,858,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:54:36,103,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:54:38,593,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:55:04,518,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 16:55:11,189,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:55:16,289,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:55:21,937,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 16:55:23,285,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:55:29,115,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 16:55:32,235,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:55:34,708,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 16:55:37,786,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:55:39,931,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 16:55:41,890,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 17:39:12,043,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 17:39:19,695,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:39:22,754,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 17:39:28,528,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:39:32,504,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 17:39:36,816,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 17:39:39,600,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 17:39:42,095,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 17:39:45,060,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:39:47,057,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 17:42:19,310,INFO,Thinh_test_gui.py,_init_log,1056,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-24 17:42:26,439,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:42:58,094,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 17:42:58,102,INFO,controller.py,enable_system,715,System is enabled. Ready for operation.
+2023-10-24 17:43:09,245,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:43:17,366,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-24 17:43:20,326,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 17:43:23,126,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-24 17:43:26,464,INFO,controller.py,is_arrived,623,Provided joint states is Done
+2023-10-24 17:43:28,602,INFO,controller.py,go_to_cartesian_pose,588,Pose is unreachable!
+2023-10-25 09:26:10,015,INFO,Thinh_test_gui.py,_init_log,1057,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:26:17,162,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:26:24,307,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 09:26:24,311,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 09:26:32,607,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:26:36,106,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 09:26:39,103,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 09:26:41,486,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 09:26:44,767,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:26:46,797,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 09:27:47,096,INFO,Thinh_test_gui.py,_init_log,1057,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:27:55,250,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:37:02,415,INFO,Thinh_test_gui.py,_init_log,1058,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:37:09,989,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:38:23,682,INFO,Thinh_test_gui.py,_init_log,1058,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:38:31,433,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:57:04,144,INFO,Thinh_test_gui.py,_init_log,1110,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:57:11,795,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 09:59:52,389,INFO,Thinh_test_gui.py,_init_log,1111,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 09:59:59,413,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:00:14,731,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:00:14,735,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:00:16,792,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:00:21,067,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:00:24,837,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 10:00:27,653,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:00:30,205,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:00:33,537,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:00:35,447,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 10:00:46,360,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:00:47,119,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:03:49,561,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:03:56,838,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:04:07,558,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:04:07,563,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:04:13,174,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:04:17,279,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:04:28,063,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:06:29,976,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:06:37,329,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:06:43,451,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:06:43,462,INFO,controller.py,enable_system,714,System is enabled. Ready for operation.
+2023-10-25 10:06:45,513,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:06:49,797,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:07:02,188,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 10:07:05,022,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:07:07,457,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:07:10,636,INFO,controller.py,is_arrived,622,Provided joint states is Done
+2023-10-25 10:07:12,702,INFO,controller.py,go_to_cartesian_pose,587,Pose is unreachable!
+2023-10-25 10:07:23,832,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:07:39,029,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:07:47,079,INFO,controller.py,is_arrived,349,Provided goal is Done
+2023-10-25 10:28:44,811,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:28:52,217,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:28:58,343,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:28:58,346,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:29:00,910,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:29:05,092,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:29:11,123,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:29:15,730,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:29:19,847,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:29:23,866,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:29:28,448,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:29:31,211,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:29:34,421,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:29:36,539,INFO,controller.py,go_to_cartesian_pose,601,Pose is unreachable!
+2023-10-25 10:30:21,842,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:30:29,170,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:30:31,208,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:30:33,260,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:30:34,272,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:30:38,583,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:30:43,022,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:30:45,717,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:30:48,816,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:30:50,657,INFO,controller.py,go_to_cartesian_pose,601,Pose is unreachable!
+2023-10-25 10:31:45,605,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:31:53,067,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:31:57,658,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:31:57,664,INFO,controller.py,enable_system,728,System is enabled. Ready for operation.
+2023-10-25 10:31:58,682,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:32:02,905,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:32:07,964,INFO,controller.py,go_to_cartesian_pose,601,Pose is unreachable!
+2023-10-25 10:32:08,364,INFO,controller.py,go_to_cartesian_pose,601,Pose is unreachable!
+2023-10-25 10:32:11,043,INFO,controller.py,is_arrived,363,Provided goal is Done
+2023-10-25 10:32:14,267,INFO,controller.py,is_arrived,636,Provided joint states is Done
+2023-10-25 10:32:16,214,INFO,controller.py,go_to_cartesian_pose,601,Pose is unreachable!
+2023-10-25 10:49:25,374,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:49:32,840,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:49:38,454,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:49:38,460,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:49:47,155,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:49:50,678,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:49:56,371,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:50:04,605,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:50:08,324,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:51:17,069,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:51:24,511,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:51:27,060,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:51:34,485,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:51:38,156,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:51:43,262,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:51:47,464,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:01,499,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:52:08,931,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:52:10,972,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:52:16,161,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:52:19,866,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:24,318,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:27,984,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:32,168,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:42,036,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:46,247,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:49,459,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:52,629,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:56,366,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:52:59,448,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:02,248,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:07,028,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:19,272,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:53:26,729,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:53:28,767,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:53:34,195,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:53:38,418,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:42,010,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:48,141,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:53,396,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:53:58,768,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:04,532,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:07,741,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:11,930,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:24,719,INFO,Thinh_test_gui.py,_init_log,1140,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/24_10_2023_benjamin.log
+2023-10-25 10:54:31,978,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:54:35,039,INFO,controller.py,enable_system,734,System is enabled. Ready for operation.
+2023-10-25 10:54:40,808,INFO,controller.py,is_arrived,642,Provided joint states is Done
+2023-10-25 10:54:44,925,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:47,567,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!
+2023-10-25 10:54:50,790,INFO,controller.py,go_to_cartesian_pose,607,Pose is unreachable!

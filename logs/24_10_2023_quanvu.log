@@ -1,0 +1,43 @@
+2023-10-24 15:24:33,095,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:24:53,120,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:24:53,121,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:24:57,481,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:26:39,483,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:26:59,501,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:26:59,502,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:27:03,756,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:27:23,912,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:27:43,903,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:27:43,903,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:27:47,560,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:29:10,812,INFO,Thinh_test_gui.py,_init_log,914,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:29:30,801,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:29:30,802,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:29:34,733,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:29:42,772,INFO,controller.py,enable_system,588,System is enabled. Ready for operation.
+2023-10-24 15:29:48,331,INFO,controller.py,is_arrived,515,Provided joint states is Done
+2023-10-24 15:34:14,207,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:34:20,443,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 15:35:17,633,INFO,Thinh_test_gui.py,_init_log,1054,Saving logs to: /home/quanvu/uts/industrial_robotic/IR-Assignment2/logs/24_10_2023_quanvu.log
+2023-10-24 15:35:37,647,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:35:37,648,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:35:42,881,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 15:35:50,537,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 15:35:57,666,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:35:57,705,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:35:59,722,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 15:36:09,969,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 15:36:14,616,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 15:36:16,722,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 15:36:17,733,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:36:17,775,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:36:18,460,INFO,controller.py,is_arrived,344,Provided goal is Done
+2023-10-24 15:36:21,027,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 15:36:22,957,INFO,controller.py,is_arrived,618,Provided joint states is Done
+2023-10-24 15:36:24,498,INFO,controller.py,go_to_cartesian_pose,583,Pose is unreachable!
+2023-10-24 15:37:23,040,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:37:23,040,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong
+2023-10-24 15:37:38,368,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 15:37:42,444,INFO,controller.py,enable_system,710,System is enabled. Ready for operation.
+2023-10-24 15:37:43,246,DEBUG,protocol.py,keepalive_ping,1261,% sending keepalive ping
+2023-10-24 15:37:43,246,DEBUG,protocol.py,keepalive_ping,1268,% received keepalive pong

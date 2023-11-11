@@ -10,7 +10,9 @@ import spatialgeometry as geometry
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
+# from m_DHRobot3D import M_DHRobot3D
 import ir_support
+
 
 class Sawyer(M_DHRobot3D):
 
@@ -23,7 +25,8 @@ class Sawyer(M_DHRobot3D):
 
 
     """
-    _NEUTRAL = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57, 3.3161]
+    _NEUTRAL= np.deg2rad(np.array([-51.26, -40.96, -7.47, 83.18, -61.48, -69.74, 134.15]))
+    # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  # [0.00, -0.9, 0.00, -1.9, 0.00, -0.97, 3.14] #  [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.14]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
 
     # -----------------------------------------------------------------------------------#
@@ -33,12 +36,17 @@ class Sawyer(M_DHRobot3D):
         self,
         env: Swift,
         base=sm.SE3(0, 0, 0),
-        gripper_ready=True,
+        gripper_ready=False,
         gui=None,
     ):
+        self._gripper_ready = gripper_ready
+        if self._gripper_ready:
+            self._offset_gripper = 0.16
+        else:
+            self._offset_gripper = 0
+
         # DH links
         links = self._create_DH()
-        self._gripper_ready = gripper_ready
         self._env = env
 
         # Names of the robot link files in the directory
@@ -82,6 +90,11 @@ class Sawyer(M_DHRobot3D):
         self._head = self._add_model(
             "Sawyer_model/head.dae", smb.transl(0, 0, 0.3811))
         self.set_neutral_js(self._NEUTRAL)
+
+        # Add gripper
+        self.gripper = SawyerGripper(base=self.fkine(self.q))
+        self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
+        self.base_ax = geometry.Axes(0.2, pose=self.base)
         self.update_sim()
 
     def _create_DH(self):
@@ -91,14 +104,26 @@ class Sawyer(M_DHRobot3D):
 
         # deg = np.pi / 180
         mm = 1e-3
-
         # kinematic parameters
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
-        d = np.r_[317, 192.5, 400, 168.5, 400, 136.3, 133.75] * mm
-        alpha = [-np.pi / 2, -np.pi / 2, -np.pi /
-                 2, -np.pi / 2, -np.pi / 2, -np.pi / 2, 0]
+        d = np.r_[317, 192.5, 400, -168.5, 400, 136.3,
+                  133.75 + self._offset_gripper/mm] * mm
+        # alpha = [-np.pi / 2,
+        #          -np.pi / 2,
+        #          -np.pi / 2,
+        #          -np.pi / 2,
+        #          -np.pi / 2,
+        #          -np.pi / 2,
+        #          0]
+        alpha = [-np.pi / 2,
+                 np.pi / 2,
+                 -np.pi / 2,
+                 np.pi / 2,
+                 -np.pi / 2,
+                 np.pi / 2,
+                 0]
         qlim = np.deg2rad([[-175, 175],
-                           [-175, 175],
+                           [-219, 131],
                            [-175, 175],
                            [-175, 175],
                            [-170.5, 170.5],
@@ -106,7 +131,9 @@ class Sawyer(M_DHRobot3D):
                            [-270, 270]])
 
         # offset to have the dh from toolbox match with the actual pose
-        offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
+        # offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
+        offset = [0, np.pi/2, 0, 0, 0, 0, -np.pi/2]
+
 
         links = []
 
@@ -125,10 +152,10 @@ class Sawyer(M_DHRobot3D):
         model_placement = self.base.A @ placement
         if color is None:
             model = geometry.Mesh(
-                model_full_path, pose=model_placement,collision=True)
+                model_full_path, pose=model_placement, collision=True)
         else:
             model = geometry.Mesh(
-                model_full_path, pose=model_placement,collision=True, color=color)
+                model_full_path, pose=model_placement, collision=True, color=color)
 
         self._env.add(model, collision_alpha=1)
         return model
@@ -138,8 +165,12 @@ class Sawyer(M_DHRobot3D):
         Reconfigure robot to home position set by user
 
         """
-        self._ellipsoids = self.get_ellipsoid()
         self.add_to_env(self._env)
+        self._env.add(self.ax)
+        self._env.add(self.base_ax)
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+            self.gripper.add_to_env(self._env)
 
     def get_workspace(self):
         """
@@ -189,87 +220,27 @@ class Sawyer(M_DHRobot3D):
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
 
-    # COLISION and SAFETY FUNCTION
-    # -----------------------------------------------------------------------------------#
-
-    def get_ellipsoid(self):
+    def send_joint_command(self, q):
         """
-        Get ellipsoid of the robot
+        Send joint command to robot. Current mode available is joint position mode
         """
+        self.q = q
+        self.ax.T = self.fkine(self.q)
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+        self._env.step(0)
 
-        ellipsoids = []
-        for i in range(len(self.links)):
-
-            minor_axis = 0.03 if self.a[i] == 0 else copy.deepcopy(
-                self.a[i]) / 2 + 0.02
-            major_axis = copy.deepcopy(self.d[i]) / 2
-
-            ellipsoid = np.asarray(
-                [minor_axis, major_axis, minor_axis])
-
-            ellipsoids.append(ellipsoid)
-
-        ellipsoids[6][2] = ellipsoids[6][1]
-        ellipsoids[6][1] = ellipsoids[6][0]
-        return ellipsoids
-
-    def get_link_poses(self, q=None):
+    def open_gripper(self):
         """
-        :param q robot joint angles
-        :param robot -  seriallink robot model
-        :param transforms - list of transforms
+        Function to open gripper
         """
-        if q is None:
-            return self.fkine_all().A
-        return self.fkine_all(q).A
+        self.gripper.open()
 
-    # def is_grounded(self, q=None):
-    #     """
-    #     Check if robot is grounded
-    #     """
-    #     pass
-
-    # # testing
-    # def is_collided_with_object(self, q=None):
-    #     """
-    #     Check if robot is collided with object
-    #     """
-
-    #     pass
-
-    # # testing
-    # def self_collided_LP(self,):
-    #     pass
-
-    # # testing
-    # def self_collisions_Cylinder(self, q=None):
-    #     """
-    #     Check self-collision of the robot using cylinder intersection
-    #     """
-    #     is_collided = False
-    #     tr = self.get_link_poses(q)
-
-    #     for i in range(len(tr)):
-
-    #         if i == 0:
-    #             continue
-
-    #         center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-    #         radi = copy.deepcopy(self._ellipsoids[i-1])
-    #         ob = geometry.Cylinder(center, radi[0], radi[1])
-    #         for j in range(len(tr)):
-    #             if j == i or j == i-1:
-    #                 continue
-    #             center = (tr[j][0:3, 3] + tr[j-1][0:3, 3])/2
-    #             radi = copy.deepcopy(self._ellipsoids[j-1])
-    #             ob2 = geometry.Cylinder(center, radi[0], radi[1])
-    #             if ob.intersect(ob2):
-    #                 is_collided = True
-    #                 break
-
-    #     return is_collided
-
-    # -----------------------------------------------------------------------------------#
+    def close_gripper(self):
+        """
+        Function to close gripper
+        """
+        self.gripper.close()
 
     def rotate_head(self, angle):
         """
@@ -283,10 +254,11 @@ class Sawyer(M_DHRobot3D):
         step = np.pi/48 * step / abs(step)
         for i in np.arange(head_ori[2], angle, step):
             self._head.T = smb.trotz(i) @ head_from_base
-            self._env.step(0.02)
+            self._env.step(0.05)
 
     # -----------------------------------------------------------------------------------#
     # ENV TESTING
+
     def test(self):
         """
         Test the class by adding 3d objects into a new Swift window and do a simple movement
@@ -308,24 +280,189 @@ class Sawyer(M_DHRobot3D):
 
         # self._env.hold()
 
-    def plot_elipsoids(self):
+
+class Finger(M_DHRobot3D):
+    """
+    Finger class is a subclass of DHRobot3D class
+    """
+
+    def __init__(self, base, links, link3D_names, name=None, qtest=None):
+
+        qtest = [0]
+        finger_transform = [
+            smb.transl(0, 0, 0) @ smb.troty(-np.pi/2),
+            smb.transl(-0.0715, 0.0042, -0.0029)
+        ]
+
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        gripper_path = os.path.join(current_path, "Sawyer_model")
+
+        super().__init__(
+            links,
+            link3D_names,
+            gripper_path,
+            name,
+            qtest,
+            qtest_transforms=finger_transform,
+        )
+        self.base = base
+
+
+class SawyerGripper:
+    """
+    Sawyer gripper class is a subclass of DHRobot3D class
+
+    """
+
+    _qtest = [0]
+
+    @property
+    def base(self):
+        return self._base
+
+    def __init__(self, base=sm.SE3(0, 0, 0)):
+
+        links = self._create_DH()
+        # This base is created just to initial the gripper model, then the main 'base' as a class property is used for asssiging the primary base
+        base_init = sm.SE3(0, 0, 0)
+        # set attribute here: when we use "base", base at _init_ has the value, then it will be assigned to function set_base(value) at attribute function
+        self._base = base
+
+        # Right finger properties
+
+        right_link3D_names = dict(
+            link0="sawyer_gripper_base",
+            link1="sawyer_gripper_right"
+        )
+
+        self._right_finger = Finger(
+            base_init,
+            links,
+            right_link3D_names,
+            name="right_f",
+            qtest=self._qtest,
+        )
+
+        self.base_tf_right = sm.SE3.Ry(90, 'deg') * sm.SE3(0.007 + 0.16, 0, 0)
+        self._right_finger.base = (
+            self._base.A @ self.base_tf_right.A
+        )
+
+        # ---------------------------------------------
+
+        # Left finger properties
+
+        left_link3D_names = dict(
+            link0="sawyer_gripper_base",
+            link1="sawyer_gripper_left"
+        )
+
+        self._left_finger = Finger(
+            base_init,
+            links,
+            left_link3D_names,
+            name="left_f",
+            qtest=self._qtest
+        )
+
+        self.base_tf_left = sm.SE3.Ry(90, 'deg') * sm.SE3(0.007 + 0.16, 0, 0)
+        self._left_finger.base = (
+            self._base.A @ self.base_tf_left.A
+        )
+
+    # -----------------------------------------------------------------------------------#
+
+    def close(self):
         """
-        Test ellipsoid function
+        Function to close gripper model
         """
-        tr = self.get_link_poses()
-        for i in range(len(tr)):
+        q_goal = np.array([0.027])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, -1*q_goal, steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, q_goal, steps).q
 
-            if i == 0:
-                continue
+        for i in range(steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.05)
 
-            center = (tr[i][0:3, 3] + tr[i-1][0:3, 3])/2
-            elip = np.round(
-                (tr[i][0:3, 0:3] @ np.diag(np.power(self._ellipsoids[i-1], -2)) @ np.transpose(tr[i][0:3, 0:3])), 3)
-            ob = smb.plot_ellipsoid(
-                elip, center, resolution=10, color='r', alpha=0.5)
+    def open(self):
+        """
+        Function to open gripper model
+        """
+        q_goal = np.array([0])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, q_goal, steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, q_goal, steps).q
+
+        for i in range(steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.05)
+
+    # -----------------------------------------------------------------------------------#
+
+    def _create_DH(self):
+        """
+        The gripper chosen to use for this mission is Onrobot gripper RG6
+
+            Gripper model is constructed by one base with two fingers
+            Base is considered as a statis object attached to robot end-effectorand transform along with ee pose .
+            Two fingers are models as two 2-links plannar robots with a constraint for the ee of those plannar always align local z axis of the gripper base
+        """
+        links = []
+
+        link = rtb.PrismaticDH(alpha=0, offset=0, qlim=[-24.19, 24.19])
+        links.append(link)
+
+        return links
+
+    # -----------------------------------------------------------------------------------#
+
+    def add_to_env(self, env):
+        """
+        Function to add 2 fingers model to environment
+        """
+
+        # add 2 fingers to the environment
+
+        self._env = env
+        self._right_finger.add_to_env(env)
+        self._left_finger.add_to_env(env)
+
+    # -----------------------------------------------------------------------------------#
+
+    def set_base(self, newbase):
+        """
+        Function to update gripper base
+        """
+
+        # assign new base for the gripper to be attached with robot ee given
+
+        self._right_finger.base = newbase.A @ self.base_tf_right.A
+        self._left_finger.base = newbase.A @ self.base_tf_left.A
+
+        # give empty q so that gripper model is updated on swift
+
+        self._right_finger.q = self._right_finger.q
+        self._left_finger.q = self._left_finger.q
+
+    # -----------------------------------------------------------------------------------#
+
+    def __setattr__(self, name, value):
+        """
+        Overload `=` operator so the object can update its 3D model whenever a new base is assigned
+        """
+
+        if name == "base" and hasattr(self, "base"):
+            # Update the 3D model before setting the attribute
+            self.set_base(value)
+        else:
+            super().__setattr__(
+                name, value
+            )  # Call the base class method to set the attribute
 
 
-# ---------------------------------------------------------------------------------------#
 if __name__ == "__main__":
 
     # generate environment
@@ -333,5 +470,17 @@ if __name__ == "__main__":
     env.launch(realtime=True)
 
     # generate robot
-    r = Sawyer(env)
-    r.test()
+    r = Sawyer(env, gripper_ready=True)
+
+    time.sleep(0.5)
+    # q_goal = [0.00, -1.18, 0.00, -2.18, 0.00, 0.57-np.pi/2, 3.3161]
+    q_goal = r._NEUTRAL
+    qtraj = rtb.jtraj(r.q, q_goal, 200).q
+    for q in qtraj:
+        r.send_joint_command(q)
+        time.sleep(0.02)
+
+    r.close_gripper()
+    # time.sleep(1)
+    r.open_gripper()
+    env.hold()

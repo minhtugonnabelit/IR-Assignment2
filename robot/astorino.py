@@ -16,14 +16,13 @@ import time
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
+# from m_DHRobot3D import M_DHRobot3D
 
 class Astorino(M_DHRobot3D):
     
     _NEUTRAL = [0, -np.pi/2, 0, 0, 0, 0]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
-    # def __init__(self, links, link3D_names, link3d_dir, name=None, qtest=None, qtest_transforms=None):
-    #     super().__init__(links, link3D_names, link3d_dir, name, qtest, qtest_transforms)
-    
+
     def __init__(
         self,
         env: Swift,
@@ -31,20 +30,25 @@ class Astorino(M_DHRobot3D):
         gripper_ready = False, # Indicate for mounting gripper
         gui = None
     ):
+        self._gripper_ready = gripper_ready
+        if self._gripper_ready:
+            self._offset_gripper = 0.13
+        else: self._offset_gripper = 0
+        
         # DH links
         links = self._create_DH() # need to work on function
-        self._gripper_ready = gripper_ready
+        
         self._env = env
         
         # Names of the robot link files in the directory
         link3D_names = dict(
-            link0 = 'Astorino base',
-            link1 = 'Astorino Robot Joint 1',
-            link2 = 'Astorino Robot Joint 2',
-            link3 = 'Astorino Robot Joint 3',
-            link4 = 'Astorino Robot Joint 4',
-            link5 = 'Astorino Robot Joint 5',
-            link6 = 'Astorino Robot Joint 6'
+            link0 = 'Astorino_base',
+            link1 = 'Astorino_Robot_Joint_1',
+            link2 = 'Astorino_Robot_Joint_2',
+            link3 = 'Astorino_Robot_Joint_3',
+            link4 = 'Astorino_Robot_Joint_4',
+            link5 = 'Astorino_Robot_Joint_5',
+            link6 = 'Astorino_Robot_Joint_6'
             )
         
         # A joint config and the 3D object transforms to match that config
@@ -76,10 +80,15 @@ class Astorino(M_DHRobot3D):
         self.base = base * self.base
         self.q = qtest
         self.set_neutral_js(self._NEUTRAL)
+
+        # Add gripper
+        self.gripper = AstorinoGripper(base= self.fkine(self.q))
+        # self.gripper_offset = sm.SE3(0,0,0.13)
+        self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
+
         self.update_sim()
 
-        
-        
+
     def _create_DH(self):
         """
         Creat Astorino's DH parameter
@@ -91,7 +100,7 @@ class Astorino(M_DHRobot3D):
         # 63.5 start from link 2 (base: no, link 1: no)
 
         a = np.r_[63.5,  222, 66,     0,  0,  0]*mm
-        d = np.r_[165.98,  0,  0, 286.5,  0,  0]*mm
+        d = np.r_[165.98,  0,  0, 286.5,  0,  0 + self._offset_gripper/mm]*mm
         
         alpha = [-np.pi/2, 0, -np.pi/2, np.pi/2, np.pi/2, 0]
         offset = [0,0,0,0,np.pi/2,0]
@@ -107,28 +116,15 @@ class Astorino(M_DHRobot3D):
     
         return links
         
-    
-    def _add_model(self, file_path, placement, color=None):
-        """ 
-        Add model to simulation environment
-        """
-        model_full_path = os.path.join(self._script_directory, file_path)
-        model_placement = self.base.A @ placement
-        if color is None:
-            model = geometry.Mesh(
-                model_full_path, pose = model_placement)
-        else:
-            model = geometry.Mesh(
-                model_full_path, pose = model_placement, color = color)
-            
-        self._env.add(model, collision_alpha=1)
-        return model
-        
     def update_sim(self):
         """ 
         Update simulation
         """
         self.add_to_env(self._env)
+        self._env.add(self.ax)
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+            self.gripper.add_to_env(self._env)
         
     def get_workspace(self):
         """ 
@@ -178,6 +174,22 @@ class Astorino(M_DHRobot3D):
         return pointcloud
     
     
+    def send_joint_command(self, q):
+        """
+        Send joint command to robot. Current mode available is joint position mode
+        """
+        self.q = q
+        self.ax.T = self.fkine(self.q)
+        if self._gripper_ready:
+            self.gripper.base = self.fkine(self.get_jointstates())
+        self._env.step(0)  
+    
+    def open_gripper(self):
+        self.gripper.open()
+        
+    def close_gripper(self):
+        self.gripper.close()
+    
     def test(self):
         """
         Test the class by adding 3d objects into a new Swift window and do a simple movement
@@ -199,6 +211,173 @@ class Astorino(M_DHRobot3D):
 
         self._env.hold()
     
+    
+
+    
+#----------- CLASS GRIPPER
+class Finger(M_DHRobot3D):
+    
+    def __init__(self, base, links, link3D_names, name = None, qtest = None):
+        qtest = [0]
+        finger_transform = [
+            smb.transl(-0.055,0,0) @ smb.troty(-np.pi/2), # NEED TO FIX
+            smb.transl(-0.09,0,0)   # NEED TO FIX
+        ]
+        
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        gripper_path = os.path.join(current_path, "Astorino_model")
+           
+        super().__init__(
+            links,
+            link3D_names,
+            gripper_path,
+            name,
+            qtest,
+            qtest_transforms=finger_transform,
+        )
+        self.base = base
+    
+    
+class AstorinoGripper:
+    
+    _qtest = [0]
+    
+    @property
+    def base(self):
+        return self._base
+    
+    def __init__(self, base = sm.SE3(0, 0, 0)):
+        links = self._create_DH()
+        base_init = sm.SE3(0, 0, 0)
+        self._base = base
+        
+        right_link3D_names = dict(
+            link0 = "Astorino_Robot_Gripper_Base",
+            link1 = "Astorino_Robot_Gripper_Right"
+        )
+        
+        self._right_finger = Finger(
+            base_init,
+            links,
+            right_link3D_names,
+            name= "right_f",
+            qtest= self._qtest
+        )
+        
+        self.base_tf_right = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.13,0,0)
+        self._right_finger.base = (
+            self._base.A @ self.base_tf_right.A
+        )
+        
+        #---------------------------------------------
+
+        # Left finger properties
+
+        left_link3D_names = dict(
+            link0 = "Astorino_Robot_Gripper_Base",
+            link1 = "Astorino_Robot_Gripper_Left"
+        )
+
+        self._left_finger = Finger(
+            base_init, 
+            links, 
+            left_link3D_names, 
+            name="left_f", 
+            qtest=self._qtest
+        )
+
+        self.base_tf_left = sm.SE3.Ry(90,'deg') * sm.SE3(0.007 + 0.13,0,0)
+        self._left_finger.base = (
+            self._base.A @ self.base_tf_left.A
+        )
+
+    # -----------------------------------------------------------------------------------#
+    def close(self):
+        """
+        Function to close gripper model
+        """
+        q_goal = np.array([-0.0005])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, q_goal,steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, -1*q_goal,steps).q
+        
+        for i in range (steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.02)
+            
+    def open(self):
+        """
+        Function to open gripper model
+        """
+        q_goal = np.array([0.02])
+        steps = 20
+        qtraj_left = rtb.jtraj(self._left_finger.q, q_goal,steps).q
+        qtraj_right = rtb.jtraj(self._right_finger.q, -1*q_goal,steps).q
+        
+        for i in range (steps):
+            self._left_finger.q = qtraj_left[i]
+            self._right_finger.q = qtraj_right[i]
+            self._env.step(0.02) 
+
+    # -----------------------------------------------------------------------------------#
+    def _create_DH(self):
+        """
+        The gripper chosen to use for this mission is Onrobot gripper RG6
+
+            Gripper model is constructed by one base with two fingers
+            Base is considered as a statis object attached to robot end-effectorand transform along with ee pose .
+            Two fingers are models as two 2-links plannar robots with a constraint for the ee of those plannar always align local z axis of the gripper base
+        """
+        links = []
+        
+        link = rtb.PrismaticDH(alpha= 0, offset= 0, qlim= [-24.19, 24.19])
+        links.append(link)
+        
+        return links
+    
+    # -----------------------------------------------------------------------------------#
+    def add_to_env(self, env):
+        """
+        Function to add 2 fingers model to environment
+        """
+
+        # add 2 fingers to the environment
+
+        self._env = env
+        self._right_finger.add_to_env(env)
+        self._left_finger.add_to_env(env)
+        
+    # -----------------------------------------------------------------------------------#
+    def set_base(self, newbase):
+        """
+        Function to update gripper base
+        """
+
+        # assign new base for the gripper to be attached with robot ee given
+
+        self._right_finger.base = newbase.A @ self.base_tf_right.A
+        self._left_finger.base = newbase.A @ self.base_tf_left.A
+
+
+        # give empty q so that gripper model is updated on swift
+
+        self._right_finger.q = self._right_finger.q
+        self._left_finger.q = self._left_finger.q
+
+    # -----------------------------------------------------------------------------------#
+    def __setattr__(self, name, value):
+        """
+        Overload `=` operator so the object can update its 3D model whenever a new base is assigned
+        """
+
+        if name == "base" and hasattr(self, "base"):
+            self.set_base(value)  # Update the 3D model before setting the attribute
+        else:
+            super().__setattr__(
+                name, value
+            )  # Call the base class method to set the attribute
+    
 # ---------------------------------------------------------------------------------------#
 if __name__ == "__main__":
 
@@ -207,5 +386,15 @@ if __name__ == "__main__":
     env.launch(realtime=True)
 
     # generate robot
-    r = Astorino(env)
-    r.test()
+    r = Astorino(env, gripper_ready= True)
+    
+    time.sleep(1)
+    q_goal = [0, 0, 0, 0, 0, 0]
+    qtraj = rtb.jtraj(r.q, q_goal, 200).q
+    for q in qtraj:
+        r.send_joint_command(q)
+        time.sleep(0.02)
+    r.open_gripper()
+    r.close_gripper()  
+    env.hold()
+
