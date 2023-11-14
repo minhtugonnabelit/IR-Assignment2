@@ -16,7 +16,7 @@ import time
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
-# from m_DHRobot3D import M_DHRobot3D
+
 
 class Astorino(M_DHRobot3D):
     
@@ -28,7 +28,6 @@ class Astorino(M_DHRobot3D):
         env: Swift,
         base = sm.SE3(0,0,0),
         gripper_ready = False, # Indicate for mounting gripper
-        gui = None
     ):
         self._gripper_ready = gripper_ready
         if self._gripper_ready:
@@ -63,7 +62,8 @@ class Astorino(M_DHRobot3D):
             smb.transl(0.350,0,0.494)
         ]
         
-        current_path = os.path.abspath(os.path.dirname(__file__)) # Obtain the absolute path of the directory containing the current Python script. "__file__": builtin variable in Python that represents the current path when execute script
+        current_path = os.path.abspath(os.path.dirname(__file__)) 
+        # Obtain the absolute path of the directory containing the current Python script. "__file__": builtin variable in Python that represents the current path when execute script
         # For example: Python file in '/home/user/projects/my_script.py' then current_path will be assign '/home/user/projects/'
         
         current_path = os.path.join(current_path, "Astorino_model")
@@ -83,7 +83,6 @@ class Astorino(M_DHRobot3D):
 
         # Add gripper
         self.gripper = AstorinoGripper(base= self.fkine(self.q))
-        # self.gripper_offset = sm.SE3(0,0,0.13)
         self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
 
         self.update_sim()
@@ -182,8 +181,8 @@ class Astorino(M_DHRobot3D):
         self.ax.T = self.fkine(self.q)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
-        self._env.step(0)  
-    
+
+
     def open_gripper(self):
         self.gripper.open()
         
@@ -304,7 +303,7 @@ class AstorinoGripper:
         for i in range (steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.02)
+            time.sleep(0.02)
             
     def open(self):
         """
@@ -318,7 +317,7 @@ class AstorinoGripper:
         for i in range (steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.02) 
+            time.sleep(0.02)
 
     # -----------------------------------------------------------------------------------#
     def _create_DH(self):

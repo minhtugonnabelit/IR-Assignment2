@@ -38,8 +38,6 @@ class WorkCell():
         self._fire_extinguisher_1 = self._add_model('fire_extinguisher.dae', sm.SE3(-0.65,1.428,0) @ sm.SE3.Rz(90,'deg'))
         self._light_curtain_cyl = self._add_model('light_curtain_cyl1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         self._light_curtain_laser = self._add_model('light_curtain_laser1.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'), color=(0.3,1.0,0.9,0.05))
-        # self._gate = self._add_model('gate.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
-        # self._long3dprinting = self._add_model('long3dprinting.dae', sm.SE3(0, 0, 0) @ sm.SE3.Rz(180,'deg'))
         
 
     def get_cell_center(self):

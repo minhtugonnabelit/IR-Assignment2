@@ -35,7 +35,6 @@ class PhysicalEstop:
         try:
             while True:
                 button_state = self.read_button()
-                # print("button_state:  ", button_state)
 
                 # Deboucer
                 if button_state == 1:

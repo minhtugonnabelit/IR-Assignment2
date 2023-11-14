@@ -36,7 +36,7 @@ class Mission():
 
     """
 
-    STEP = 150
+    STEP = 100
 
     def __init__(self, plates_list, workcell : WorkCell, picker_robot : ControllerInterface, bender_robot : ControllerInterface):
         
@@ -94,7 +94,7 @@ class Mission():
 
         self._action_list2 = []
         
-    def _collision_avoidance(self, robot, plate,  bring_plate: bool,  bring_part: bool, gripper_pose, desired_js, right_to_left: bool):
+    def _collision_avoidance(self, robot : ControllerInterface, plate : Plate,  bring_plate: bool,  bring_part: bool, gripper_pose, desired_js, right_to_left: bool):
 
         # Defining avoidance direction
         if right_to_left: 
@@ -119,11 +119,9 @@ class Mission():
         # minor fixing to completely avoid
         for _ in range(20):
             if bring_plate:
-                fix_pose_2 = robot.get_ee_pose() @ sm.SE3(-0.0015, move_through_obstacle, 0)
+                fix_pose_2 = robot.get_ee_pose() @ sm.SE3(-0.001, move_through_obstacle, 0)
             else: 
-                # if right_to_left:
                 fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle, 0)
-                # else: fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle, 0)
                 
             robot.single_step_cartesian(fix_pose_2, 0.02)
             if bring_plate:
@@ -147,9 +145,7 @@ class Mission():
         STEP 1: Homing both robot arms, ready to pick
         """
         # non-blocking method
-        self._bender_robot.send_command('HOME')
-        # self._picker_robot.send_command('HOME')
-        
+        self._bender_robot.send_command('HOME')        
         self._picker_robot.go_to_home()
         
         self._bender_robot.open_gripper()
@@ -188,10 +184,9 @@ class Mission():
 
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated() is True and not self._picker_robot.robot_is_collided():
-            self._picker_robot.single_step_cartesian(path[index], 0.05)
+            self._picker_robot.single_step_cartesian(path[index], 0.02)
             index += 1
             self.done = self._picker_robot.is_arrived(grip_pose)
-            # time.sleep(0.01)
 
         desired_js = self._picker_robot.get_robot().ikine_LM(grip_pose, q0 = self._picker_robot.get_joint_angles()).q
         if self._picker_robot.robot_is_collided():
@@ -234,10 +229,7 @@ class Mission():
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated():
 
-            # pose = sm.SE3(path_sawyer[index])
-            # pose.A[0:3,0:3] = pose_ori          
-            # self._picker_robot.single_step_cartesian(pose, 0.05)
-            self._picker_robot.single_step_cartesian(path[index], 0.05)
+            self._picker_robot.single_step_cartesian(path[index], 0.02)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
@@ -256,6 +248,7 @@ class Mission():
         hang_pose = self.HANGPOSES[plt_index] @ self._PICKER_GRIP_POSE
         current_pose = self._picker_robot.get_ee_pose()
         
+        # hangstep = self.STEP/2
 
         pose_ori = hang_pose.A[0:3,0:3]
         path_sawyer = np.empty((self.STEP, 3))
@@ -269,7 +262,7 @@ class Mission():
 
             pose = sm.SE3(path_sawyer[index])
             pose.A[0:3,0:3] = pose_ori          
-            self._picker_robot.single_step_cartesian(pose, 0.05)
+            self._picker_robot.single_step_cartesian(pose, 0.02)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
@@ -296,7 +289,7 @@ class Mission():
         index = 0
         while index < len(path_sawyer) and self._picker_robot.system_activated() and not self._picker_robot.robot_is_collided():
 
-            self._picker_robot.single_step_joint(path_sawyer[index], 0.01)
+            self._picker_robot.single_step_joint(path_sawyer[index], 0.02)
 
             plate_pose = self._picker_robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
             self._plates_list[plt_index].move_flat_plate(sm.SE3(plate_pose))
@@ -329,7 +322,7 @@ class Mission():
     
         index = 0
         while index < len(path_astor) and self._bender_robot.system_activated():
-            self._bender_robot.single_step_cartesian(path_astor[index], 0.01)
+            self._bender_robot.single_step_cartesian(path_astor[index], 0.02)
             index += 1
             self.done = self._bender_robot.is_arrived(astorino_gripper_pose)
 
@@ -353,8 +346,8 @@ class Mission():
             picker_grip_pose = pose @ self._PICKER_GRIP_POSE
             bend_grip_pose = pose @ self._BENDER_GRIP_POSE
             
-            self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
-            self._bender_robot.single_step_cartesian(bend_grip_pose, 0.01)
+            self._picker_robot.single_step_cartesian(picker_grip_pose, 0.02)
+            self._bender_robot.single_step_cartesian(bend_grip_pose, 0.02)
 
             self._plates_list[plt_index].move_flat_plate(pose)
             
@@ -519,9 +512,6 @@ class Mission():
         self._picker_robot.open_gripper()  
 
         if plt_index == len(self._plates_list) - 1:
-            #------------------------ NEED TO FIX HERE
-            # _New_NEUTRAL_picker_robot = np.deg2rad(np.array([-19.82, -50.55, -12.42, 125.71, -28.77, -81.69, 102.75]))
-            # self._picker_robot.go_to_joint_angles(_New_NEUTRAL_picker_robot,duration= 2)
 
             neutral_js = self._picker_robot.get_robot().neutral
             home_pose = self._picker_robot.get_ee_pose(neutral_js)
@@ -532,9 +522,7 @@ class Mission():
                 self._picker_robot.single_step_joint(path_sawyer[index], 0.01)
                 index += 1
                 self.done = self._picker_robot.is_arrived(home_pose)
-            # desired_js = _New_NEUTRAL_picker_robot
-            # gripper_pose = self._picker_robot.get_ee_pose(_New_NEUTRAL_picker_robot)
-            # desired_js = self._picker_robot.get_robot().ikine_LM(self._picker_robot.get_ee_pose(_New_NEUTRAL_picker_robot), q0 = self._picker_robot.get_joint_angles()).q
+
             if self._picker_robot.robot_is_collided():
                 self._collision_avoidance(robot= self._picker_robot, 
                                         plate= self._plates_list[plt_index], 
@@ -543,7 +531,7 @@ class Mission():
                                         gripper_pose= home_pose  ,
                                         desired_js= neutral_js,
                                         right_to_left= False)
-            #--------------------- NEED TO FIX HERE
+
             
             self._home_system()      
 

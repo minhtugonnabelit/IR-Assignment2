@@ -127,7 +127,7 @@ class Human():
         new_transform = sm.SE3(x,y,0)
         self._human.T = self.human_init_pos @ new_transform
 
-        self._env.step(0.00) # MUST KEEP THIS FOR FLAWLESS MOVEMENT
+        # self._env.step(0.00) # MUST KEEP THIS FOR FLAWLESS MOVEMENT
         if self.is_in_workcell():
             self.human_status = 'DANGER'
         else: self.human_status = 'SAFE'

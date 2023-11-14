@@ -10,8 +10,6 @@ import spatialgeometry as geometry
 
 from swift import Swift
 from robot.m_DHRobot3D import M_DHRobot3D
-# from m_DHRobot3D import M_DHRobot3D
-import ir_support
 
 
 class Sawyer(M_DHRobot3D):
@@ -25,8 +23,11 @@ class Sawyer(M_DHRobot3D):
 
 
     """
+    # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  
+    #            [0.00, -0.9, 0.00, -1.9, 0.00, -0.97, 3.14] 
+    #            [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.14]
+
     _NEUTRAL= np.deg2rad(np.array([-51.26, -40.96, -7.47, 83.18, -61.48, -69.74, 134.15]))
-    # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  # [0.00, -0.9, 0.00, -1.9, 0.00, -0.97, 3.14] #  [0.00, -1.18, 0.00, -2.18, 0.00, -0.97, 3.14]
     _script_directory = os.path.dirname(os.path.abspath(__file__))
 
     # -----------------------------------------------------------------------------------#
@@ -37,17 +38,20 @@ class Sawyer(M_DHRobot3D):
         env: Swift,
         base=sm.SE3(0, 0, 0),
         gripper_ready=False,
-        gui=None,
     ):
+
+        # Initialize environment to update robot body
+        self._env = env
+
+
+        # Initialize gripper parameters
         self._gripper_ready = gripper_ready
-        if self._gripper_ready:
-            self._offset_gripper = 0.16
-        else:
-            self._offset_gripper = 0
+        self._offset_gripper = 0.16 if self._gripper_ready else 0
+
 
         # DH links
         links = self._create_DH()
-        self._env = env
+
 
         # Names of the robot link files in the directory
         link3D_names = dict(
@@ -60,6 +64,7 @@ class Sawyer(M_DHRobot3D):
             link6="l5",
             link7="l6",
         )
+
 
         # A joint config and the 3D object transforms to match that config
         qtest = [0, -np.pi/2, 0, 0, 0, 0, np.pi]
@@ -94,7 +99,6 @@ class Sawyer(M_DHRobot3D):
         # Add gripper
         self.gripper = SawyerGripper(base=self.fkine(self.q))
         self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
-        self.base_ax = geometry.Axes(0.2, pose=self.base)
         self.update_sim()
 
     def _create_DH(self):
@@ -102,19 +106,13 @@ class Sawyer(M_DHRobot3D):
         Create robot's standard DH model
         """
 
-        # deg = np.pi / 180
         mm = 1e-3
+
         # kinematic parameters
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
         d = np.r_[317, 192.5, 400, -168.5, 400, 136.3,
                   133.75 + self._offset_gripper/mm] * mm
-        # alpha = [-np.pi / 2,
-        #          -np.pi / 2,
-        #          -np.pi / 2,
-        #          -np.pi / 2,
-        #          -np.pi / 2,
-        #          -np.pi / 2,
-        #          0]
+
         alpha = [-np.pi / 2,
                  np.pi / 2,
                  -np.pi / 2,
@@ -131,18 +129,17 @@ class Sawyer(M_DHRobot3D):
                            [-270, 270]])
 
         # offset to have the dh from toolbox match with the actual pose
-        # offset = [0, -np.pi/2, 0, np.pi, 0, np.pi, 0]
         offset = [0, np.pi/2, 0, 0, 0, 0, -np.pi/2]
 
 
         links = []
-
         for j in range(7):
             link = rtb.RevoluteDH(
                 d=d[j], a=a[j], alpha=alpha[j], offset=offset[j], qlim=qlim[j])
             links.append(link)
 
         return links
+    
 
     def _add_model(self, file_path, placement, color=None):
         """
@@ -159,6 +156,7 @@ class Sawyer(M_DHRobot3D):
 
         self._env.add(model, collision_alpha=1)
         return model
+    
 
     def update_sim(self):
         """
@@ -167,10 +165,10 @@ class Sawyer(M_DHRobot3D):
         """
         self.add_to_env(self._env)
         self._env.add(self.ax)
-        self._env.add(self.base_ax)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
             self.gripper.add_to_env(self._env)
+
 
     def get_workspace(self):
         """
@@ -220,6 +218,7 @@ class Sawyer(M_DHRobot3D):
         print("Point cloud complete with %d points captured!", len(pointcloud))
         return pointcloud
 
+
     def send_joint_command(self, q):
         """
         Send joint command to robot. Current mode available is joint position mode
@@ -228,7 +227,7 @@ class Sawyer(M_DHRobot3D):
         self.ax.T = self.fkine(self.q)
         if self._gripper_ready:
             self.gripper.base = self.fkine(self.get_jointstates())
-        self._env.step(0)
+
 
     def open_gripper(self):
         """
@@ -236,11 +235,13 @@ class Sawyer(M_DHRobot3D):
         """
         self.gripper.open()
 
+
     def close_gripper(self):
         """
         Function to close gripper
         """
         self.gripper.close()
+
 
     def rotate_head(self, angle):
         """
@@ -254,7 +255,6 @@ class Sawyer(M_DHRobot3D):
         step = np.pi/48 * step / abs(step)
         for i in np.arange(head_ori[2], angle, step):
             self._head.T = smb.trotz(i) @ head_from_base
-            self._env.step(0.05)
 
     # -----------------------------------------------------------------------------------#
     # ENV TESTING
@@ -384,7 +384,8 @@ class SawyerGripper:
         for i in range(steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.05)
+            time.sleep(0.02)
+
 
     def open(self):
         """
@@ -398,7 +399,7 @@ class SawyerGripper:
         for i in range(steps):
             self._left_finger.q = qtraj_left[i]
             self._right_finger.q = qtraj_right[i]
-            self._env.step(0.05)
+            time.sleep(0.02)
 
     # -----------------------------------------------------------------------------------#
 

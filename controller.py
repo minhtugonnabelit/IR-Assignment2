@@ -23,27 +23,23 @@ class Controller():
     def __init__(self, robot : M_DHRobot3D, log: logging, is_sim=True):
 
         self._robot = robot
+        self._log = log
         self._is_sim = is_sim
+
         self._state = 'IDLE'
         self._ui_js = self._robot.q
         self._ui_pose = self._robot.fkine(self._ui_js)
         self._shutdown = False
         self._disable_gamepad = True
         self._gamepad_status = False
-        self._command_queue = queue.Queue()
-        self._safety = Safety(self._robot, log)
         self._robot_busy = False
-        self.object = None
-        self._log = log
-        self.action_done = True
         self._print_once = True
         self._read_event = None
+        self._object = None
+        self._safety = Safety(self._robot, log)
+        self._command_queue = queue.Queue()
+        self.action_done = True
         self.is_collided = False
-        
-        if self._robot.name == 'Sawyer':
-            self._ee_offset = sm.SE3(0, 0, 0.16)
-        elif self._robot.name == 'Astorino':
-            self._ee_offset = sm.SE3(0, 0, 0.1)
 
         # Dispatch table
         self._dispatch = {
@@ -100,8 +96,8 @@ class Controller():
         Update collision object
         """
         # create RectangularPrism object for line_plane collision check
-        self.object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center.A[0:3,3])
-        self.vertices, self.faces, self.normals = self.object.get_data()
+        self._object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center.A[0:3,3])
+        self.vertices, self.faces, self.normals = self._object.get_data()
 
         # create Cuboid object for collision avoidance
         self.avoidance_object = geometry.Cuboid(side, pose=center, color= (0.549,0.29,0.004,0.7))
@@ -147,7 +143,6 @@ class Controller():
             except queue.Empty:
                 pass
 
-            # time.sleep(0.5)
 
     def send_command(self, command):
         """
@@ -402,10 +397,9 @@ class Controller():
 
                 # Check collision
                 self.is_collided = False
-                if self.object is not None:
+                if self._object is not None:
                     if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
                         self.is_collided = True
-                        # self._log.warning('line_plane ee is nearly collided with object')
                         
                     if self.is_collided is True:
                         # get distance between ee and object,  also extracting the closest points to use as damping velocity
@@ -500,10 +494,9 @@ class Controller():
                 gamepad_max_gain = 1
 
                 self.is_collided = False
-                if self.object is not None:
+                if self._object is not None:
                     if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals, threshold=0.0):
                         self.is_collided = True
-                        # self._log.warning('line_plane ee is nearly collided with object')
                         
                     if self.is_collided is True:
                         # get distance between ee and object,  also extracting the closest points to use as damping velocity
@@ -551,11 +544,14 @@ class Controller():
         ee_pose = self._robot.fkine(self._robot.q)
         poss_diff = np.diff(ee_pose.A - pose.A)
         if np.all(np.abs(poss_diff) < tolerance):
-            # self._log.info('Provided goal is Done')
             self.action_done = True
             return True
         self.action_done = False
         return False
+    
+
+    def action_is_done(self):
+        return self.action_done
     
     
     def _get_busy_status(self):
@@ -610,7 +606,7 @@ class Controller():
             ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             
             self.is_collided = False
-            if self.object is not None:
+            if self._object is not None:
                 if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
                     self.is_collided = True
                     self._log.warning('line_plane ee is nearly collided with object')
@@ -696,100 +692,69 @@ class Controller():
 
             self._robot_busy = True
 
-            # # Direction methods
-            # # extracting linear vel direction
-            # ee_cur_pose = self._robot.fkine(self._robot.q)
-            # distance = np.linalg.norm(pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3])
-            # if np.isnan(distance) or distance < 0.005:
-            #     lin_uint = np.array([0.0, 0.0, 0.0])
-            #     distance = float(0.0)
-            # else:
-            #     lin_uint = (pose.A[0:3, 3] - ee_cur_pose.A[0:3, 3]) / distance
-            # # extracting angular vel direction
-            # s_omega = (pose.A[0:3, 0:3] @ np.transpose(
-            #     ee_cur_pose.A[0:3, 0:3]) - np.eye(3))
-            # orientation_error = np.linalg.norm([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]])
-            # ang_unit = np.array([s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]) / orientation_error
-            # # brake_thresh = 0.01
-            # # ______________________________________
-            # # missing a orientation brake threshold
-            # # ___________________________________
-            # # if distance < brake_thresh or orientation_error < brake_thresh:
-            # #     linear_vel = lin_uint * vel_scale['linear'] * (distance / brake_thresh)**2
-            # #     angular_vel = ang_unit * vel_scale['linear'] * (orientation_error / brake_thresh)**2
-            # # else:
-            # linear_vel = lin_uint * vel_scale['linear']
-            # angular_vel = ang_unit * 2
+            ## LINEAR INTERPOLATION METHODS
 
-            # ee_vel = np.hstack((linear_vel, angular_vel))
-            # print(ee_vel)
-
-            ## Linear interpolation methods
             # get linear velocity between interpolated point and current pose of ee
-            
             prev_ee_pos = path[index].A[0:3, 3]
             desired_ee_pos = path[index+1].A[0:3, 3]
 
 
             # get linear velocity between interpolated point and current pose of ee
-            
             lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
 
             # get angular velocity between interpolated ...
-            
             s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
             ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
             
             # combine velocities
-            
             ee_vel = np.hstack((lin_vel, ang_vel))
             
-
-            ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             self.is_collided = False
-            if self.object is not None:
+            if self._object is not None:
                 if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
                     self.is_collided = True
                     self._log.warning('line_plane ee is nearly collided with object')
-                    # break
 
+                # CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
                 if self.is_collided is True:
 
                     # set threshold and damping
-                    d_thresh = 0.01
+                    d_thresh = 0.008
 
                     # weight of the damping vel for collision avoidance
-                    weight = 0.4
+                    weight = 0.06
 
                     # get distance between ee and object,  also extracting the closest points to use as damping velocity
                     d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                    
                     if d <= d_thresh:
+
+                        # Damping coefficience to be applied with inversed proportional gain 
                         damp = (1-np.power(d/d_thresh, 2)) * weight 
 
-                        vel = ( p1 - p2 ) / time_step
-                        # ee_vel[0:3] += weight*vel  
+                        # Extract the unit vector for the push back direction
+                        vel = ( p1 - p2 ) / np.linalg.norm(p1-p2)
+
+                        # Apply the linear damping vel to the current end effector linear velocity
                         ee_vel[0:3] += damp * vel
 
-
-            ## END -----------------------------------------------------------------------------#
+                # END -----------------------------------------------------------------------------#
+        
             
             # calculate joint velocities, singularity check is already included in the function
-
             j = self._robot.jacob0(self._robot.q)
             mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
             joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
             
 
             # update joint states as a command to robot
-
             current_js = copy.deepcopy(self._robot.q)
             q = current_js + joint_vel * time_step
 
 
             # check safety functionality before sending to execute
-
             if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                 self._state = 'STOPPED'
                 break
@@ -801,9 +766,7 @@ class Controller():
 
 
             # send joint command to robot to execute desired motion. Currently available mode is position mode
-
             self._robot.send_joint_command(q)
-            # time.sleep(time_step)
 
 
         self._robot_busy = False
@@ -820,96 +783,72 @@ class Controller():
         Returns:
             None
         """
-        
-        # self._robot_busy = True
-        
+                
         prev_ee_pos = self._robot.fkine(self._robot.q).A[0:3, 3]
         desired_ee_pos = pose.A[0:3, 3]
 
 
         # get linear velocity between interpolated point and current pose of ee
-        
         lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
 
         # get angular velocity between interpolated ...
-        
         s_omega = (pose.A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
         ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
         
         # combine velocities
-        
         ee_vel = np.hstack((lin_vel, ang_vel))
         
 
-        ## CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
         self.is_collided = False
-        if self.object is not None:
+        if self._object is not None:
             if self._safety.collision_check_ee(self._robot.q, self.vertices, self.faces, self.normals):
                 self.is_collided = True
                 self._log.warning('line_plane ee is nearly collided with object')
-                # break
 
+            # CHEATING COLLISION AVOIDANCE METHODS ---------------------------------------------#
             if self.is_collided is True:
 
                 # set threshold and damping
-                d_thresh = 0.008
+                d_thresh = 0.01
 
                 # weight of the damping vel for collision avoidance
                 weight = 0.06
 
                 # get distance between ee and object,  also extracting the closest points to use as damping velocity
                 d, p1, p2 = self._safety.collision_check(self._robot.q, self.avoidance_object)
+                
                 if d <= d_thresh:
+
+                    # Damping coefficience to be applied with inversed proportional gain 
                     damp = (1-np.power(d/d_thresh, 2)) * weight 
 
-                    # vel = ( p1 - p2 ) / time_step
+                    # Extract the unit vector for the push back direction
                     vel = ( p1 - p2 ) / np.linalg.norm(p1-p2)
 
-                    # ee_vel[0:3] += weight*vel  
+                    # Apply the linear damping vel to the current end effector linear velocity
                     ee_vel[0:3] += damp * vel
-                    # vel = ( p1 - p2 ) / time_step
-                    # ee_vel[0:3] += weight*vel
 
-        ## END -----------------------------------------------------------------------------#
+            # END -----------------------------------------------------------------------------#
         
         # calculate joint velocities, singularity check is already included in the function 
-
         j = self._robot.jacob0(self._robot.q)
         mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
         joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
         
 
         # update joint states as a command to robot
-
         current_js = copy.deepcopy(self._robot.q)
         q = current_js + joint_vel * time_step
 
 
         # check safety functionality before sending to execute
-
         if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
             self._state = 'STOPPED'
 
 
         # send joint command to robot to execute desired motion. Currently available mode is position mode
-
-        self._robot.send_joint_command(q)
-        
-
-    def single_step_joint(self, q : np.ndarray, time_step, tolerance=0.0001):
-
-        self._robot_busy = True
-        if self.object is not None:
-            if self._safety.collision_check_ee(q, self.vertices, self.faces, self.normals):
-                self._log.warning('line_plane ee is nearly collided with object')
-                # self._state = 'STOPPED'
-                self.is_collided = True
-
-        if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
-            self._state = 'STOPPED'
-
         self._robot.send_joint_command(q)
 
 
@@ -927,7 +866,6 @@ class Controller():
         time_step = duration/step
 
         # Defined quintic polynomial trajectory
-
         path = rtb.jtraj(self._robot.q, q, t=step)
 
 
@@ -951,14 +889,13 @@ class Controller():
                     break
                 
             self._robot_busy = True
-            if self.object is not None:
+            if self._object is not None:
                 if self._safety.collision_check_ee(path.q[index], self.vertices, self.faces, self.normals):
                     self._log.warning('line_plane ee is nearly collided with object')
                     self._state = 'STOPPED'
                     break
 
             # check if robot body is too close to the ground
-
             if self._safety.grounded_check(path.q[index]) or self._safety.is_self_collided(path.q[index]):
                 self._state = 'STOPPED'
                 break
@@ -966,12 +903,29 @@ class Controller():
             index += 1
 
             # send joint command to robot to execute desired motion. Currently available mode is position mode
-
             self._robot.send_joint_command(path.q[index])
-            # time.sleep(0)
 
 
         self._robot_busy = False
+
+
+    def single_step_joint(self, q : np.ndarray, time_step, tolerance=0.0001):
+        """
+        Function to send the desired jointstates for the robot to execute. 
+        All necessary collision detection is cooperated before the jointstate is sent.
+        No avoidance presented in this function. """
+
+        self._robot_busy = True
+        if self._object is not None:
+            if self._safety.collision_check_ee(q, self.vertices, self.faces, self.normals):
+                self._log.warning('line_plane ee is nearly collided with object')
+                self.is_collided = True
+
+        if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
+            self._state = 'STOPPED'
+
+        self._robot.send_joint_command(q)
+
 
     @staticmethod
     def solve_RMRC(j, ee_vel, mu_threshold=0.04):
@@ -983,18 +937,15 @@ class Controller():
         """
 
         # calculate manipulability
-
         w = np.sqrt(np.linalg.det(j @ np.transpose(j)))
 
 
         # set threshold and damping
-
         w_thresh = mu_threshold
         max_damp = 0.5
 
 
         # if manipulability is less than threshold, add damping
-
         if w < w_thresh:
             damp = (1-np.power(w/w_thresh, 2)) * max_damp 
         else: 
@@ -1002,19 +953,15 @@ class Controller():
 
 
         # calculate damped least square
-
         j_dls = j @ np.transpose(j) @ np.linalg.inv( j @ np.transpose(j) + damp * np.eye(6) )
 
 
         # get joint velocities, if robot is in singularity, use damped least square
-
         joint_vel = np.linalg.pinv(j) @ j_dls @ np.transpose(ee_vel)
 
 
         return joint_vel
     
-    def action_is_done(self):
-        return self.action_done
 
     # STATE FUNCTION
     # -----------------------------------------------------------------------------------#

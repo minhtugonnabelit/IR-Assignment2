@@ -102,9 +102,6 @@ class ControllerInterface():
         self._impl._update_robot_js()
 
 
-    def robot_is_collided(self):
-        return self._impl.robot_is_collided()
-
     def move(self):
         """
         Execute a joint space trajectory
@@ -173,16 +170,7 @@ class ControllerInterface():
         self._impl.close_gripper()
 
 
-    def get_busy_status(self):
-        return self._impl._get_busy_status()
-    
-    
-    def action_is_done(self):
-        return self._impl.action_is_done()
-    
-    
-    def is_arrived(self, pose, tolerance=0.001):
-        return self._impl.is_arrived(pose, tolerance)
+
     
 
     # -----------------------------------------------------------------------------------#
@@ -193,11 +181,13 @@ class ControllerInterface():
 
         return self._impl._robot
     
+
     def get_collision_object(self):
         """
         Getter for collision object """
 
         return self._impl.object
+    
     
     def get_joint_angles(self):
         """
@@ -205,6 +195,7 @@ class ControllerInterface():
 
         return copy.deepcopy(self._impl._robot.q)
     
+
     def get_ee_pose(self, q = None):
         """
         Getter for end-effector pose """
@@ -213,6 +204,22 @@ class ControllerInterface():
         else :
             return self._impl._robot.fkine(q)
 
+
+    def get_busy_status(self):
+        return self._impl._get_busy_status()
+    
+    
+    def action_is_done(self):
+        return self._impl.action_is_done()
+    
+
+    def robot_is_collided(self):
+        return self._impl.robot_is_collided()
+    
+    
+    def is_arrived(self, pose, tolerance=0.001):
+        return self._impl.is_arrived(pose, tolerance)
+    
     # -----------------------------------------------------------------------------------#
     # STATE FUNCTION
     def system_state(self):

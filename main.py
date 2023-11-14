@@ -107,11 +107,6 @@ class RobotGUI:
 
         sg.theme('DarkAmber')
 
-        # Initialize environment and logging system
-
-        self.env = Swift()
-        self.env.set_camera_pose([0, 0, 5], self._cell_center.A[0:3, 3])
-        self.env.launch(realtime=True)
 
         # Verbose setup for logging level
 
@@ -120,6 +115,15 @@ class RobotGUI:
         else:
             log_level = logging.INFO
         self.log = _init_log(log_level)
+
+
+        # Initialize environment and logging system
+
+        self.env = Swift()
+        self.env.set_camera_pose([0, 0, 5], self._cell_center.A[0:3, 3])
+        self.env.launch(realtime=True)
+        self.collapsed = False
+
 
         # Init environment object:
         
@@ -134,7 +138,6 @@ class RobotGUI:
         plates_list = []
         plates_list.append(plate)
         plates_list.append(plate1)
-        
         
 
         # Initialize robot
@@ -173,11 +176,11 @@ class RobotGUI:
                                self.astorino_controller)
 
         # set up collision
+
         self.collision_setup()
 
-        # Initialize GUI
-        
 
+        # Initialize GUI
 
         self.window = self.create_window()
         self.update_gui_thread()
@@ -745,18 +748,23 @@ class RobotGUI:
         flag_print_once_astorino = [True]
         flag_print_running_astorino = [True]
 
+        # Mission thread initialisation
         self.mission_thread = threading.Thread(target=self.mission.run)
         self.human_thread = threading.Thread(target=self.human.keyboard_move)
+
+        # Timeline thread start
+        world_timeline = threading.Thread(target=self.bigbang)
+        world_timeline.start()
         
         # Physicall estop
         # estop = PhysicalEstop()
         # current_time = time.time()
         # last_time = time.time()
 
-            
         while True:
             event, values = self.window.read()
             if event == sg.WIN_CLOSED:
+                self.collapsed = True
                 break
 
             # if estop.is_pressed():
@@ -774,13 +782,19 @@ class RobotGUI:
             
             self.human_control(event=event, values= values)
             
-            self.env.step(0.02)
+            # self.env.step(0.02)
             
 
         self.sawyer_controller.clean()
         self.astorino_controller.clean()
+        world_timeline.join()
         self.env.close()
         self.window.close()
+
+    def bigbang(self):
+
+        while not self.collapsed:
+            self.env.step(0.02)
 
     def astorino_teach_pendant(self, event, values, flag_print_once_astorino, flag_print_running_astorino):
         # -------------------------------------------------------------------- astorino
@@ -791,7 +805,7 @@ class RobotGUI:
                     self.astorino_controller.set_joint_value(
                         i, values[f'-A_SLIDER{i}-'])
                     self.astorino_controller.update_js()
-                    # self.env.step(0.02)
+
         else:
             for i in range(6):
                 self.astorino_controller.set_joint_value(
@@ -825,19 +839,7 @@ class RobotGUI:
             self.window['-A_J3-'].update(f'{new_joint_states[4]:.2f} ')
             self.window['-A_J4-'].update(f'{new_joint_states[5]:.2f} ')
 
-            # self.window['-A_X-'].update(
-            #     f'X: {self.astorino.fkine(self.astorino.q).A[0,3]:.2f} m')
-            # self.window['-A_Y-'].update(
-            #     f'Y: {self.astorino.fkine(self.astorino.q).A[1,3]:.2f} m')
-            # self.window['-A_Z-'].update(
-            #     f'Z: {self.astorino.fkine(self.astorino.q).A[2,3]:.2f} m')
-            # self.window['-A_RX-'].update(
-            #     f'Rx: {np.rad2deg(self.getori(self.astorino)[0]):.2f} deg')
-            # self.window['-A_RY-'].update(
-            #     f'Ry: {np.rad2deg(self.getori(self.astorino)[1]):.2f} deg')
-            # self.window['-A_RZ-'].update(
-            #     f'Rz: {np.rad2deg(self.getori(self.astorino)[2]):.2f} deg')
-            
+            # Cartesian pose of end effector updated in real-time related to base frame
             self.window['-A_X-'].update(
                 f'X: {(self.astorino.base.inv() @ self.astorino.fkine(self.astorino.q)).A[0,3]:.2f} m')
             self.window['-A_Y-'].update(
@@ -914,8 +916,6 @@ class RobotGUI:
 
         # event activated with HOME button
         elif event == '-A_HOME-':
-            # if self.astorino_controller.disable_gamepad is False:
-            #     self.astorino_controller.disable_gamepad()
             self.astorino_controller.send_command('HOME')
             self.astorino_controller.set_event_GUI(event)
 
@@ -951,8 +951,7 @@ class RobotGUI:
                 self.astorino_controller.send_command('CARTESIAN_POSE')
 
         elif event == '-A_GAMEPAD_ENABLE-':
-            # self.astorino_controller.send_command("GAMEPAD_ENABLE")
-            # self.astorino_controller.gamepad_control()
+
             gamepad_status = self.astorino_controller.get_gamepad_status()
             if not gamepad_status: # If Gamepad is off
                 self.astorino_controller.send_command("GAMEPAD_ENABLE")
@@ -1019,12 +1018,12 @@ class RobotGUI:
 
         if values['-RJOINT-']:
             for i in range(7):
-                # self.sawyer_controller.set_joint_value(i, values[f'-SLIDER{i}-'])
+
                 if event == f'-SLIDER{i}-':
                     self.sawyer_controller.set_joint_value(
                         i, values[f'-SLIDER{i}-'])
                     self.sawyer_controller.update_js()
-                    self.env.step(0)
+
         else:
             for i in range(7):
                 self.sawyer_controller.set_joint_value(
@@ -1057,19 +1056,6 @@ class RobotGUI:
             self.window['-J3-'].update(f'{new_joint_states[4]:.2f} ')
             self.window['-J4-'].update(f'{new_joint_states[5]:.2f} ')
             self.window['-J5-'].update(f'{new_joint_states[6]:.2f} ')
-
-            # self.window['-X-'].update(
-            #     f'X: {self.sawyer.fkine(self.sawyer.q).A[0,3]:.2f} m')
-            # self.window['-Y-'].update(
-            #     f'Y: {self.sawyer.fkine(self.sawyer.q).A[1,3]:.2f} m')
-            # self.window['-Z-'].update(
-            #     f'Z: {self.sawyer.fkine(self.sawyer.q).A[2,3]:.2f} m')
-            # self.window['-RX-'].update(
-            #     f'Rx: {np.rad2deg(self.getori(self.sawyer)[0]):.2f} deg')
-            # self.window['-RY-'].update(
-            #     f'Ry: {np.rad2deg(self.getori(self.sawyer)[1]):.2f} deg')
-            # self.window['-RZ-'].update(
-            #     f'Rz: {np.rad2deg(self.getori(self.sawyer)[2]):.2f} deg')
             
             self.window['-X-'].update(
                 f'X: {(self.sawyer.base.inv() @ self.sawyer.fkine(self.sawyer.q)).A[0,3]:.2f} m')
@@ -1145,8 +1131,6 @@ class RobotGUI:
 
         # event activated with HOME button
         elif event == '-HOME-':
-            # if self.sawyer_controller.disable_gamepad is False:
-            #     self.sawyer_controller.disable_gamepad()
             self.sawyer_controller.send_command('HOME')
             self.sawyer_controller.set_event_GUI(event)
 
@@ -1382,7 +1366,6 @@ class RobotGUI:
         # Human motion by sliders adjustment
         if event == f'-H_SLIDERX-' or event == f'-H_SLIDERY-':
             self.human.move(x= values['-H_SLIDERX-'], y= values['-H_SLIDERY-'])
-            self.env.step(0.0)
             
         if state_human == 'SAFE':
             self.window['-STATE-HUMAN-'].update('SAFE',background_color= 'green')
@@ -1412,7 +1395,6 @@ class RobotGUI:
         """
         Return orientation of the robot in RPY
         """
-        # ori = smb.tr2rpy(robot.fkine(robot.q).A[0:3, 0:3], order='xyz')
         ori = smb.tr2rpy((robot.base.inv() @ robot.fkine(robot.q)).A[0:3, 0:3], order='xyz')
         return ori
 

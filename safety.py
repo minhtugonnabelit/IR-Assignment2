@@ -124,10 +124,10 @@ class Safety:
 
         lines = []
             
-        lastlink_norm = np.linalg.norm(tr[-1].A[:3,3] - tr[-2].A[:3,3])
+        lastlink_norm = np.linalg.norm(tr[-1].A[:3,3] - tr[-2].A[:3,3]) * 0.7
         start1 = tr[-1].A @ smb.transl(0.05 ,offset + 0.07,-lastlink_norm)
         line1 = {'start': start1, 
-                    'end': start1 @ smb.transl(0,0,lastlink_norm*1.5)}
+                    'end': start1 @ smb.transl(0,0,lastlink_norm*2)}
         
         start2 = tr[-1].A @ smb.transl(0,-offset - 0.07,-lastlink_norm)
         line2 = {'start': start2,
@@ -142,18 +142,33 @@ class Safety:
                     'end': start4 @ smb.transl(0,0,lastlink_norm*2)}
         
         #----- skew right 45 deg
-        start5 =  tr[-1].A @ smb.transl(offset+0.1,-offset-0.1,-lastlink_norm)
+        start5 =  tr[-1].A @ smb.transl(offset+0.1,-(offset+0.1),-lastlink_norm)
         line5 = {'start': start5,
                     'end': start5 @ smb.transl(0,0,lastlink_norm*2)}
-
         
+        start6 =  tr[-1].A @ smb.transl(-(offset+0.1),offset+0.1,-lastlink_norm)
+        line6 = {'start': start6,
+                    'end': start6 @ smb.transl(0,0,lastlink_norm*2)}
+
+        start7 =  tr[-1].A @ smb.transl(offset+0.1,offset+0.1,-lastlink_norm)
+        line7 = {'start': start7,
+                    'end': start7 @ smb.transl(0,0,lastlink_norm*2)}
+
+        start8 =  tr[-1].A @ smb.transl(-(offset+0.1),-(offset+0.1),-lastlink_norm)
+        line8 = {'start': start8,
+                    'end': start8 @ smb.transl(0,0,lastlink_norm*2)}
+
         lines.append(line1)
         lines.append(line2)
         lines.append(line3)
         lines.append(line4)
         lines.append(line5)
+        lines.append(line6)
+        lines.append(line7)
+        lines.append(line8)
 
         return lines
+    
     
     def collision_check_ee(self, q, vertecies, faces, face_normals, return_once_found = True, threshold = 0):
         """

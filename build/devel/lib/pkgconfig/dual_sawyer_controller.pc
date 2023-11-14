@@ -1,0 +1,8 @@
+prefix=/home/benjamin/git/IR-Assignment2/build/devel
+
+Name: dual_sawyer_controller
+Description: Description of dual_sawyer_controller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib -ldual_sawyer_controller
+Requires: intera_interface rospy
