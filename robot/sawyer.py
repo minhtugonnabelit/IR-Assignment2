@@ -15,12 +15,12 @@ from robot.m_DHRobot3D import M_DHRobot3D
 class Sawyer(M_DHRobot3D):
 
     """
-    Sawyer robot.
-
-        Parameters:
+    
+        Sawyer
         --------------------------------------------
+        env: Environment to add robot to.
+        base: Base pose of robot.
         gripper_ready: Indicator for mounting gripper.
-
 
     """
     # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  
@@ -170,55 +170,6 @@ class Sawyer(M_DHRobot3D):
             self.gripper.add_to_env(self._env)
 
 
-    def get_workspace(self):
-        """
-        Get workspace of the robot
-        """
-        step = np.pi / 4
-        pointcloud_size = 5 * int(
-            np.prod(
-                np.floor((self.qlim[1, 1:6] - self.qlim[0, 1:6]) / step + 1))
-        )
-        print(pointcloud_size)
-
-        pointcloud = np.zeros((pointcloud_size, 3))
-        counter = 0
-        start_time = time.time()
-        print("Start getting point cloud...")
-
-        for q0 in np.arange(self.qlim[0, 0], self.qlim[1, 0] + 0.2, 0.2):
-            for q1 in np.arange(self.qlim[0, 1], self.qlim[1, 1] + step, step):
-                for q2 in np.arange(self.qlim[0, 2], self.qlim[1, 2] + step, step):
-                    for q3 in np.arange(self.qlim[0, 3], self.qlim[1, 3] + step, step):
-                        for q4 in np.arange(self.qlim[0, 4], self.qlim[1, 4] + step, step):
-                            for q5 in np.arange(self.qlim[0, 5], self.qlim[1, 5] + step, step):
-
-                                q = [q0, q1, q2, q3, q4, q5, 0]
-
-                                ep = self.fkine(q).A
-                                if counter == pointcloud_size:
-                                    break
-                                pointcloud[counter, :] = ep[0:3, 3]
-                                counter += 1
-                                if np.mod(counter / pointcloud_size * 100, 1) == 0:
-                                    end_time = time.time()
-                                    execution_time = end_time - start_time
-                                    print(
-                                        f"After {execution_time} seconds, complete",
-                                        counter / pointcloud_size * 100,
-                                        "% of pose",
-                                    )
-
-        # Eliminate points that lie below the table
-        pointcloud = pointcloud[pointcloud[:, 2] > 0.1+self.base.A[2, 3], :]
-        pc_x = pointcloud[:, 0]
-        pc_y = pointcloud[:, 1]
-        print('max x: ', np.max(pc_x), 'min x: ', np.min(pc_x))
-        print('max y: ', np.max(pc_y), 'min y: ', np.min(pc_y))
-        print("Point cloud complete with %d points captured!", len(pointcloud))
-        return pointcloud
-
-
     def send_joint_command(self, q):
         """
         Send joint command to robot. Current mode available is joint position mode
@@ -323,10 +274,13 @@ class SawyerGripper:
     def __init__(self, base=sm.SE3(0, 0, 0)):
 
         links = self._create_DH()
+
         # This base is created just to initial the gripper model, then the main 'base' as a class property is used for asssiging the primary base
         base_init = sm.SE3(0, 0, 0)
+
         # set attribute here: when we use "base", base at _init_ has the value, then it will be assigned to function set_base(value) at attribute function
         self._base = base
+
 
         # Right finger properties
 
@@ -348,7 +302,6 @@ class SawyerGripper:
             self._base.A @ self.base_tf_right.A
         )
 
-        # ---------------------------------------------
 
         # Left finger properties
 

@@ -76,8 +76,7 @@ class Mission():
         self.mission_state = 'IDLE'
         
         
-
-
+        # Action list for the mission
         self._action_list = [
             self._grip_plate_edge,
             self._lift_plate,

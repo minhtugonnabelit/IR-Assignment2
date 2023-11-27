@@ -25,12 +25,12 @@ class Safety:
         self._log = log
 
         # get ellipsoid parameters (x,y,z) with major and minor axis allocated to a and d respectively
-        self._ellipsoids = self.get_ellipsoid()
+        self._ellipsoids = self._get_ellipsoid()
 
         # generate mesh points for each ellipsoid in the local frame of each link
-        self._ellipsoids_meshlist = self.get_ellipsoid_meshlist()
+        self._ellipsoids_meshlist = self._get_ellipsoid_meshlist()
 
-    def get_link_poses(self, q=None):
+    def _get_link_poses(self, q=None):
         """
         :param q robot joint angles
         :param robot -  seriallink robot model
@@ -40,7 +40,7 @@ class Safety:
             return self.robot.fkine_all()
         return self.robot.fkine_all(q)
 
-    def get_ellipsoid(self):
+    def _get_ellipsoid(self):
 
         """ Get ellipsoid of the robot """
 
@@ -66,7 +66,7 @@ class Safety:
 
         return ellipsoids
     
-    def get_ellipsoid_meshlist(self):
+    def _get_ellipsoid_meshlist(self):
         
         """ Get the ellipsoid mesh points corresponded to each link stick to their local frame """
 
@@ -77,7 +77,7 @@ class Safety:
 
         return meshlist   
     
-    def transform_ellipsoid(self, links_center):
+    def _transform_ellipsoid(self, links_center):
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
         ellip_transforms = []
@@ -101,7 +101,7 @@ class Safety:
         
         return ellip_transforms
     
-    def get_link_centers(links_tf):
+    def _get_link_centers(links_tf):
 
         """
         Get the center of each link"""
@@ -178,7 +178,7 @@ class Safety:
         result = False
         offset = 0.05+threshold
 
-        tr = self.get_link_poses(q)
+        tr = self._get_link_poses(q)
 
         # offset the end-effector to create a virtual box
         lines = Safety._ee_line_offset(tr, offset)
@@ -225,11 +225,11 @@ class Safety:
         """
 
         # get the transforms of all links end and center
-        links_tf = self.get_link_poses(q)
-        links_center = Safety.get_link_centers(links_tf)
+        links_tf = self._get_link_poses(q)
+        links_center = Safety._get_link_centers(links_tf)
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
-        ellip_transforms = self.transform_ellipsoid(links_center)
+        ellip_transforms = self._transform_ellipsoid(links_center)
 
         if self.robot.name == 'Sawyer':
             headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
@@ -279,7 +279,7 @@ class Safety:
             ground_height = self.robot.base.A[2, 3]
 
         # get the transforms of all links
-        link_transforms = self.get_link_poses(q).A
+        link_transforms = self._get_link_poses(q).A
 
         # check if all links are above the ground defined
         for j, link in enumerate(link_transforms):
@@ -390,7 +390,7 @@ class Safety:
         ax = fig.ax
 
         # get the transforms of all links
-        links_tf = self.get_link_poses(self.robot.neutral)
+        links_tf = self.__get_link_poses(self.robot.neutral)
         ee_lines = Safety._ee_line_offset(links_tf, 0.05)
 
         for line in ee_lines:
@@ -399,10 +399,10 @@ class Safety:
                     [line['start'][2,3], line['end'][2,3]], c='r', linewidth=0.5)
 
         # get the center of each link
-        links_center = Safety.get_link_centers(links_tf)
+        links_center = Safety._get_link_centers(links_tf)
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
-        ellip_transforms = sawyer_safety.transform_ellipsoid(links_center)
+        ellip_transforms = sawyer_safety._transform_ellipsoid(links_center)
 
         # eliminate the last column of the ellipsoid mesh points
         ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
