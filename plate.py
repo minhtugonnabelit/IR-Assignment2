@@ -91,9 +91,7 @@ class Plate():
         bender_pose = None
 
         # Bending parameters        
-        # Increment is the increment of seg_pose after each step
-        # INCREMENT = pi/300 * i
-        
+        # Increment is the increment of seg_pose after each step        
         seg_pose = self._pose
         for seg in self._segments[:middle_segment_number]:
             seg_pose = seg_pose * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0) * SE3.Ry(increment) * SE3.Trans(Plate.SEGMENT_LENGTH/2,0,0)
@@ -128,12 +126,13 @@ class Plate():
         return [picker_pose, bender_pose]
 
     def drop_bunny_step(self, step):
-        # self._bunny.T = self._bunny.T * SE3.Trans(-step,0,0)
         
         step_pose = SE3(0, -step, 0) @ self._bunny_location
         self._bunny.T = self._pose @ step_pose
 
+
     def drop_bunny_step_box(self, step):
+
         self._bunny.T = SE3.Trans(step/3, 0, -step) * self._bunny.T
         
 

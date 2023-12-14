@@ -756,45 +756,35 @@ class RobotGUI:
         world_timeline = threading.Thread(target=self.bigbang)
         world_timeline.start()
         
-        # Physicall estop
-        # estop = PhysicalEstop()
-        # current_time = time.time()
-        # last_time = time.time()
+        try:
+            while True:
+                event, values = self.window.read()
+                if event == sg.WIN_CLOSED:
+                    self.collapsed = True
+                    break
 
-        while True:
-            event, values = self.window.read()
-            if event == sg.WIN_CLOSED:
-                self.collapsed = True
-                break
-
-            # if estop.is_pressed():
-            #     current_time = time.time()
-            #     if current_time - last_time > 1:
-            #         event = '-MISSION_STOP-'
-            #         print("Pressed")
-            #         last_time = time.time()
-
-            self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
-                                        flag_print_running_sawyer=flag_print_running_sawyer)
-            self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
-                                        flag_print_running_astorino=flag_print_running_astorino)
-            self.mission_callback(event=event, values=values)
+                self.sawyer_teach_pendant(event=event, values=values, flag_print_once_sawyer=flag_print_once_sawyer,
+                                            flag_print_running_sawyer=flag_print_running_sawyer)
+                self.astorino_teach_pendant(event=event, values=values, flag_print_once_astorino=flag_print_once_astorino,
+                                            flag_print_running_astorino=flag_print_running_astorino)
+                self.mission_callback(event=event, values=values)
+                
+                self.human_control(event=event, values= values)
+                                
+        finally:
             
-            self.human_control(event=event, values= values)
-            
-            # self.env.step(0.02)
-            
+            self.sawyer_controller.clean()
+            self.astorino_controller.clean()
+            world_timeline.join()
+            self.env.close()
+            self.window.close()
 
-        self.sawyer_controller.clean()
-        self.astorino_controller.clean()
-        world_timeline.join()
-        self.env.close()
-        self.window.close()
 
     def bigbang(self):
 
         while not self.collapsed:
             self.env.step(0.02)
+
 
     def astorino_teach_pendant(self, event, values, flag_print_once_astorino, flag_print_running_astorino):
         # -------------------------------------------------------------------- astorino

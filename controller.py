@@ -27,19 +27,20 @@ class Controller():
         self._is_sim = is_sim
 
         self._state = 'IDLE'
-        self._ui_js = self._robot.q
-        self._ui_pose = self._robot.fkine(self._ui_js)
-        self._shutdown = False
-        self._disable_gamepad = True
-        self._gamepad_status = False
-        self._robot_busy = False
-        self._print_once = True
-        self._read_event = None
-        self._object = None
         self._safety = Safety(self._robot, log)
         self._command_queue = queue.Queue()
+        self._ui_js = self._robot.q
+        self._ui_pose = self._robot.fkine(self._ui_js)
+        self._read_event = None
+        self._object = None
+        self._shutdown = False
+        self._robot_busy = False
+        self._print_once = True
+        self._disable_gamepad = True
+        self._gamepad_status = False
         self.action_done = True
         self.is_collided = False
+        self.joystick_object = None
 
         # Dispatch table
         self._dispatch = {
@@ -68,15 +69,15 @@ class Controller():
             "GO_TO_JOINT_ANGLES": self.go_to_joint_angles,
         }  
         
-        self.joystick_object = None
 
-    
+
     def launch(self):
         """
         Start the controller
         """
         self.thread = threading.Thread(target=self._run)
         self.thread.start()
+
             
     def system_activated(self):
         """
@@ -90,6 +91,7 @@ class Controller():
                 print(f'System is not enabled. Current state: {self._state}')
                 self._print_once = False 
             return False
+        
 
     def update_collision_object(self, side, center):
         """
@@ -99,10 +101,11 @@ class Controller():
         self._object = RectangularPrism(width=side[0], breadth=side[1], height=side[2], center=center.A[0:3,3])
         self.vertices, self.faces, self.normals = self._object.get_data()
 
-        # create Cuboid object for collision avoidance
+        # create Cuboid object for vector field collision avoidance
         self.avoidance_object = geometry.Cuboid(side, pose=center, color= (0.549,0.29,0.004,0.7))
 
         return self.avoidance_object
+
 
     @staticmethod
     def _joystick_init(self):
@@ -226,14 +229,20 @@ class Controller():
         """
         Open gripper
         """
-        self._robot.open_gripper()
+        if self._robot._gripper_ready:
+            self._robot.open_gripper()
+        else:
+            self._log.error(f'No gripper attached on {self._robot.name}!')
 
 
     def close_gripper(self):
         """
         Close gripper
         """
-        self._robot.close_gripper()
+        if self._robot._gripper_ready:
+            self._robot.close_gripper()
+        else:
+            self._log.error(f'No gripper attached on {self._robot.name}!')
 
         
     # -----------------------------------------------------------------------------------#
@@ -393,27 +402,22 @@ class Controller():
                
                
                 # collision avoidance damping
-                
                 d_thresh = 0.05
                 ee_vel = self.vector_field_collision_avoidance(ee_vel, d_thresh=d_thresh, weight=1)
 
 
                 # calculate joint velocities
-
                 j = self._robot.jacob0(self._robot.q)
                 mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
-
-                joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
+                joint_vel = Controller.RMRC_solver(j, ee_vel, mu_threshold=mu_threshold)
 
 
                 # update joint states as a command to robot
-
                 current_js = copy.deepcopy(self._robot.q)
                 q = current_js + joint_vel * time_step
 
 
                 # check if ee is too close to the ground
-
                 if self._safety.grounded_check(q) or self._safety.is_self_collided(q):
                     self._state = 'STOPPED'
                     continue
@@ -478,7 +482,7 @@ class Controller():
                 j = self._robot.jacob0(self._robot.q)
                 mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
 
-                joint_vel = Controller.solve_RMRC(j, ee_vel, mu_threshold=mu_threshold)
+                joint_vel = Controller.RMRC_solver(j, ee_vel, mu_threshold=mu_threshold)
 
 
                 # update joint states as a command to robot
@@ -580,7 +584,7 @@ class Controller():
             # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
             mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
-            joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
+            joint_vel = Controller.RMRC_solver(j,ee_vel,mu_threshold=mu_threshold)
             
 
             # update joint states as a command to robot
@@ -640,7 +644,7 @@ class Controller():
         # calculate joint velocities, singularity check is already included in the function 
         j = self._robot.jacob0(self._robot.q)
         mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
-        joint_vel = Controller.solve_RMRC(j,ee_vel,mu_threshold=mu_threshold)
+        joint_vel = Controller.RMRC_solver(j,ee_vel,mu_threshold=mu_threshold)
         
 
         # update joint states as a command to robot
@@ -758,12 +762,12 @@ class Controller():
 
 
     @staticmethod
-    def solve_RMRC(j, ee_vel, mu_threshold=0.04):
+    def RMRC_solver(j, ee_vel, mu_threshold=0.04):
         """
         ### Solve RMRC with given jacobian and desired ee velocity 
         - @param j: jacobian matrix (6xn numpy array)
         - @param ee_vel: desired ee velocity (6x1 vector) in format of [x,y,z,wx,wy,wz]
-        - @param mu_threshold: manipulability threshold to determine if robot is in singularity. This threshhold varies for each type of robot.
+        - @param mu_threshold: manipulability threshold to determine if robot is near singularity. This threshhold varies for each type of robot.
         """
 
         # calculate manipulability

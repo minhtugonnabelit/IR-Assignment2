@@ -57,7 +57,7 @@ class M_DHRobot3D(rtb.DHRobot, ABC):
         Collect the corresponding 3D model for each link.\n
         Then get the relation between the DH transforms for each link and the pose of its corresponding 3D object
         """
-        # current_path = os.path.abspath(os.path.dirname(__file__))
+
         self.links_3d = []
         for i in range(self.n + 1):
             file_name = None

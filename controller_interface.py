@@ -162,10 +162,7 @@ class ControllerInterface():
         """
         self._impl.close_gripper()
 
-
-
-    
-
+        
     # -----------------------------------------------------------------------------------#
     # Getters
     def get_robot(self):
