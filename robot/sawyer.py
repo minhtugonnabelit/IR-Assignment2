@@ -181,18 +181,18 @@ class Sawyer(M_DHRobot3D):
             self.gripper.base = self.fkine(self.get_jointstates())
 
 
-    def open_gripper(self):
-        """
-        Function to open gripper
-        """
-        self.gripper.open()
+    # def open_gripper(self):
+    #     """
+    #     Function to open gripper
+    #     """
+    #     self.gripper.open()
 
 
-    def close_gripper(self):
-        """
-        Function to close gripper
-        """
-        self.gripper.close()
+    # def close_gripper(self):
+    #     """
+    #     Function to close gripper
+    #     """
+    #     self.gripper.close()
 
 
     def rotate_head(self, angle):

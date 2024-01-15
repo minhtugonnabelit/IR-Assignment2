@@ -135,8 +135,9 @@ class Mission():
         STEP 1: Homing both robot arms, ready to pick
         """
         # non-blocking method
-        self._bender_robot.send_command('HOME')        
-        self._picker_robot.send_command('HOME')
+        self._bender_robot.send_command('HOME')
+        # self._bender_robot.
+        self._picker_robot.go_to_home()        
         
         self._bender_robot.open_gripper()
         self._picker_robot.open_gripper()
@@ -330,6 +331,8 @@ class Mission():
         """
 
         path_plate = rtb.ctraj(self._plates_list[plt_index].get_pose(), self.TILTEDPOSE, 30)
+
+        # Extracting the last pose of the plate for completion check
         picker_last_pose = path_plate[-1] @ self._PICKER_GRIP_POSE
         bender_last_pose = path_plate[-1] @ self._BENDER_GRIP_POSE
 

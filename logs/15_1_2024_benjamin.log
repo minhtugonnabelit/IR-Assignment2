@@ -1,0 +1,223 @@
+2024-01-15 12:08:49,682,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:08:56,951,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:09:00,301,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:09:00,301,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:09:01,729,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:09:07,246,WARNING,safety.py,is_self_collided,335,link 5 is collided with link 0
+2024-01-15 12:10:37,348,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:10:43,954,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:10:47,413,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:10:47,413,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:10:48,879,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:10:54,258,WARNING,safety.py,is_self_collided,317,link 5 is collided with head
+2024-01-15 12:14:09,934,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:14:09,934,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:14:10,801,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:14:20,914,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:14:30,872,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:14:38,507,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:14:40,811,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:14:50,102,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:14:56,459,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:14:57,727,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:15:07,246,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:15:14,088,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,114,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,228,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,270,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,332,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,388,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,448,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,496,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,561,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,624,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,697,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,748,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,803,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,843,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,908,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:14,975,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,036,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,103,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,157,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,531,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,584,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,640,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,702,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,862,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:15,954,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:16,008,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:16,069,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:15:16,123,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:16:29,338,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:16:36,434,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:16:40,038,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:16:40,038,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:16:40,938,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:16:44,503,WARNING,safety.py,is_self_collided,317,link 5 is collided with head
+2024-01-15 12:17:04,961,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:17:11,988,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:17:15,177,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:17:15,177,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:17:16,083,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:17:20,122,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:17:32,254,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,308,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,398,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,436,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,492,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,545,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,593,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,635,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,722,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,786,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,837,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:32,885,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,029,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,126,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,208,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,255,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,321,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,387,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,454,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,815,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:33,904,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:34,033,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:34,085,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:34,253,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:34,289,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:34,342,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,384,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,491,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,537,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,625,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,715,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,764,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,820,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,870,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,910,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:54,958,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:55,167,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:55,200,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:17:55,268,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:01,834,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:02,163,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:02,399,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:02,468,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:02,710,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,429,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,469,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,532,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,599,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,662,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:45,709,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:46,260,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:46,322,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:46,394,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:46,452,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:18:47,699,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:47,728,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:47,762,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:47,853,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:47,880,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:48,027,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:48,059,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:48,091,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:48,195,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:18:49,894,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:18:52,198,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:19:06,232,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 12:19:12,641,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:19:18,268,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:19:18,268,INFO,controller.py,enable_system,817,System is enabled. Ready for operation.
+2024-01-15 12:19:19,568,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:19:23,708,INFO,controller.py,is_arrived,710,Provided joint states is Done
+2024-01-15 12:19:36,740,WARNING,controller.py,single_step_joint,755,line_plane ee is nearly collided with object
+2024-01-15 12:19:36,782,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:36,895,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:36,984,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,047,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,104,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,192,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,294,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,370,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,435,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,484,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,562,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,621,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,669,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,723,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,801,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,871,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,908,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:37,967,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,223,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,285,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,345,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,399,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,561,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,613,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 12:19:38,681,WARNING,controller.py,vector_field_collision_avoidance,670,line_plane ee is nearly collided with object
+2024-01-15 14:52:40,128,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 14:52:46,750,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:52:51,863,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:52:59,745,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:55:08,104,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 14:55:14,656,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:55:18,797,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:55:23,306,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:27,110,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:55:28,228,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:55:32,741,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:35,604,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:38,317,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:41,419,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:44,905,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:49,953,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:53,074,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:55:56,108,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:09,663,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 14:56:16,219,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:56:20,288,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:56:25,406,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:56:28,294,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:31,633,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:33,499,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:36,667,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:38,589,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:42,834,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:56:50,370,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:57:41,120,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 14:57:47,824,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:57:54,494,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:58:00,024,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:58:02,844,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:05,326,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:11,098,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:14,634,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:17,739,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:21,222,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:24,704,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:27,685,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:58:58,588,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/15_1_2024_benjamin.log
+2024-01-15 14:59:05,064,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:59:08,422,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:59:08,422,INFO,controller.py,enable_system,825,System is enabled. Ready for operation.
+2024-01-15 14:59:15,715,INFO,controller.py,is_arrived,718,Provided joint states is Done
+2024-01-15 14:59:18,615,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:20,775,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:26,971,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:30,354,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:33,928,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:37,400,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:39,237,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:41,619,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:45,028,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:47,841,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:51,149,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:53,663,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:57,132,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 14:59:58,979,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 15:00:01,308,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 15:00:04,055,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!
+2024-01-15 15:00:06,416,INFO,controller.py,go_to_cartesian_pose,610,Pose is unreachable!

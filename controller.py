@@ -54,12 +54,12 @@ class Controller():
             "-Y": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, -0.1, 0),),
             "+Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, 0.1),),
             "-Z": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3(0, 0, -0.1),),
-            "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.1), duration=0.1),
-            "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.1), duration=0.1),
-            "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.1), duration=0.1),
-            "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.1), duration=0.1),
-            "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.1), duration=0.1),
-            "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.1), duration=0.1),
+            "+Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(0.5), duration=0.1),
+            "-Rx": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rx(-0.5), duration=0.1),
+            "+Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(0.5), duration=0.1),
+            "-Ry": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Ry(-0.5), duration=0.1),
+            "+Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(0.5), duration=0.1),
+            "-Rz": lambda: self.go_to_cartesian_pose(self._robot.fkine(self._robot.q) @ sm.SE3.Rz(-0.5), duration=0.1),
 
             "CARTESIAN_POSE": self.move_cartesian,
             "GAMEPAD_ENABLE": self.gamepad_control,
@@ -230,7 +230,7 @@ class Controller():
         Open gripper
         """
         if self._robot._gripper_ready:
-            self._robot.open_gripper()
+            self._robot.gripper.open()
         else:
             self._log.error(f'No gripper attached on {self._robot.name}!')
 
@@ -240,7 +240,7 @@ class Controller():
         Close gripper
         """
         if self._robot._gripper_ready:
-            self._robot.close_gripper()
+            self._robot.gripper.close()
         else:
             self._log.error(f'No gripper attached on {self._robot.name}!')
 
@@ -551,40 +551,55 @@ class Controller():
 
         step = 50
         time_step = duration/step
-        
-        path = rtb.ctraj(self._robot.fkine(self._robot.q), pose, t=step)
 
-        vel_scale = {'linear': 0.6, 'angular': 0.8}
+        ### COMMENTED AS THIS IS NOT NEEDED FOR P_SERVO
 
-        index = 0
-        while not self.is_arrived(pose,tolerance) and self.system_activated():
+        # path = rtb.ctraj(self._robot.fkine(self._robot.q), pose, t=step)
+        # index = 0
 
-            ## LINEAR INTERPOLATION METHODS
-            self._robot_busy = True
+        arrived = False
+        gain = [1,1,1,2,2,2]
 
-            # get linear velocity between interpolated point and current pose of ee
-            prev_ee_pos = path[index].A[0:3, 3]
-            desired_ee_pos = path[index+1].A[0:3, 3]
+        while not arrived and self.system_activated():
+
+            """
+            """
+            # ## LINEAR INTERPOLATION METHODS
+            # self._robot_busy = True
+
+            # # get linear velocity between interpolated point and current pose of ee
+            # prev_ee_pos = path[index].A[0:3, 3]
+            # desired_ee_pos = path[index+1].A[0:3, 3]
 
 
-            # get linear velocity between interpolated point and current pose of ee
-            lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
+            # # get linear velocity between interpolated point and current pose of ee
+            # lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
 
-            # get angular velocity between interpolated ...
-            s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
-            ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
+            # # get angular velocity between interpolated ...
+            # s_omega = (path[index+1].A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
+            # ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
             
-            # combine velocities
-            ee_vel = np.hstack((lin_vel, ang_vel))
+            # # combine velocities
+            # ee_vel = np.hstack((lin_vel, ang_vel))
+            # ee_vel = self.vector_field_collision_avoidance(ee_vel)
+
+
+            """
+            """
+            ## P_SERVO METHODS USING ORIENTATION FEEDBACK CONVERTED FROM RPY TO ANGLE-AXIS
+            cur_tf = self._robot.fkine(self._robot.q)
+            ee_vel, arrived = rtb.p_servo(cur_tf, pose, gain=gain, threshold=0.001, method="angle-axis")
             ee_vel = self.vector_field_collision_avoidance(ee_vel)
-        
+
             
+            """
+            """
             # calculate joint velocities, singularity check is already included in the function
             j = self._robot.jacob0(self._robot.q)
             mu_threshold = 0.04 if self._robot._name == "Sawyer" else 0.01
-            joint_vel = Controller.RMRC_solver(j,ee_vel,mu_threshold=mu_threshold)
+            joint_vel = Controller.RMRC_solver(j, ee_vel, mu_threshold=mu_threshold)
             
 
             # update joint states as a command to robot
@@ -597,15 +612,17 @@ class Controller():
                 self._state = 'STOPPED'
                 break
 
-            index += 1
-            if index == len(path)-1 and not self.is_arrived(pose,tolerance):
-                self._log.info('Pose is unreachable!')
-                break
+            ### COMMENTED AS THIS IS NOT NEEDED FOR P_SERVO
+            
+            # arrived = self.is_arrived(pose,tolerance)
+            # index += 1
+            # if index == len(path)-1 and not self.is_arrived(pose,tolerance):
+            #     self._log.info('Pose is unreachable!')
+            #     break
 
 
             # send joint command to robot to execute desired motion. Currently available mode is position mode
             self._robot.send_joint_command(q)
-
 
         self._robot_busy = False
         
@@ -623,15 +640,19 @@ class Controller():
             None
         """
                 
-        prev_ee_pos = self._robot.fkine(self._robot.q).A[0:3, 3]
-        desired_ee_pos = pose.A[0:3, 3]
+        prev_ee_pos = self._robot.fkine(self._robot.q).A[:3, 3]
+        desired_ee_pos = pose.A[:3, 3]
 
 
         # get linear velocity between interpolated point and current pose of ee
         lin_vel = (desired_ee_pos - prev_ee_pos) / time_step
 
 
-        # get angular velocity between interpolated ...
+        # Angular error extraction from feedback
+        er = pose.A[:3, :3] @ np.transpose(self._robot.fkine(self._robot.q).A[:3, :3])
+        
+
+        # get angular error between desired TF and current TF
         s_omega = (pose.A[0:3, 0:3] @ np.transpose(self._robot.fkine(self._robot.q).A[0:3, 0:3]) - np.eye(3)) / time_step
         ang_vel = [s_omega[2, 1], s_omega[0, 2], s_omega[1, 0]]
 
