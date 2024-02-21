@@ -1,0 +1,2 @@
+2023-11-27 15:24:13,288,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/27_11_2023_benjamin.log
+2023-11-27 15:24:20,822,INFO,controller.py,is_arrived,706,Provided joint states is Done

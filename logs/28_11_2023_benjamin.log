@@ -1,0 +1,92 @@
+2023-11-28 11:40:55,668,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 11:44:09,941,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 11:44:47,662,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 11:47:15,057,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 11:51:43,989,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 11:58:23,994,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:00:38,336,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:01:35,272,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:03:42,119,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:04:24,237,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:05:07,916,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:05:42,905,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:05:50,580,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:05:53,699,INFO,controller.py,enable_system,813,System is enabled. Ready for operation.
+2023-11-28 12:05:53,699,INFO,controller.py,enable_system,813,System is enabled. Ready for operation.
+2023-11-28 12:05:55,011,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:06:27,547,INFO,safety.py,_init_log,83,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:06:45,864,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 12:06:53,418,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:06:57,163,INFO,controller.py,enable_system,813,System is enabled. Ready for operation.
+2023-11-28 12:06:57,163,INFO,controller.py,enable_system,813,System is enabled. Ready for operation.
+2023-11-28 12:06:57,950,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:07:03,199,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:07:19,945,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:07:19,973,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,095,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,187,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,306,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,350,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,404,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,463,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,541,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,610,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,679,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,745,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,811,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:20,914,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,006,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,084,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,170,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,248,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,317,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,903,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:21,963,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:22,034,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:22,110,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:22,397,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:22,463,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:22,545,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,129,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,296,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,348,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,426,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,494,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,572,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,641,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,743,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,796,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:53,860,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:54,215,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:54,326,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:07:54,398,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:03,465,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:03,956,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:04,327,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:04,427,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:04,746,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:53,756,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:53,807,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:53,890,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:53,977,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:54,037,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:54,105,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:55,019,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:55,085,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:55,213,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:55,294,WARNING,controller.py,vector_field_collision_avoidance,666,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,695,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,720,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,746,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,832,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,854,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:56,985,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:57,009,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:57,043,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:57,160,WARNING,controller.py,single_step_joint,751,line_plane ee is nearly collided with object
+2023-11-28 12:08:58,831,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 12:09:01,959,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 15:46:46,490,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 15:46:54,103,INFO,controller.py,is_arrived,706,Provided joint states is Done
+2023-11-28 15:47:51,810,INFO,main.py,_init_log,91,Saving logs to: /home/benjamin/git/IR-Assignment2/logs/28_11_2023_benjamin.log
+2023-11-28 15:48:05,061,INFO,controller.py,is_arrived,706,Provided joint states is Done

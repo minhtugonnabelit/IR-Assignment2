@@ -66,18 +66,15 @@ class Mission():
 
         #----------------
         self._cell_center = self._workcell.get_cell_center()
-        self._cart_location = self._workcell.get_cart_location()
-
 
         # index to track current step
-        self.index = 0
-        self.plate_index = 0
+        self._mission_index = 0
+        self._plate_index = 0
         self.done = True
         self.mission_state = 'IDLE'
         
         
-
-
+        # Action list for the separated mission function
         self._action_list = [
             self._grip_plate_edge,
             self._lift_plate,
@@ -98,31 +95,23 @@ class Mission():
 
         # Defining avoidance direction
         if right_to_left: 
-            move_through_obstacle = 0.011
-        else: move_through_obstacle = -0.011 # move left to right
+            move_through_obstacle_y = 0.011
+        else: move_through_obstacle_y = -0.011 # move left to right
 
         # Start avoiding obstacle
         while robot.robot_is_collided():
 
-            # go up if got plate gripped, else move backward to avoid
-            if bring_plate:
-                fix_pose = sm.SE3(0,0,0.005) @ robot.get_ee_pose()
-            else: fix_pose = robot.get_ee_pose() @ sm.SE3(0,0,-0.07)
-            
+            # go up if got plate gripped, else move backward to avoid collision            
+            fix_pose = sm.SE3(0,0,0.005) @ robot.get_ee_pose() if bring_plate else robot.get_ee_pose() @ sm.SE3(0,0,-0.07)
             robot.single_step_cartesian(fix_pose, 0.02)
-            
-            # option to animate the plate or not
             if bring_plate:
                 plate_pose = robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
                 plate.move_flat_plate(sm.SE3(plate_pose), bring_part)   
             
         # minor fixing to completely avoid
         for _ in range(20):
-            if bring_plate:
-                fix_pose_2 = robot.get_ee_pose() @ sm.SE3(-0.001, move_through_obstacle, 0)
-            else: 
-                fix_pose_2 = robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle, 0)
-                
+
+            fix_pose_2 = robot.get_ee_pose() @ sm.SE3(-0.001, move_through_obstacle_y, 0) if bring_plate else robot.get_ee_pose() @ sm.SE3(0, move_through_obstacle_y, 0)  
             robot.single_step_cartesian(fix_pose_2, 0.02)
             if bring_plate:
                 plate_pose = robot.get_ee_pose().A @ np.linalg.inv(self._PICKER_GRIP_POSE)
@@ -140,15 +129,19 @@ class Mission():
             index += 1
             self.done = robot.is_arrived(gripper_pose)
 
+
     def _home_system(self):
         """
         STEP 1: Homing both robot arms, ready to pick
         """
         # non-blocking method
-        self._bender_robot.send_command('HOME')        
-        self._picker_robot.go_to_home()
+        self._bender_robot.send_command('HOME')
+        # self._bender_robot.
+        self._picker_robot.go_to_home()        
         
         self._bender_robot.open_gripper()
+        self._picker_robot.open_gripper()
+        
         print('system homed')
     
 
@@ -338,6 +331,8 @@ class Mission():
         """
 
         path_plate = rtb.ctraj(self._plates_list[plt_index].get_pose(), self.TILTEDPOSE, 30)
+
+        # Extracting the last pose of the plate for completion check
         picker_last_pose = path_plate[-1] @ self._PICKER_GRIP_POSE
         bender_last_pose = path_plate[-1] @ self._BENDER_GRIP_POSE
 
@@ -394,7 +389,7 @@ class Mission():
 
             self.all_seg.append(seg_array)
                     
-    def _unbend_plate(self, plt_index):
+    def _unbend_plate(self, plt_index : int):
         """
         Coordinate 2 arms to unbend the plate
         """
@@ -427,6 +422,7 @@ class Mission():
             self._picker_robot.single_step_cartesian(picker_grip_pose, 0.01)
             self._bender_robot.single_step_cartesian(bender_grip_pose, 0.01)
 
+
     def _astor_release(self, i):
         """
         STEP 6: Astor release the plate
@@ -436,6 +432,7 @@ class Mission():
 
         self._bender_robot.go_to_cartesian_pose(self._bender_robot.get_ee_pose() @ sm.SE3(0,0,-0.1))
     
+
     def _hold_plate(self, plt_index):
         """
         Hold the plate in place
@@ -595,56 +592,56 @@ class Mission():
         Run the mission
         """
 
-        while self.plate_index < len(self._plates_list):
+        while self._plate_index < len(self._plates_list):
 
             if self._picker_robot.system_activated() is False or self._bender_robot.system_activated() is False:
                 print('system not activated')
                 break 
             
-            if self.plate_index == 0 and self.index == 0:
+            if self._plate_index == 0 and self._mission_index == 0:
                 self._home_system()
             
             
-            # Loop to go through individual steps for each plate
-            while self.index < len(self._action_list):
+            # Loop to go through individual steps for each plate until no more action to perform
+            while self._mission_index < len(self._action_list):
 
                 # check if system is activated
                 if self._picker_robot.system_activated() is False or self._bender_robot.system_activated() is False:
                     print('system not activated')
                     break   
 
-                print(f'Step {self.index} executing')
-                self._action_list[self.index](self.plate_index)
+                print(f'Step {self._mission_index} executing')
+                self._action_list[self._mission_index](self._plate_index)
                 
                 if self.step_is_done():
-                    self.index += 1
+                    self._mission_index += 1
             
 
             # check if task is completed
             if self.task_completed():   
 
                 print('task completed') 
-                self.plate_index += 1
+                self._plate_index += 1
                 
-                if  self.plate_index <= len(self._plates_list)-1:
+                if  self._plate_index <= len(self._plates_list)-1:
 
                     # reset task index
                     print('Task index reset!')
-                    self.index = 0
+                    self._mission_index = 0
 
         
     def reset_mission(self):
         """
         Reset mission to step 0"""
-        self.index = 0
-        self.plate_index = 0
+        self._mission_index = 0
+        self._plate_index = 0
     
 
     def task_completed(self):
         """
         Check if task is completed
         """
-        return self.index == len(self._action_list) and self.step_is_done()
+        return self._mission_index == len(self._action_list) and self.step_is_done()
     
 
     def mission_completed(self):
@@ -652,7 +649,7 @@ class Mission():
         Check if mission is completed
         """
         
-        return self.index == len(self._action_list) and self.plate_index == len(self._plates_list) and self.step_is_done()
+        return self._mission_index == len(self._action_list) and self._plate_index == len(self._plates_list) and self.step_is_done()
 
 
 

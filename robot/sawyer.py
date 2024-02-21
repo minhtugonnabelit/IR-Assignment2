@@ -15,12 +15,12 @@ from robot.m_DHRobot3D import M_DHRobot3D
 class Sawyer(M_DHRobot3D):
 
     """
-    Sawyer robot.
-
-        Parameters:
+    
+        Sawyer
         --------------------------------------------
+        env: Environment to add robot to.
+        base: Base pose of robot.
         gripper_ready: Indicator for mounting gripper.
-
 
     """
     # _NEUTRAL = [0.00, -0.82, 0.00, 2.02, 0.00, -1.22,  1.57]  
@@ -79,8 +79,7 @@ class Sawyer(M_DHRobot3D):
             smb.transl(0.081361, 0.160295, 1.22569),
         ]
 
-        current_path = os.path.abspath(os.path.dirname(__file__))
-        current_path = os.path.join(current_path, "Sawyer_model")
+        current_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "Sawyer_model")
         super().__init__(
             links,
             link3D_names,
@@ -101,6 +100,7 @@ class Sawyer(M_DHRobot3D):
         self.ax = geometry.Axes(0.2, pose=self.fkine(self.q))
         self.update_sim()
 
+
     def _create_DH(self):
         """
         Create robot's standard DH model
@@ -108,7 +108,7 @@ class Sawyer(M_DHRobot3D):
 
         mm = 1e-3
 
-        # kinematic parameters
+        # Kinematic parameters
         a = np.r_[81, 0, 0, 0, 0, 0, 0] * mm
         d = np.r_[317, 192.5, 400, -168.5, 400, 136.3,
                   133.75 + self._offset_gripper/mm] * mm
@@ -120,6 +120,11 @@ class Sawyer(M_DHRobot3D):
                  -np.pi / 2,
                  np.pi / 2,
                  0]
+
+        # Offset to have the dh from toolbox match with the actual pose
+        offset = [0, np.pi/2, 0, 0, 0, 0, -np.pi/2]
+
+        # Joint limits
         qlim = np.deg2rad([[-175, 175],
                            [-219, 131],
                            [-175, 175],
@@ -127,10 +132,6 @@ class Sawyer(M_DHRobot3D):
                            [-170.5, 170.5],
                            [-170.5, 170.5],
                            [-270, 270]])
-
-        # offset to have the dh from toolbox match with the actual pose
-        offset = [0, np.pi/2, 0, 0, 0, 0, -np.pi/2]
-
 
         links = []
         for j in range(7):
@@ -170,55 +171,6 @@ class Sawyer(M_DHRobot3D):
             self.gripper.add_to_env(self._env)
 
 
-    def get_workspace(self):
-        """
-        Get workspace of the robot
-        """
-        step = np.pi / 4
-        pointcloud_size = 5 * int(
-            np.prod(
-                np.floor((self.qlim[1, 1:6] - self.qlim[0, 1:6]) / step + 1))
-        )
-        print(pointcloud_size)
-
-        pointcloud = np.zeros((pointcloud_size, 3))
-        counter = 0
-        start_time = time.time()
-        print("Start getting point cloud...")
-
-        for q0 in np.arange(self.qlim[0, 0], self.qlim[1, 0] + 0.2, 0.2):
-            for q1 in np.arange(self.qlim[0, 1], self.qlim[1, 1] + step, step):
-                for q2 in np.arange(self.qlim[0, 2], self.qlim[1, 2] + step, step):
-                    for q3 in np.arange(self.qlim[0, 3], self.qlim[1, 3] + step, step):
-                        for q4 in np.arange(self.qlim[0, 4], self.qlim[1, 4] + step, step):
-                            for q5 in np.arange(self.qlim[0, 5], self.qlim[1, 5] + step, step):
-
-                                q = [q0, q1, q2, q3, q4, q5, 0]
-
-                                ep = self.fkine(q).A
-                                if counter == pointcloud_size:
-                                    break
-                                pointcloud[counter, :] = ep[0:3, 3]
-                                counter += 1
-                                if np.mod(counter / pointcloud_size * 100, 1) == 0:
-                                    end_time = time.time()
-                                    execution_time = end_time - start_time
-                                    print(
-                                        f"After {execution_time} seconds, complete",
-                                        counter / pointcloud_size * 100,
-                                        "% of pose",
-                                    )
-
-        # Eliminate points that lie below the table
-        pointcloud = pointcloud[pointcloud[:, 2] > 0.1+self.base.A[2, 3], :]
-        pc_x = pointcloud[:, 0]
-        pc_y = pointcloud[:, 1]
-        print('max x: ', np.max(pc_x), 'min x: ', np.min(pc_x))
-        print('max y: ', np.max(pc_y), 'min y: ', np.min(pc_y))
-        print("Point cloud complete with %d points captured!", len(pointcloud))
-        return pointcloud
-
-
     def send_joint_command(self, q):
         """
         Send joint command to robot. Current mode available is joint position mode
@@ -229,18 +181,18 @@ class Sawyer(M_DHRobot3D):
             self.gripper.base = self.fkine(self.get_jointstates())
 
 
-    def open_gripper(self):
-        """
-        Function to open gripper
-        """
-        self.gripper.open()
+    # def open_gripper(self):
+    #     """
+    #     Function to open gripper
+    #     """
+    #     self.gripper.open()
 
 
-    def close_gripper(self):
-        """
-        Function to close gripper
-        """
-        self.gripper.close()
+    # def close_gripper(self):
+    #     """
+    #     Function to close gripper
+    #     """
+    #     self.gripper.close()
 
 
     def rotate_head(self, angle):
@@ -323,13 +275,15 @@ class SawyerGripper:
     def __init__(self, base=sm.SE3(0, 0, 0)):
 
         links = self._create_DH()
+
         # This base is created just to initial the gripper model, then the main 'base' as a class property is used for asssiging the primary base
         base_init = sm.SE3(0, 0, 0)
+
         # set attribute here: when we use "base", base at _init_ has the value, then it will be assigned to function set_base(value) at attribute function
         self._base = base
 
-        # Right finger properties
 
+        # Right finger properties
         right_link3D_names = dict(
             link0="sawyer_gripper_base",
             link1="sawyer_gripper_right"
@@ -348,10 +302,8 @@ class SawyerGripper:
             self._base.A @ self.base_tf_right.A
         )
 
-        # ---------------------------------------------
 
         # Left finger properties
-
         left_link3D_names = dict(
             link0="sawyer_gripper_base",
             link1="sawyer_gripper_left"
@@ -370,7 +322,6 @@ class SawyerGripper:
             self._base.A @ self.base_tf_left.A
         )
 
-    # -----------------------------------------------------------------------------------#
 
     def close(self):
         """
@@ -401,7 +352,6 @@ class SawyerGripper:
             self._right_finger.q = qtraj_right[i]
             time.sleep(0.02)
 
-    # -----------------------------------------------------------------------------------#
 
     def _create_DH(self):
         """
@@ -418,7 +368,6 @@ class SawyerGripper:
 
         return links
 
-    # -----------------------------------------------------------------------------------#
 
     def add_to_env(self, env):
         """
@@ -426,12 +375,10 @@ class SawyerGripper:
         """
 
         # add 2 fingers to the environment
-
         self._env = env
         self._right_finger.add_to_env(env)
         self._left_finger.add_to_env(env)
 
-    # -----------------------------------------------------------------------------------#
 
     def set_base(self, newbase):
         """
@@ -439,16 +386,13 @@ class SawyerGripper:
         """
 
         # assign new base for the gripper to be attached with robot ee given
-
         self._right_finger.base = newbase.A @ self.base_tf_right.A
         self._left_finger.base = newbase.A @ self.base_tf_left.A
 
         # give empty q so that gripper model is updated on swift
-
         self._right_finger.q = self._right_finger.q
         self._left_finger.q = self._left_finger.q
 
-    # -----------------------------------------------------------------------------------#
 
     def __setattr__(self, name, value):
         """

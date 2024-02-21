@@ -1,5 +1,8 @@
 import copy
+import time
 import logging
+import argparse
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +20,70 @@ from robot.astorino import Astorino
 
 from swift import Swift
 
+# The default log filename
+DAY = time.gmtime()
+LOG_FILE_NAME = f"TEST_{os.curdir}.log"
+LOG_FILE_NAME = f"{DAY.tm_mday}_{DAY.tm_mon}_{DAY.tm_year}_{os.getlogin()}.log"
+# Here is how a log will format to a file
+LOG_FORMAT_FILE = "%(asctime)s,%(levelname)s,%(filename)s,%(funcName)s,%(lineno)d,%(message)s"
+# Here is how a log will format to the console
+LOG_FORMAT_CONSOLE = "%(asctime)s\t%(levelname)s: %(message)s"
+
+
+def load_args():
+    parser = argparse.ArgumentParser(
+        description="Logging mode toggle here", formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help="Enable debug outputs")
+
+    return parser.parse_args()
+
+
+def _create_new_logfile(basename):
+
+    # Create a directory where we want to save the log file
+    current_dir = os.path.dirname(__file__)
+    log_dir = os.path.join(current_dir, "logs")
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    full_filename = os.path.join(log_dir, f"{basename}")
+    return full_filename
+
+
+def _init_log(log_level):
+
+    # First, lets get the root logger
+    log = logging.getLogger('root')
+
+    # Create a new log file and setup logging to a file
+    log_file = _create_new_logfile(LOG_FILE_NAME)
+    file_handler = logging.FileHandler(log_file, mode='a')
+    formatter_file = logging.Formatter(LOG_FORMAT_FILE)
+    file_handler.setFormatter(formatter_file)
+    file_handler.setLevel(logging.DEBUG)
+
+    # Create a log file to go to the console
+    stream_handler = logging.StreamHandler()
+    formatter_console = logging.Formatter(LOG_FORMAT_CONSOLE)
+    stream_handler.setFormatter(formatter_console)
+
+    # Here you can optionally set the name of the log
+    stream_handler.set_name("console_log")
+
+    # Set the log level for the console output (based on what we passed into this function)
+    stream_handler.setLevel(log_level)
+
+    # Set the main logging level to debug so the file handler can support it. The stream handler (to console) will use the level set above.
+    log.setLevel(logging.DEBUG)
+    log.addHandler(file_handler)
+    log.addHandler(stream_handler)
+    log.info(f"Saving logs to: {file_handler.baseFilename}")
+
+    return log
+
 class Safety:
 
     def __init__(self, robot : M_DHRobot3D, log : logging) -> None:
@@ -25,12 +92,12 @@ class Safety:
         self._log = log
 
         # get ellipsoid parameters (x,y,z) with major and minor axis allocated to a and d respectively
-        self._ellipsoids = self.get_ellipsoid()
+        self._ellipsoids = self._get_ellipsoid()
 
         # generate mesh points for each ellipsoid in the local frame of each link
-        self._ellipsoids_meshlist = self.get_ellipsoid_meshlist()
+        self._ellipsoids_meshlist = self._get_ellipsoid_meshlist()
 
-    def get_link_poses(self, q=None):
+    def _get_link_poses(self, q=None):
         """
         :param q robot joint angles
         :param robot -  seriallink robot model
@@ -40,7 +107,7 @@ class Safety:
             return self.robot.fkine_all()
         return self.robot.fkine_all(q)
 
-    def get_ellipsoid(self):
+    def _get_ellipsoid(self):
 
         """ Get ellipsoid of the robot """
 
@@ -49,8 +116,8 @@ class Safety:
         for i in range(len(self.robot.links)):
             
             # special define for major and minor axis for ellipsoid
-            minor_axis = thickness if self.robot.a[i] == 0 else copy.deepcopy(self.robot.a[i]) / 2 + thickness
-            major_axis = copy.deepcopy(self.robot.d[i]) / 2 + thickness
+            minor_axis = thickness if self.robot.a[i] == 0 else np.abs(copy.deepcopy(self.robot.a[i])) / 2 + thickness
+            major_axis = np.abs(copy.deepcopy(self.robot.d[i])) / 2 + thickness
 
             # define major and minor axis of ellipsoid
             ellipsoid = np.asarray([minor_axis, major_axis, minor_axis])
@@ -66,7 +133,7 @@ class Safety:
 
         return ellipsoids
     
-    def get_ellipsoid_meshlist(self):
+    def _get_ellipsoid_meshlist(self):
         
         """ Get the ellipsoid mesh points corresponded to each link stick to their local frame """
 
@@ -77,7 +144,7 @@ class Safety:
 
         return meshlist   
     
-    def transform_ellipsoid(self, links_center):
+    def _transform_ellipsoid(self, links_center):
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
         ellip_transforms = []
@@ -101,7 +168,7 @@ class Safety:
         
         return ellip_transforms
     
-    def get_link_centers(links_tf):
+    def _get_link_centers(links_tf):
 
         """
         Get the center of each link"""
@@ -125,7 +192,7 @@ class Safety:
         lines = []
             
         lastlink_norm = np.linalg.norm(tr[-1].A[:3,3] - tr[-2].A[:3,3]) * 0.7
-        start1 = tr[-1].A @ smb.transl(0.05 ,offset + 0.07,-lastlink_norm)
+        start1 = tr[-1].A @ smb.transl(0,offset + 0.07,-lastlink_norm)
         line1 = {'start': start1, 
                     'end': start1 @ smb.transl(0,0,lastlink_norm*2)}
         
@@ -142,19 +209,20 @@ class Safety:
                     'end': start4 @ smb.transl(0,0,lastlink_norm*2)}
         
         #----- skew right 45 deg
-        start5 =  tr[-1].A @ smb.transl(offset+0.1,-(offset+0.1),-lastlink_norm)
+        offset = 0
+        start5 =  tr[-1].A @ smb.transl(offset+0.025,-(offset+0.07),-lastlink_norm)
         line5 = {'start': start5,
                     'end': start5 @ smb.transl(0,0,lastlink_norm*2)}
         
-        start6 =  tr[-1].A @ smb.transl(-(offset+0.1),offset+0.1,-lastlink_norm)
+        start6 =  tr[-1].A @ smb.transl(-(offset+0.025),offset+0.07,-lastlink_norm)
         line6 = {'start': start6,
                     'end': start6 @ smb.transl(0,0,lastlink_norm*2)}
 
-        start7 =  tr[-1].A @ smb.transl(offset+0.1,offset+0.1,-lastlink_norm)
+        start7 =  tr[-1].A @ smb.transl(offset+0.025,offset+0.07,-lastlink_norm)
         line7 = {'start': start7,
                     'end': start7 @ smb.transl(0,0,lastlink_norm*2)}
 
-        start8 =  tr[-1].A @ smb.transl(-(offset+0.1),-(offset+0.1),-lastlink_norm)
+        start8 =  tr[-1].A @ smb.transl(-(offset+0.025),-(offset+0.07),-lastlink_norm)
         line8 = {'start': start8,
                     'end': start8 @ smb.transl(0,0,lastlink_norm*2)}
 
@@ -178,7 +246,7 @@ class Safety:
         result = False
         offset = 0.05+threshold
 
-        tr = self.get_link_poses(q)
+        tr = self._get_link_poses(q)
 
         # offset the end-effector to create a virtual box
         lines = Safety._ee_line_offset(tr, offset)
@@ -223,13 +291,14 @@ class Safety:
         Principle is from extracting the ellipsoid mesh points corresponded to each link, 
         then transform its to each link ceener to check if there is any intersection
         """
-
+        # start = time.time()
+        # try:
         # get the transforms of all links end and center
-        links_tf = self.get_link_poses(q)
-        links_center = Safety.get_link_centers(links_tf)
+        links_tf = self._get_link_poses(q)
+        links_center = Safety._get_link_centers(links_tf)
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
-        ellip_transforms = self.transform_ellipsoid(links_center)
+        ellip_transforms = self._transform_ellipsoid(links_center)
 
         if self.robot.name == 'Sawyer':
             headplace = self.robot._head.T @ smb.transl(0,0,0.23/2)
@@ -257,7 +326,7 @@ class Safety:
             
                 # iteration through each ellipsoid mesh points
                 for point in np.transpose(ellip_transforms[j][:]):
-                         
+                        
                     # transform the extracted ellipsoid mesh points to the local frame of the current link
                     transformed_point = np.linalg.inv(center) @ point
 
@@ -267,6 +336,9 @@ class Safety:
                         return True
 
         return False
+        
+        # finally:
+        #     print(f'is_self_collided took {time.time() - start} seconds')
     
     ## function to check if the robot is hit the ground
     def grounded_check(self, q, ground_height = None):
@@ -279,7 +351,7 @@ class Safety:
             ground_height = self.robot.base.A[2, 3]
 
         # get the transforms of all links
-        link_transforms = self.get_link_poses(q).A
+        link_transforms = self._get_link_poses(q).A
 
         # check if all links are above the ground defined
         for j, link in enumerate(link_transforms):
@@ -386,11 +458,11 @@ class Safety:
         """
         Test function to plot ellipsoid along with robot stick model """
 
-        fig = self.robot.plot(q=sawyer.neutral, block=False, )
+        fig = self.robot.plot(q=self.robot.neutral, block=False, )
         ax = fig.ax
 
         # get the transforms of all links
-        links_tf = self.get_link_poses(self.robot.neutral)
+        links_tf = self._get_link_poses(self.robot.neutral)
         ee_lines = Safety._ee_line_offset(links_tf, 0.05)
 
         for line in ee_lines:
@@ -399,10 +471,10 @@ class Safety:
                     [line['start'][2,3], line['end'][2,3]], c='r', linewidth=0.5)
 
         # get the center of each link
-        links_center = Safety.get_link_centers(links_tf)
+        links_center = Safety._get_link_centers(links_tf)
 
         # get the ellipsoid mesh points corresponded to each link and transform to the world frames
-        ellip_transforms = sawyer_safety.transform_ellipsoid(links_center)
+        ellip_transforms = self._transform_ellipsoid(links_center)
 
         # eliminate the last column of the ellipsoid mesh points
         ellip_transforms = np.array(ellip_transforms)[:,:-1, :]
@@ -423,18 +495,28 @@ class Safety:
         fig.hold()
 
 
-    
+def main(args):
+    env = Swift()
+    env.launch()
+
+    if args.verbose:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+    log = _init_log(log_level)
+
+    sawyer = Sawyer(env)
+    sawyer_safety = Safety(sawyer, log)
+
+    sawyer_safety.test_ellipsoid_mesh()
+    sawyer_safety.is_self_collided(sawyer.neutral)
 
 ## TESTING SPACE
 if __name__ =='__main__':
 
-    env = Swift()
-    env.launch()
+    args = load_args()
+    main(args=args)
 
-    sawyer = Sawyer(env)
-    sawyer_safety = Safety(sawyer)
-
-    sawyer_safety.test_ellipsoid_mesh()
     
 
         

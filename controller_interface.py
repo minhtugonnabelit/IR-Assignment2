@@ -130,13 +130,6 @@ class ControllerInterface():
         self._impl.single_step_cartesian(pose, time_step, tolerance)
 
 
-    def follow_cartesian_path(self, path, duration=1, tolerance=0.001):
-        """
-        Follow a cartesian path
-        """
-        self._impl.follow_cartesian_path(path, duration, tolerance)
-
-
     def go_to_cartesian_pose(self, pose, duration=1, tolerance=0.001):
         """
         Go to cartesian pose
@@ -169,10 +162,7 @@ class ControllerInterface():
         """
         self._impl.close_gripper()
 
-
-
-    
-
+        
     # -----------------------------------------------------------------------------------#
     # Getters
     def get_robot(self):

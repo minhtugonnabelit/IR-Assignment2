@@ -479,7 +479,7 @@ gtest_hide_internal_symbols:BOOL=OFF
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
 //The directory containing a CMake configuration file for intera_core_msgs.
-intera_core_msgs_DIR:PATH=/home/benjamin/sawyer_ws/devel/share/intera_core_msgs/cmake
+intera_core_msgs_DIR:PATH=intera_core_msgs_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for intera_interface.
 intera_interface_DIR:PATH=/home/benjamin/sawyer_ws/devel/share/intera_interface/cmake
